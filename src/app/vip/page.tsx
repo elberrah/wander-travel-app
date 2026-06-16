@@ -87,13 +87,13 @@ export default function VipLimousinesPage() {
         <div className="relative z-10 container mx-auto px-6 text-center max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="text-primary tracking-[0.4em] uppercase text-xs font-bold mb-8 block"
+            className="text-primary tracking-[0.4em] uppercase text-xs font-bold mb-8 block drop-shadow-lg"
           >
             Mobilité Prestige & Chauffeurs VIP
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-white mb-10 leading-[1]"
+            className="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-white mb-10 leading-[1] drop-shadow-2xl"
           >
             L'Élite, <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic pr-4">

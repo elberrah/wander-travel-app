@@ -88,9 +88,22 @@ const premiumPackages = [
 ];
 
 const partners = [
-  "ENSA", "CGEM", "ISCAE", "ENCG", "SIHAMCO", "Richard Mille", 
-  "Aramco", "Groupe Lafayette", "PROfm", "AKSAM", "CRDP", 
-  "Entraide Nationale", "ONICL", "Savola", "Comexi", "Mapping Engineering"
+  { name: "ENSA", logo: "/images/partners/ensa.png" },
+  { name: "CGEM", logo: "/images/partners/cgem.png" },
+  { name: "ISCAE", logo: "/images/partners/iscae.png" },
+  { name: "ENCG", logo: "/images/partners/encg.png" },
+  { name: "SIHAMCO", logo: "/images/partners/sihamco.png" },
+  { name: "Richard Mille", logo: "/images/partners/richard-mille.png" },
+  { name: "Aramco", logo: "/images/partners/aramco.png" },
+  { name: "Groupe Lafayette", logo: "/images/partners/lafayette.png" },
+  { name: "PROfm", logo: "/images/partners/profm.png" },
+  { name: "AKSAM", logo: "/images/partners/aksam.png" },
+  { name: "CRDP", logo: "/images/partners/crdp.png" },
+  { name: "Entraide Nationale", logo: "/images/partners/entraide.png" },
+  { name: "ONICL", logo: "/images/partners/onicl.png" },
+  { name: "Savola", logo: "/images/partners/savola.png" },
+  { name: "Comexi", logo: "/images/partners/comexi.png" },
+  { name: "Mapping Engineering", logo: "/images/partners/mapping.png" }
 ];
 
 // Mélange de photos premium et photos réelles (raw) demandées par l'user - structure modulaire de cadrage
@@ -431,8 +444,18 @@ export default function Home() {
 
            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-10">
               {partners.map((p, i) => (
-                <motion.div key={p} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="px-6 py-10 border border-white/[0.03] bg-white/[0.005] hover:border-primary/20 hover:bg-white/[0.015] transition-all rounded-2xl flex items-center justify-center text-center group">
-                   <span className="text-[10px] md:text-sm font-bold uppercase tracking-[0.2em] text-white/30 group-hover:text-primary transition-colors duration-500">{p}</span>
+                <motion.div key={p.name} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="px-6 py-10 border border-white/[0.03] bg-white/[0.005] hover:border-primary/20 hover:bg-white/[0.015] transition-all rounded-2xl flex flex-col items-center justify-center text-center group">
+                   <div className="h-12 w-full flex items-center justify-center mb-4 opacity-40 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0">
+                      <img 
+                        src={p.logo} 
+                        alt={p.name} 
+                        className="max-h-full max-w-full object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                   </div>
+                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-white/30 group-hover:text-primary transition-colors duration-500">{p.name}</span>
                 </motion.div>
               ))}
            </div>

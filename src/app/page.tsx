@@ -151,9 +151,11 @@ export default function Home() {
         <HeroCanvas />
         {/* Background Subtle Video & Gradients */}
         <motion.div style={{ scale: heroScale, opacity: heroOpacity }} className="absolute inset-0 z-0">
-          <video autoPlay loop muted playsInline className="w-full h-full object-cover brightness-[0.25] saturate-50">
-            <source src="https://videos.pexels.com/video-files/2169880/2169880-uhd_3840_2160_25fps.mp4" type="video/mp4" />
-          </video>
+          <img 
+            src="/images/hero/hero-main-display.png" 
+            alt="Wander Luxury" 
+            className="w-full h-full object-cover brightness-[0.3] saturate-50"
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-background/80 to-background" />
         </motion.div>
 

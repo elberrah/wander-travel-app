@@ -69,7 +69,7 @@ export default function DestinationsPage() {
       <section className="relative h-screen flex items-center justify-center pt-24 overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 z-0">
           <img
-            src="/images/02_Offres_Entreprise/04_sales_kickoff.jpg"
+            src="/images/destinations/marrakech-resort.jpg"
             className="parallax-dest w-full h-full object-cover brightness-[0.35] scale-110"
             alt="Maroc - Agafay - Atlas"
           />

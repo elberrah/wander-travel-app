@@ -65,7 +65,7 @@ export default function AviationPage() {
       <section ref={heroRef} className="relative h-screen flex items-center pt-24 overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 z-0">
           <img
-            src="/images/services/aviation-fast-track/jet prive/jet prive (3).jpg"
+            src="/images/aviation/private-jet-exterior.jpg"
             className="parallax-jet w-full h-full object-cover brightness-[0.35] scale-110"
             alt="Aviation Excellence"
           />

@@ -75,7 +75,7 @@ export default function CorporatePage() {
       <section ref={heroRef} className="relative h-[85vh] flex items-center justify-center pt-24 overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 z-0">
           <img
-            src="/images/02_Offres_Entreprise/01_hero_offres.jpg"
+            src="/images/corporate/corporate-event-group.jpg"
             alt="Seminar Excellence"
             className="parallax-bg w-full h-full object-cover brightness-[0.3] scale-110"
           />

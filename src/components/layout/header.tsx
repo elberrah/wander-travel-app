@@ -28,6 +28,7 @@ const navLinks = [
   },
   { label: "Destinations", href: "/destinations" },
   { label: "Réalisations", href: "/realisations" },
+  { label: "Fan Zone", href: "/fan-zone" },
   { label: "Contact", href: "/contact" },
 ];
 

@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import HeroCanvas from "@/components/sections/HeroCanvas";
 import { TiltCard } from "@/components/ui/tilt-card";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -134,6 +135,7 @@ export default function Home() {
 
       {/* ── 1. HERO SECTION (EDITORIAL & LAYERED CARDS) ───────────────────── */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#050505]">
+        <HeroCanvas />
         {/* Background Subtle Video & Gradients */}
         <motion.div style={{ scale: heroScale, opacity: heroOpacity }} className="absolute inset-0 z-0">
           <video autoPlay loop muted playsInline className="w-full h-full object-cover brightness-[0.25] saturate-50">

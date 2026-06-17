@@ -74,41 +74,42 @@ export default function PaiementAvantages() {
       <Header />
 
       {/* HERO */}
-      <section className="relative min-h-[65vh] flex items-center justify-center overflow-hidden pt-24">
-        <div className="absolute inset-0">
-          <img src="/images/services/hebergement-palace-stay/HOTEL (1).avif" alt="Paiement" className="w-full h-full object-cover brightness-[0.15]" />
+      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden pt-24 bg-[#050505]">
+        {/* Background Globe for Global Corporate Reach */}
+        <div className="absolute inset-0 z-0 opacity-40">
+          <HeroGlobe />
+        </div>
+        
+        <div className="absolute inset-0 z-0">
+          <img src="/images/services/hebergement-palace-stay/HOTEL (1).avif" alt="Paiement" className="w-full h-full object-cover brightness-[0.1]" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-background/70 to-background" />
         </div>
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
-            className="text-primary tracking-[0.4em] uppercase text-xs font-bold mb-6 block"
-          >
-            Pôle Entreprise
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }}
-            className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight tracking-tight mb-8"
-          >
-            Des modalités de règlement pensées pour les entreprises,{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic">
-              des avantages conçus pour les collaborateurs
+          <Reveal>
+            <span className="text-primary tracking-[0.4em] uppercase text-xs font-bold mb-6 block">
+              Pôle Entreprise
             </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.5 }}
-            className="text-lg text-white/60 max-w-2xl mx-auto font-light leading-relaxed mb-10"
-          >
-            Wander accompagne les sociétés avec une approche structurée du paiement et des solutions premium dédiées aux équipes, pour simplifier l'organisation tout en valorisant l'expérience collaborateur.
-          </motion.p>
-          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.7 }} className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-            <Link href="#contact-b2b" className="px-12 py-5 bg-primary text-black font-bold uppercase tracking-widest text-[11px] hover:shadow-[0_0_40px_rgba(197,160,89,0.35)] transition-all">
-              Échanger avec un conseiller
-            </Link>
-            <Link href="/entreprise/offres" className="px-12 py-5 border border-white/20 text-white hover:border-primary hover:text-primary transition-all text-[11px] font-bold uppercase tracking-widest flex items-center gap-2">
-              Offres Entreprise <ArrowRight size={12} />
-            </Link>
-          </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }}
+              className="text-4xl md:text-7xl font-serif font-bold text-white leading-tight tracking-tight mb-8"
+            >
+              Des modalités de règlement pensées pour les entreprises,{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic">
+                des avantages conçus pour les collaborateurs
+              </span>
+            </motion.h1>
+            <p className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto font-light leading-relaxed mb-10">
+              Wander accompagne les sociétés avec une approche structurée du paiement et des solutions premium dédiées aux équipes, pour simplifier l'organisation tout en valorisant l'expérience collaborateur.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <Link href="#contact-b2b" className="px-12 py-5 bg-primary text-black font-bold uppercase tracking-widest text-[11px] hover:shadow-[0_0_40px_rgba(197,160,89,0.35)] hover:scale-105 transition-all rounded-sm">
+                Échanger avec un conseiller
+              </Link>
+              <Link href="/entreprise/offres" className="px-12 py-5 border border-white/20 text-white hover:border-primary hover:text-primary transition-all text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 rounded-sm group">
+                Offres Entreprise <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 

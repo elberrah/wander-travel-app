@@ -30,7 +30,15 @@ export default function RootLayout({
       className={`${fontSans.variable} ${fontSerif.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-primary/30 selection:text-primary">
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <CustomCursor />
+        <SmoothScrollProvider>
+          <PageTransition>{children}</PageTransition>
+        </SmoothScrollProvider>
+      </body>
+    </html>
+  );
+}
+oothScrollProvider>
       </body>
     </html>
   );

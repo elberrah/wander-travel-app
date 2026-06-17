@@ -103,51 +103,57 @@ export default function ServicesPage() {
       <Header />
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <section className="relative h-[80vh] flex items-center justify-center pt-24 overflow-hidden border-b border-white/5">
+      <section className="relative h-[85vh] flex items-center justify-center pt-24 overflow-hidden border-b border-white/5 bg-[#050505]">
+        {/* 3D Globe Background Overlay */}
+        <div className="absolute inset-0 z-10 opacity-20 pointer-events-none">
+          <HeroGlobe />
+        </div>
+        
         <div className="absolute inset-0 z-0">
           <video
             autoPlay loop muted playsInline
-            className="parallax-services w-full h-full object-cover brightness-[0.3] scale-110"
+            className="parallax-services w-full h-full object-cover brightness-[0.2] scale-110"
           >
             <source src="https://videos.pexels.com/video-files/2169880/2169880-uhd_3840_2160_25fps.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/30" />
         </div>
 
-        <div className="relative z-10 container mx-auto px-6 text-center max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="text-primary tracking-[0.5em] uppercase text-xs font-bold mb-8 block"
-          >
-            Services & Solutions Globales
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-8xl font-serif font-bold text-white mb-10 leading-[1.1]"
-          >
-            L'Excellence <br /> 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic">Opérationnelle</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-            className="text-lg md:text-xl text-white/50 font-light max-w-3xl mx-auto mb-16 leading-relaxed"
-          >
-            Un interlocuteur unique pour orchestrer vos voyages d'affaires, vos événements MICE et votre mobilité prestige, du Maroc au reste du monde.
-          </motion.p>
+        <div className="relative z-20 container mx-auto px-6 text-center max-w-5xl">
+          <Reveal>
+            <div className="text-primary tracking-[0.5em] uppercase text-[10px] md:text-xs font-bold mb-8 block">
+              Services & Solutions Globales
+            </div>
+            <h1 className="text-5xl md:text-[8rem] font-serif font-bold text-white mb-10 leading-[0.9] tracking-tighter">
+              L'Excellence <br /> 
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic">Opérationnelle</span>
+            </h1>
+            <p className="text-lg md:text-xl text-white/50 font-light max-w-3xl mx-auto mb-16 leading-relaxed">
+              Un interlocuteur unique pour orchestrer vos voyages d'affaires, vos événements MICE et votre mobilité prestige, du Maroc au reste du monde.
+            </p>
+          </Reveal>
         </div>
       </section>
 
       {/* ── 2. STATS & WHY ───────────────────────────────────────────────── */}
       <section className="py-24 bg-[#080808] border-b border-white/5">
          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                  <h2 className="font-serif text-4xl text-white font-bold mb-8 leading-snug">Votre réussite, notre seule mesure de performance.</h2>
-                  <p className="text-white/40 font-light text-lg mb-10">Depuis 17 ans, nous transformons chaque mission en un standard d'excellence, alliant discrétion diplomatique et réactivité absolue.</p>
-                  <div className="grid grid-cols-2 gap-8">
-                     <div>
-                        <div className="text-3xl font-serif font-bold text-primary mb-1">1 500+</div>
-                        <div className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Hôtels Partenaires</div>
+            <Reveal>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                 <div>
+                    <h2 className="font-serif text-4xl text-white font-bold mb-8 leading-snug">Votre réussite, notre seule mesure de performance.</h2>
+                    <p className="text-white/40 font-light text-lg mb-10">Depuis 17 ans, nous transformons chaque mission en un standard d'excellence, alliant discrétion diplomatique et réactivité absolue.</p>
+                    <div className="grid grid-cols-2 gap-8">
+                       <div>
+                          <div className="text-3xl font-serif font-bold text-primary mb-1">1 500+</div>
+                          <div className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Hôtels Partenaires</div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+            </Reveal>
+         </div>
+      </section>
                      </div>
                      <div>
                         <div className="text-3xl font-serif font-bold text-primary mb-1">40+</div>

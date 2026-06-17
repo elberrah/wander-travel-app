@@ -112,44 +112,40 @@ export default function OffresEntreprise() {
       <Header />
 
       {/* HERO */}
-      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden pt-24">
-        <div className="absolute inset-0">
-          <img src="/images/02_Offres_Entreprise/01_hero_offres.jpg" alt="Corporate" className="w-full h-full object-cover brightness-[0.18]" />
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-24 bg-[#050505]">
+        {/* 3D Globe Background */}
+        <div className="absolute inset-0 z-0 opacity-40">
+          <HeroGlobe />
+        </div>
+        
+        <div className="absolute inset-0 z-0">
+          <img src="/images/corporate/sofitel.jpg" alt="Corporate" className="w-full h-full object-cover brightness-[0.12]" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-background/70 to-background" />
         </div>
+        
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
-            className="text-primary tracking-[0.4em] uppercase text-xs font-bold mb-6 block"
-          >
-            Pôle Entreprise
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }}
-            className="text-5xl md:text-7xl font-serif font-bold text-white leading-[0.95] tracking-tight mb-8"
-          >
-            Des expériences entreprise pensées pour <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic">
-              fédérer, engager et valoriser
+          <Reveal>
+            <span className="text-primary tracking-[0.4em] uppercase text-[10px] md:text-xs font-bold mb-6 block">
+              Pôle Entreprise
             </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.5 }}
-            className="text-lg text-white/60 max-w-2xl mx-auto font-light leading-relaxed mb-12"
-          >
-            Wander conçoit et coordonne des formats corporate premium, du team day au offsite stratégique, avec une exécution fluide, soignée et adaptée à vos enjeux RH, managériaux et business.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex flex-col sm:flex-row gap-4 items-center justify-center"
-          >
-            <Link href="/contact" className="px-12 py-5 bg-primary text-black font-bold uppercase tracking-widest text-[11px] hover:shadow-[0_0_40px_rgba(197,160,89,0.35)] transition-all">
-              Demander une proposition
-            </Link>
-            <Link href="/entreprise/paiement-avantages" className="px-12 py-5 border border-white/20 text-white hover:border-primary hover:text-primary transition-all text-[11px] font-bold uppercase tracking-widest">
-              Voir les solutions paiement
-            </Link>
-          </motion.div>
+            <h1 className="text-5xl md:text-[8rem] font-serif font-bold text-white leading-[0.8] tracking-tighter mb-8">
+              Fédérer <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic pr-8">
+                l'Engagement
+              </span>
+            </h1>
+            <p className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto font-light leading-relaxed mb-12">
+              Wander conçoit et coordonne des formats corporate premium, du team day au offsite stratégique, avec une exécution fluide, soignée et adaptée à vos enjeux.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
+              <Link href="/contact" className="px-16 py-6 bg-primary text-black font-bold uppercase tracking-widest text-xs hover:bg-white hover:scale-105 transition-all shadow-[0_30px_100px_rgba(197,160,89,0.25)] rounded-sm">
+                Réserver un Format
+              </Link>
+              <Link href="/entreprise/paiement-avantages" className="px-16 py-6 border border-white/20 text-white hover:border-primary hover:text-primary transition-all text-xs font-bold uppercase tracking-widest rounded-sm group flex items-center gap-3">
+                Solutions Paiement <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 

@@ -101,8 +101,7 @@ export default function DestinationsPage() {
         <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-30">
           <div className="w-px h-20 bg-gradient-to-b from-primary to-transparent" />
         </motion.div>
-      </section>
-
+    
       {/* ── 2. GLOBAL FOOTPRINT ─────────────────────────────────────────── */}
       <section className="py-24 bg-[#080808] border-b border-white/5">
          <div className="container mx-auto px-6 max-w-7xl">

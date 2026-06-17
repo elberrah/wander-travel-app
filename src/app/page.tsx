@@ -250,16 +250,23 @@ export default function Home() {
       </section>
 
       {/* ── 2. STATS ────────────────────────────────────────────────── */}
-      <section className="relative z-10 py-20 bg-[#080808] border-y border-white/5">
-        <div className="container mx-auto px-6 max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-            {stats.map((stat, i) => (
-              <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <div className="text-3xl md:text-5xl font-serif font-bold text-primary mb-2">{stat.value}<span className="text-xl md:text-2xl ml-1">{stat.suffix}</span></div>
-                <div className="text-[10px] text-white/30 uppercase tracking-[0.25em] font-medium">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
+      <section className="relative z-10 py-20 bg-[#080808] border-y border-white/5 overflow-hidden">
+        {/* Background Globe for Global Presence */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-20 z-0">
+          <HeroGlobe />
+        </div>
+        
+        <div className="container mx-auto px-6 max-w-6xl relative z-10">
+          <Reveal>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+              {stats.map((stat, i) => (
+                <div key={stat.label}>
+                  <div className="text-3xl md:text-5xl font-serif font-bold text-primary mb-2">{stat.value}<span className="text-xl md:text-2xl ml-1">{stat.suffix}</span></div>
+                  <div className="text-[10px] text-white/30 uppercase tracking-[0.25em] font-medium">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 

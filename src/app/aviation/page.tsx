@@ -274,19 +274,3 @@ export default function AviationPage() {
     </main>
   );
 }
-]">
-                   Ouvrir un Dossier Vol
-                 </Link>
-                 <div className="flex items-center gap-4">
-                    <Plane size={20} className="text-primary/60" />
-                    <span className="text-white/30 uppercase tracking-[0.3em] font-bold text-[10px]">Wander Global Aviation</span>
-                 </div>
-              </div>
-           </motion.div>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
-  );
-}

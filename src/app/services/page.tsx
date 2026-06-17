@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { Reveal } from "@/components/providers/transitions";
+import { HeroGlobe } from "@/components/ui/hero-globe";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Globe, Shield, Zap, Star, Layout, Laptop } from "lucide-react";
 import gsap from "gsap";

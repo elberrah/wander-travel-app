@@ -66,38 +66,37 @@ export default function DestinationsPage() {
       <Header />
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <section className="relative h-screen flex items-center justify-center pt-24 overflow-hidden border-b border-white/5">
+      <section className="relative h-screen flex items-center justify-center pt-24 overflow-hidden border-b border-white/5 bg-[#050505]">
+        {/* 3D Globe Background */}
+        <div className="absolute inset-0 z-0 opacity-40">
+          <HeroGlobe />
+        </div>
+        
         <div className="absolute inset-0 z-0">
           <img
             src="/images/destinations/marrakech-resort.jpg"
-            className="parallax-dest w-full h-full object-cover brightness-[0.35] scale-110"
+            className="parallax-dest w-full h-full object-cover brightness-[0.2] scale-110"
             alt="Maroc - Agafay - Atlas"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/30" />
         </div>
 
         <div className="relative z-10 container mx-auto px-6 text-center max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
-            className="w-20 h-20 rounded-full border border-primary/20 bg-primary/10 backdrop-blur-md flex items-center justify-center text-primary mx-auto mb-10"
-          >
-            <Compass size={32} strokeWidth={1} />
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-6xl md:text-[10rem] font-serif font-bold text-white mb-10 leading-[0.85] tracking-tighter"
-          >
-             Le Monde <br /> 
-             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic pr-8">Wander</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-            className="text-xl text-white/40 max-w-2xl mx-auto font-light leading-relaxed"
-          >
-            Du cœur battant de Marrakech aux centres financiers de Tokyo. 
-            Découvrez nos destinations de prédilection, opérées avec une excellence sans compromis.
-          </motion.p>
+          <Reveal>
+            <div className="w-20 h-20 rounded-full border border-primary/20 bg-primary/10 backdrop-blur-md flex items-center justify-center text-primary mx-auto mb-10">
+              <Compass size={32} strokeWidth={1} />
+            </div>
+            <h1 className="text-6xl md:text-[10rem] font-serif font-bold text-white mb-10 leading-[0.85] tracking-tighter">
+               Le Monde <br /> 
+               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic pr-8">Wander</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/40 max-w-2xl mx-auto font-light leading-relaxed mb-12">
+              Du cœur battant de Marrakech aux centres financiers de Tokyo. <br className="hidden md:block" />
+              Découvrez nos destinations de prédilection, opérées avec une excellence sans compromis.
+            </p>
+          </Reveal>
         </div>
+      </section>
 
         <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-30">
           <div className="w-px h-20 bg-gradient-to-b from-primary to-transparent" />
@@ -217,6 +216,18 @@ export default function DestinationsPage() {
                  <Link href="/contact" className="px-16 py-7 bg-primary text-black font-bold uppercase tracking-[0.4em] text-xs hover:bg-white transition-all shadow-[0_30px_100px_rgba(197,160,89,0.2)]">Ouvrir un Dossier</Link>
                  <div className="flex items-center gap-6 justify-center">
                     <Globe size={24} className="text-primary/60" />
+                    <span className="text-white/30 uppercase tracking-[0.3em] font-bold text-[10px]">Wander Global Logistics</span>
+                 </div>
+              </div>
+           </motion.div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}
+xt-primary/60" />
                     <span className="text-white/30 uppercase tracking-[0.3em] font-bold text-[10px]">Wander Global Logistics</span>
                  </div>
               </div>

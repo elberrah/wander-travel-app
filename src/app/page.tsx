@@ -271,36 +271,51 @@ export default function Home() {
       </section>
 
       {/* ── 2b. CORPORATE À LA UNE ─────────────────────────────────── */}
-      <section className="relative z-10 py-32 bg-gradient-to-b from-[#050505] via-[#090909] to-background">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16 relative">
-            <span className="text-[#c5a059] font-bold tracking-[0.4em] uppercase text-xs mb-5 block">Pôle Entreprise</span>
-            <h2 className="font-serif text-5xl md:text-7xl text-white font-medium leading-[1.1] mb-6">Vos expériences entreprise, <br />avec plus de fluidité</h2>
-            <p className="text-white/50 font-light max-w-2xl mx-auto leading-relaxed text-lg">
-              Wander accompagne les entreprises avec des offres sur-mesure, des modalités de règlement structurées et des avantages exclusifs pensés pour les collaborateurs.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-14">
-            {["Team Day","Team Offsite","Incentive","Guest Desk","Paiement par acompte","Virement entreprise","Paiement échelonné","Avantages salariés","Wallet entreprise"].map((item,i) => (
-              <motion.div key={item} initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ delay:i*0.07 }}
-                className="px-4 py-4 border border-white/5 rounded-2xl bg-[#080808] hover:border-[#c5a059]/40 hover:shadow-[0_0_20px_rgba(197,160,89,0.1)] transition-all duration-300 text-center group cursor-default">
-                <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/40 group-hover:text-[#c5a059] transition-colors duration-300">{item}</span>
-              </motion.div>
-            ))}
-          </div>
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {["Sur-mesure","Corporate Premium","Paiement Structuré","Coordination de bout en bout"].map(b => (
-              <span key={b} className="px-5 py-2.5 border border-[#c5a059]/20 bg-[#c5a059]/[0.02] text-[#c5a059] text-[10px] font-bold uppercase tracking-[0.2em] rounded-full drop-shadow-sm">{b}</span>
-            ))}
-          </div>
-          <div className="flex flex-col sm:flex-row gap-5 items-center justify-center">
-            <Link href="/entreprise/offres" className="group relative px-12 py-5 bg-[#c5a059] text-black font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-[#d4b472] hover:scale-105 hover:shadow-[0_0_40px_rgba(197,160,89,0.35)] transition-all duration-500 rounded-sm">
-              Découvrir les offres entreprise
-            </Link>
-            <Link href="/entreprise/paiement-avantages" className="group px-12 py-5 border border-white/10 text-white hover:border-[#c5a059]/50 hover:bg-[#c5a059]/5 transition-all duration-500 text-[11px] font-bold uppercase tracking-[0.2em] rounded-sm">
-              Solutions de paiement
-            </Link>
-          </div>
+      <section className="relative z-10 py-32 bg-gradient-to-b from-[#050505] via-[#090909] to-background overflow-hidden">
+        {/* Background Globe for Corporate Scale */}
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full h-full opacity-[0.15] z-0 pointer-events-none">
+          <HeroGlobe />
+        </div>
+
+        <div className="container mx-auto px-6 max-w-7xl relative z-10">
+          <Reveal>
+            <div className="text-center mb-16 relative">
+              <span className="text-[#c5a059] font-bold tracking-[0.4em] uppercase text-xs mb-5 block">Pôle Entreprise</span>
+              <h2 className="font-serif text-5xl md:text-7xl text-white font-medium leading-[1.1] mb-6">Vos expériences entreprise, <br />avec plus de fluidité</h2>
+              <p className="text-white/50 font-light max-w-2xl mx-auto leading-relaxed text-lg">
+                Wander accompagne les entreprises avec des offres sur-mesure, des modalités de règlement structurées et des avantages exclusifs pensés pour les collaborateurs.
+              </p>
+            </div>
+          </Reveal>
+          
+          <Reveal delay={0.2}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-14">
+              {["Team Day","Team Offsite","Incentive","Guest Desk","Paiement par acompte","Virement entreprise","Paiement échelonné","Avantages salariés","Wallet entreprise"].map((item,i) => (
+                <div key={item} className="px-4 py-4 border border-white/5 rounded-2xl bg-[#080808] hover:border-[#c5a059]/40 hover:shadow-[0_0_20px_rgba(197,160,89,0.1)] transition-all duration-300 text-center group cursor-default">
+                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/40 group-hover:text-[#c5a059] transition-colors duration-300">{item}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.3}>
+            <div className="flex flex-wrap justify-center gap-4 mb-12">
+              {["Sur-mesure","Corporate Premium","Paiement Structuré","Coordination de bout en bout"].map(b => (
+                <span key={b} className="px-5 py-2.5 border border-[#c5a059]/20 bg-[#c5a059]/[0.02] text-[#c5a059] text-[10px] font-bold uppercase tracking-[0.2em] rounded-full drop-shadow-sm">{b}</span>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.4}>
+            <div className="flex flex-col sm:flex-row gap-5 items-center justify-center">
+              <Link href="/entreprise/offres" className="group relative px-12 py-5 bg-[#c5a059] text-black font-bold uppercase tracking-[0.2em] text-[11px] hover:bg-[#d4b472] hover:scale-105 hover:shadow-[0_0_40px_rgba(197,160,89,0.35)] transition-all duration-500 rounded-sm">
+                Découvrir les offres entreprise
+              </Link>
+              <Link href="/entreprise/paiement-avantages" className="group px-12 py-5 border border-white/10 text-white hover:border-[#c5a059]/50 hover:bg-[#c5a059]/5 transition-all duration-500 text-[11px] font-bold uppercase tracking-[0.2em] rounded-sm">
+                Solutions de paiement
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 

@@ -73,65 +73,65 @@ export default function VipLimousinesPage() {
       <Header />
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <section className="relative h-screen flex items-center justify-center pt-24 overflow-hidden border-b border-white/5">
+      <section className="relative h-screen flex items-center justify-center pt-24 overflow-hidden border-b border-white/5 bg-[#050505]">
+        {/* 3D Globe Background Overlay */}
+        <div className="absolute inset-0 z-10 opacity-20 pointer-events-none">
+          <HeroGlobe />
+        </div>
+        
         <div className="absolute inset-0 z-0 overflow-hidden">
           <video
             autoPlay loop muted playsInline
-            className="parallax-vip w-full h-full object-cover brightness-[0.3] scale-125"
+            className="parallax-vip w-full h-full object-cover brightness-[0.25] scale-125"
           >
             <source src="https://videos.pexels.com/video-files/3773461/3773461-uhd_3840_2160_25fps.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background" />
         </div>
 
-        <div className="relative z-10 container mx-auto px-6 text-center max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="text-primary tracking-[0.4em] uppercase text-xs font-bold mb-8 block drop-shadow-lg"
-          >
-            Mobilité Prestige & Chauffeurs VIP
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-white mb-10 leading-[1] drop-shadow-2xl"
-          >
-            L'Élite, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic pr-4">
-              Sans Compromis.
-            </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-            className="text-lg md:text-xl text-white/50 font-light max-w-2xl mx-auto mb-14"
-          >
-            Découvrez une mobilité qui mêle authenticité de terrain et excellence internationale.
-          </motion.p>
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1 }}>
-             <Link href="/contact" className="px-12 py-5 bg-primary text-black font-bold uppercase tracking-widest text-xs hover:bg-white transition-all shadow-[0_0_60px_rgba(197,160,89,0.3)]">
-                Réserver mon Chauffeur
-             </Link>
-          </motion.div>
+        <div className="relative z-20 container mx-auto px-6 text-center max-w-5xl">
+          <Reveal>
+            <div className="text-primary tracking-[0.4em] uppercase text-[10px] md:text-xs font-bold mb-8 block drop-shadow-lg">
+              Mobilité Prestige & Chauffeurs VIP
+            </div>
+            <h1 className="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-white mb-10 leading-[1] drop-shadow-2xl">
+              L'Élite, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic pr-4">
+                Sans Compromis.
+              </span>
+            </h1>
+            <p className="text-lg md:text-xl text-white/50 font-light max-w-2xl mx-auto mb-14">
+              Découvrez une mobilité qui mêle authenticité de terrain et excellence internationale.
+            </p>
+            <div className="flex justify-center">
+               <Link href="/contact" className="px-12 py-5 bg-primary text-black font-bold uppercase tracking-widest text-xs hover:bg-white hover:scale-105 transition-all shadow-[0_0_60px_rgba(197,160,89,0.3)] rounded-sm">
+                  Réserver mon Chauffeur
+               </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── 2. SERVICES VIP ──────────────────────────────────────────────── */}
       <section className="py-24 bg-[#080808] border-b border-white/5">
         <div className="container mx-auto px-6 max-w-7xl">
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              {[
-                { icon: <Shield size={32} />, title: "Sécurité & Discret", desc: "Chauffeurs formés aux protocoles de protection." },
-                { icon: <Clock size={32} />, title: "Réactivité 24/7", desc: "Prêt à opérer à tout moment." },
-                { icon: <Globe size={32} />, title: "Réseau Maroc & Global", desc: "Expertise locale ancrée dans le terrain." },
-              ].map((s, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex gap-6">
-                   <div className="text-primary shrink-0">{s.icon}</div>
-                   <div>
-                      <h3 className="text-white font-bold text-lg mb-3">{s.title}</h3>
-                      <p className="text-white/40 font-light text-sm leading-relaxed">{s.desc}</p>
-                   </div>
-                </motion.div>
-              ))}
-           </div>
+           <Reveal>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                {[
+                  { icon: <Shield size={32} />, title: "Sécurité & Discret", desc: "Chauffeurs formés aux protocoles de protection." },
+                  { icon: <Clock size={32} />, title: "Réactivité 24/7", desc: "Prêt à opérer à tout moment." },
+                  { icon: <Globe size={32} />, title: "Réseau Maroc & Global", desc: "Expertise locale ancrée dans le terrain." },
+                ].map((s, i) => (
+                  <div key={i} className="flex gap-6">
+                     <div className="text-primary shrink-0">{s.icon}</div>
+                     <div>
+                        <h3 className="text-white font-bold text-lg mb-3">{s.title}</h3>
+                        <p className="text-white/40 font-light text-sm leading-relaxed">{s.desc}</p>
+                     </div>
+                  </div>
+                ))}
+             </div>
+           </Reveal>
         </div>
       </section>
 
@@ -199,6 +199,21 @@ export default function VipLimousinesPage() {
                             </div>
                             <div>
                                <h4 className="text-white font-bold mb-1">Audit Flotte</h4>
+                               <p className="text-white/30 text-xs font-light">Maintenance rigoureuse et propreté clinique garantie avant chaque mission.</p>
+                            </div>
+                        </li>
+                     </ul>
+                  </motion.div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}
+>Audit Flotte</h4>
                                <p className="text-white/30 text-xs font-light">Maintenance rigoureuse et propreté clinique garantie avant chaque mission.</p>
                             </div>
                         </li>

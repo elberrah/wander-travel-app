@@ -62,11 +62,16 @@ export default function AviationPage() {
       <Header />
 
       {/* ── 1. HERO ──────────────────────────────────────────────────────── */}
-      <section ref={heroRef} className="relative h-screen flex items-center pt-24 overflow-hidden border-b border-white/5">
+      <section ref={heroRef} className="relative h-screen flex items-center pt-24 overflow-hidden border-b border-white/5 bg-[#050505]">
+        {/* 3D Globe Background */}
+        <div className="absolute inset-0 z-0 opacity-30">
+          <HeroGlobe />
+        </div>
+        
         <div className="absolute inset-0 z-0">
           <img
             src="/images/aviation/private-jet-exterior.jpg"
-            className="parallax-jet w-full h-full object-cover brightness-[0.35] scale-110"
+            className="parallax-jet w-full h-full object-cover brightness-[0.2] scale-110"
             alt="Aviation Excellence"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent" />
@@ -74,62 +79,57 @@ export default function AviationPage() {
         </div>
 
         <div className="relative z-10 container mx-auto px-6 max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
-            className="flex items-center gap-4 mb-10"
-          >
-            <div className="w-16 h-px bg-primary" />
-            <span className="text-primary tracking-[0.5em] uppercase text-xs font-bold font-serif italic">Wings of Wander</span>
-          </motion.div>
+          <Reveal>
+            <div className="flex items-center gap-4 mb-10">
+              <div className="w-16 h-px bg-primary" />
+              <span className="text-primary tracking-[0.5em] uppercase text-xs font-bold font-serif italic">Wings of Wander</span>
+            </div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-6xl md:text-8xl lg:text-[10rem] font-serif font-bold text-white mb-10 leading-[0.85] tracking-tighter"
-          >
-            Le Ciel <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic pr-8">
-              Sans Limite
-            </span>
-          </motion.h1>
+            <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-serif font-bold text-white mb-10 leading-[0.85] tracking-tighter text-balance">
+              Le Ciel <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-100 to-primary/80 italic pr-8">
+                Sans Limite
+              </span>
+            </h1>
 
-          <motion.p
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-            className="text-lg md:text-2xl text-white/40 font-light max-w-2xl mb-16 leading-relaxed"
-          >
-             Affrètement de jets privés, hélicoptères VIP et billetterie corporate premium. 
-             Nous orchestrons chaque plan de vol avec une précision absolue.
-          </motion.p>
+            <p className="text-lg md:text-2xl text-white/40 font-light max-w-2xl mb-16 leading-relaxed">
+               Affrètement de jets privés, hélicoptères VIP et billetterie corporate premium. 
+               Nous orchestrons chaque plan de vol avec une précision absolue.
+            </p>
 
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1 }} className="flex flex-col sm:flex-row gap-6 items-center">
-             <Link href="/contact" className="px-16 py-6 bg-primary text-black font-bold uppercase tracking-widest text-xs hover:bg-white transition-all shadow-[0_30px_100px_rgba(197,160,89,0.25)]">
-                Demander un Plan de Vol
-             </Link>
-             <div className="flex items-center gap-4 text-white/30 lowercase italic text-sm">
-                <span>Décollage garanti en 4h</span>
-                <div className="w-1 h-1 bg-primary rounded-full" />
-                <span>Discrétion Totale</span>
-             </div>
-          </motion.div>
+            <div className="flex flex-col sm:flex-row gap-8 items-center">
+               <Link href="/contact" className="px-16 py-6 bg-primary text-black font-bold uppercase tracking-widest text-xs hover:bg-white hover:scale-105 transition-all shadow-[0_30px_100px_rgba(197,160,89,0.25)] rounded-sm">
+                  Demander un Plan de Vol
+               </Link>
+               <div className="flex items-center gap-4 text-white/30 lowercase italic text-sm">
+                  <span>Décollage garanti en 4h</span>
+                  <div className="w-1 h-1 bg-primary rounded-full" />
+                  <span>Discrétion Totale</span>
+               </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── 2. STATS ─────────────────────────────────────────────────────── */}
       <section className="py-24 bg-[#080808] border-b border-white/5">
         <div className="container mx-auto px-6 max-w-7xl">
-           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-              {[
-                { icon: <Clock size={24} />, label: "Réactivité 4h", desc: "De la demande au décollage." },
-                { icon: <Shield size={24} />, label: "Confidentialité", desc: "Protocoles d'État garantis." },
-                { icon: <Globe size={24} />, label: "Global Reach", desc: "Accès à 5 000+ aéroports." },
-                { icon: <Zap size={24} />, label: "Priority Fast-Track", desc: "Zéro attente au terminal." },
-              ].map((s, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center md:text-left">
-                   <div className="text-primary mb-6 flex justify-center md:justify-start">{s.icon}</div>
-                   <h3 className="text-white font-bold text-lg mb-2">{s.label}</h3>
-                   <p className="text-white/30 font-light text-sm">{s.desc}</p>
-                </motion.div>
-              ))}
-           </div>
+           <Reveal>
+             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+                {[
+                  { icon: <Clock size={24} />, label: "Réactivité 4h", desc: "De la demande au décollage." },
+                  { icon: <Shield size={24} />, label: "Confidentialité", desc: "Protocoles d'État garantis." },
+                  { icon: <Globe size={24} />, label: "Global Reach", desc: "Accès à 5 000+ aéroports." },
+                  { icon: <Zap size={24} />, label: "Priority Fast-Track", desc: "Zéro attente au terminal." },
+                ].map((s, i) => (
+                  <div key={i} className="text-center md:text-left">
+                     <div className="text-primary mb-6 flex justify-center md:justify-start">{s.icon}</div>
+                     <h3 className="text-white font-bold text-lg mb-2">{s.label}</h3>
+                     <p className="text-white/30 font-light text-sm">{s.desc}</p>
+                  </div>
+                ))}
+             </div>
+           </Reveal>
         </div>
       </section>
 
@@ -259,6 +259,22 @@ export default function AviationPage() {
               </h2>
               <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
                  <Link href="/contact" className="px-16 py-7 bg-primary text-black font-bold uppercase tracking-[0.4em] text-xs hover:bg-white transition-all shadow-[0_30px_100px_rgba(197,160,89,0.25)]">
+                   Ouvrir un Dossier Vol
+                 </Link>
+                 <div className="flex items-center gap-4">
+                    <Plane size={20} className="text-primary/60" />
+                    <span className="text-white/30 uppercase tracking-[0.3em] font-bold text-[10px]">Wander Global Aviation</span>
+                 </div>
+              </div>
+           </motion.div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}
+]">
                    Ouvrir un Dossier Vol
                  </Link>
                  <div className="flex items-center gap-4">

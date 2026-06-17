@@ -108,11 +108,11 @@ const partners = [
 
 // Mélange de photos premium et photos réelles (raw) demandées par l'user - structure modulaire de cadrage
 const immersiveGallery = [
-  { src: "/images/services/incentive-team-building/team-bulding (6).png", title: "Team Building", aspect: "aspect-[4/5] object-top" },
-  { src: "/images/services/travel-management/DISTINATION-MARBELLA.png", title: "Destination Premium", aspect: "aspect-[3/4]" },
-  { src: "/images/experience-blocks/fast-track/fast track-maroc.png", title: "Fast Track", aspect: "aspect-[16/9]" },
+  { src: "/images/mice/event-main.jpg", title: "MICE Excellence", aspect: "aspect-[4/5]" },
+  { src: "/images/gallery/casa-skyline.png", title: "Maroc Imperial", aspect: "aspect-[3/4]" },
+  { src: "/images/corporate/sofitel.jpg", title: "Palace Stay", aspect: "aspect-[16/9]" },
   { src: "/images/products/employee-benefits/avantage -salarie.png", title: "Employee Benefits", aspect: "aspect-square" },
-  { src: "/images/products/wallet-entreprise/solution entreprise.png", title: "Corporate Solutions", aspect: "aspect-[3/4]" },
+  { src: "/images/gallery/partners-group.jpg", title: "Global Network", aspect: "aspect-[3/4]" },
   { src: "/images/services/mice-event-strategy/02_service_corporate.JPEG", title: "Stratégie", aspect: "aspect-video" },
 ];
 

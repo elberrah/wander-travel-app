@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, ArrowRight, Globe, Phone, Camera, ExternalLink, ChevronDown, Building2, CreditCard } from "lucide-react";
+import { Menu, X, ArrowRight, Globe, Phone, Camera, ExternalLink, ChevronDown, Building2, CreditCard, Heart } from "lucide-react";
 
 const navLinks = [
   { label: "Accueil", href: "/" },
@@ -282,6 +282,15 @@ export default function Header() {
                <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="px-10 py-5 bg-primary text-black font-bold uppercase tracking-[0.3em] text-xs flex items-center justify-between group">
                   Demander un devis
                   <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+               </Link>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+ate-x-2 transition-transform" />
                </Link>
             </motion.div>
           </motion.div>

@@ -38,8 +38,3 @@ export default function RootLayout({
     </html>
   );
 }
-oothScrollProvider>
-      </body>
-    </html>
-  );
-}

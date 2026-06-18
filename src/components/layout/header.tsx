@@ -290,12 +290,3 @@ export default function Header() {
     </>
   );
 }
-ate-x-2 transition-transform" />
-               </Link>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-}

@@ -209,21 +209,9 @@ export default function VipLimousinesPage() {
          </div>
       </section>
 
-      <Footer />
+            <Footer />
     </main>
-  );
-}
->Audit Flotte</h4>
-                               <p className="text-white/30 text-xs font-light">Maintenance rigoureuse et propreté clinique garantie avant chaque mission.</p>
-                            </div>
-                        </li>
-                     </ul>
-                  </motion.div>
-               </div>
-            </div>
-         </div>
-      </section>
-
+      );
       <Footer />
     </main>
   );

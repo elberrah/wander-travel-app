@@ -153,14 +153,6 @@ export default function ServicesPage() {
               </div>
             </Reveal>
          </div>
-      </section>
-                     </div>
-                     <div>
-                        <div className="text-3xl font-serif font-bold text-primary mb-1">40+</div>
-                        <div className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Destinations Mondiales</div>
-                     </div>
-                  </div>
-               </motion.div>
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {[
                     { icon: <Shield size={20} />, t: "Confidentialité Protégée", d: "Gestion sécurisée des données et identités." },

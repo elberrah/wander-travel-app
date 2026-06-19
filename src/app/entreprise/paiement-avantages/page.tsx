@@ -302,7 +302,7 @@ export default function PaiementAvantages() {
                   <textarea id="message" rows={4} placeholder="Décrivez votre projet ou votre besoin…" className="w-full px-4 py-3 bg-white/[0.03] border border-white/10 rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-primary/50 transition-colors resize-none" />
                 </div>
                 <button type="submit" className="w-full py-5 bg-primary text-black font-bold uppercase tracking-widest text-[11px] hover:shadow-[0_0_30px_rgba(197,160,89,0.3)] transition-all rounded-sm">
-                  Envoyer ma demande企業
+                  Envoyer ma demande
                 </button>
               </form>
             </motion.div>

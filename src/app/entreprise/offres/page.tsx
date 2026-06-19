@@ -5,6 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { Reveal } from "@/components/providers/transitions";
+import { HeroGlobe } from "@/components/ui/hero-globe";
 import { ArrowRight, CheckCircle2, Calendar, Users, MapPin, Star, Clock, Briefcase, Coffee, Sun, Moon } from "lucide-react";
 
 const offers = [

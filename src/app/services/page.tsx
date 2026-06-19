@@ -150,24 +150,22 @@ export default function ServicesPage() {
                        </div>
                     </div>
                  </div>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {[
+                      { icon: <Shield size={20} />, t: "Confidentialité Protégée", d: "Gestion sécurisée des données et identités." },
+                      { icon: <Zap size={20} />, t: "Réactivité 120min", d: "Première proposition technique transmise en 2h." },
+                      { icon: <Globe size={20} />, t: "Logistique 360", d: "Maîtrise totale de la chaîne de valeur." },
+                      { icon: <Star size={20} />, t: "Sur-mesure Radical", d: "Aucun template, que de la création pure." },
+                    ].map((item, i) => (
+                      <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-8 border border-white/5 bg-white/[0.015] rounded-3xl">
+                         <div className="text-primary mb-4">{item.icon}</div>
+                         <h4 className="text-white font-bold text-sm mb-2">{item.t}</h4>
+                         <p className="text-white/30 text-[11px] leading-relaxed">{item.d}</p>
+                      </motion.div>
+                    ))}
+                 </div>
               </div>
             </Reveal>
-         </div>
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {[
-                    { icon: <Shield size={20} />, t: "Confidentialité Protégée", d: "Gestion sécurisée des données et identités." },
-                    { icon: <Zap size={20} />, t: "Réactivité 120min", d: "Première proposition technique transmise en 2h." },
-                    { icon: <Globe size={20} />, t: "Logistique 360", d: "Maîtrise totale de la chaîne de valeur." },
-                    { icon: <Star size={20} />, t: "Sur-mesure Radical", d: "Aucun template, que de la création pure." },
-                  ].map((item, i) => (
-                    <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-8 border border-white/5 bg-white/[0.015] rounded-3xl">
-                       <div className="text-primary mb-4">{item.icon}</div>
-                       <h4 className="text-white font-bold text-sm mb-2">{item.t}</h4>
-                       <p className="text-white/30 text-[11px] leading-relaxed">{item.d}</p>
-                    </motion.div>
-                  ))}
-               </div>
-            </div>
          </div>
       </section>
 

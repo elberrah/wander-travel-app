@@ -6,6 +6,8 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import Link from "next/link";
 import { CheckCircle2, Shield, Star, Clock, Globe, MapPin } from "lucide-react";
+import { Reveal } from "@/components/providers/transitions";
+import { HeroGlobe } from "@/components/ui/hero-globe";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -209,9 +211,6 @@ export default function VipLimousinesPage() {
          </div>
       </section>
 
-            <Footer />
-    </main>
-      );
       <Footer />
     </main>
   );

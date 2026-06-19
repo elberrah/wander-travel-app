@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/providers/smooth-scroll";
+import { CustomCursor } from "@/components/ui/custom-cursor";
+import { PageTransition } from "@/components/providers/transitions";
 
 const fontSans = Inter({
   variable: "--font-sans",

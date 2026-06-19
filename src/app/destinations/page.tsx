@@ -6,6 +6,8 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import Link from "next/link";
 import { ArrowRight, MapPin, Star, Compass, Globe } from "lucide-react";
+import { Reveal } from "@/components/providers/transitions";
+import { HeroGlobe } from "@/components/ui/hero-globe";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -215,18 +217,6 @@ export default function DestinationsPage() {
                  <Link href="/contact" className="px-16 py-7 bg-primary text-black font-bold uppercase tracking-[0.4em] text-xs hover:bg-white transition-all shadow-[0_30px_100px_rgba(197,160,89,0.2)]">Ouvrir un Dossier</Link>
                  <div className="flex items-center gap-6 justify-center">
                     <Globe size={24} className="text-primary/60" />
-                    <span className="text-white/30 uppercase tracking-[0.3em] font-bold text-[10px]">Wander Global Logistics</span>
-                 </div>
-              </div>
-           </motion.div>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
-  );
-}
-xt-primary/60" />
                     <span className="text-white/30 uppercase tracking-[0.3em] font-bold text-[10px]">Wander Global Logistics</span>
                  </div>
               </div>

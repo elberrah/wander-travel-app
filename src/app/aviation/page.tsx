@@ -6,6 +6,8 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import Link from "next/link";
 import { CheckCircle2, Plane, Clock, Shield, Globe, Wind, Zap } from "lucide-react";
+import { Reveal } from "@/components/providers/transitions";
+import { HeroGlobe } from "@/components/ui/hero-globe";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 

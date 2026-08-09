@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/providers/smooth-scroll";
+import Script from "next/script";
 
 const fontSans = Inter({
   variable: "--font-sans",
@@ -30,8 +31,20 @@ export default function RootLayout({
       className={`${fontSans.variable} ${fontSerif.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-primary/30 selection:text-primary">
-        <CustomCursor />
-        <SmoothScrollProvider>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZL06HET5SK"
+          strategy="afterInteractive"
+          />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-ZL06HET5SK');
+          `}
+        </Script>
+                <CustomCursor />
+                <SmoothScrollProvider>
           <PageTransition>{children}</PageTransition>
         </SmoothScrollProvider>
       </body>

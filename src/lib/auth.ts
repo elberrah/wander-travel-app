@@ -8,7 +8,11 @@ import { isGoogleEnabled as googleEnabled } from "./auth-config";
 
 const isProd = process.env.NODE_ENV === "production";
 // Sur Vercel, l'adresse est déduite automatiquement si BETTER_AUTH_URL est absent.
-const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+// En prévisualisation : l'URL stable de la branche (les liens des emails y renvoient).
+const vercelUrl =
+  process.env.VERCEL_ENV === "production"
+    ? process.env.VERCEL_PROJECT_PRODUCTION_URL
+    : process.env.VERCEL_BRANCH_URL || process.env.VERCEL_URL;
 const baseURL = process.env.BETTER_AUTH_URL || (vercelUrl ? `https://${vercelUrl}` : "http://localhost:3000");
 // Adresses de prévisualisation Vercel (déploiement et branche) acceptées en plus.
 const vercelOrigins = [process.env.VERCEL_URL, process.env.VERCEL_BRANCH_URL, process.env.VERCEL_PROJECT_PRODUCTION_URL]

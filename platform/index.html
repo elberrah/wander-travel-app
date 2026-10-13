@@ -30,6 +30,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Wander">
     <link rel="apple-touch-icon" href="/icons/wander-192.png">
+    <link rel="stylesheet" href="footer.css">
 </head>
 <body class="light-mode">
 
@@ -597,53 +598,108 @@
     </div>
 
     <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <img src="assets/wander-logo.png" alt="Wander Travel & Event" style="height:150px;width:auto;display:block;margin-bottom:10px">
-                <h3 class="logo-text" style="position:absolute;left:-9999px">Wander</h3>
-                <p class="brand-desc">Agent Spécialiste — Solutions Voyage d'Affaire.<br>Le partenaire privilégié de vos voyages d'affaires et de loisirs négociés au meilleur tarif.</p>
+    <footer class="wf" role="contentinfo">
+        <div class="wf-glow" aria-hidden="true"></div>
+
+        <!-- Bandeau d'appel : contact direct -->
+        <section class="wf-cta" aria-label="Contacter Wander">
+            <div>
+                <span class="wf-eyebrow">Wander Corporate</span>
+                <p class="wf-cta-title">Un projet de voyage pour vous ou vos équipes&nbsp;?</p>
+                <p class="wf-cta-text">Un conseiller dédié vous répond sous 24&nbsp;h ouvrées, avec des tarifs négociés pour les collaborateurs.</p>
             </div>
-            
-            <div class="footer-links-col">
-                <h4>Rubriques</h4>
-                <a href="#offres">Nos Offres</a>
-                <a href="#devis">Faire un Devis</a>
+            <div class="wf-cta-actions">
+                <a class="wf-btn wf-btn-gold" href="index.html#devis"><i class="fa-solid fa-file-signature" aria-hidden="true"></i> Demander un devis</a>
+                <a class="wf-btn wf-btn-ghost" href="https://wa.me/212702093107" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>
+            </div>
+        </section>
+
+        <div class="wf-main">
+            <div class="wf-brand">
+                <a class="wf-wordmark" href="index.html" aria-label="Wander Travel &amp; Event, retour à l'accueil">
+                    <span class="wf-wm-name">Wander</span>
+                    <span class="wf-wm-rule" aria-hidden="true"></span>
+                    <span class="wf-wm-sub">Travel &amp; Event</span>
+                </a>
+                <p class="wf-tagline">Agent spécialiste des solutions voyage d'affaires.</p>
+                <p class="wf-desc">Le partenaire privilégié de vos voyages d'affaires et de loisirs, négociés au meilleur tarif pour les collaborateurs des entreprises partenaires.</p>
+                <ul class="wf-trust" aria-label="Garanties">
+                    <li><i class="fa-solid fa-award" aria-hidden="true"></i> Agrément tourisme ODV-9266</li>
+                    <li><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Données protégées · loi 09-08</li>
+                </ul>
             </div>
 
-            <div class="footer-links-col">
-                <h4>Nos Destinations</h4>
-                <span>Casablanca · Marrakech · Agadir</span>
-                <span>Tanger · Chefchaouen · Ifrane · Dakhla</span>
-                <span>Omra · Istanbul · Égypte</span>
+            <nav class="wf-col" aria-label="Rubriques">
+                <h2 class="wf-h">Rubriques</h2>
+                <ul class="wf-links">
+                    <li><a href="index.html#offres">Nos offres</a></li>
+                    <li><a href="index.html#promo-flash">Promo Flash</a></li>
+                    <li><a href="index.html#kids">Kids &amp; Juniors</a></li>
+                    <li><a href="index.html#comment-ca-marche">Comment ça marche</a></li>
+                    <li><a href="index.html#faq">Questions fréquentes</a></li>
+                    <li><a href="index.html#devis">Faire un devis</a></li>
+                </ul>
+            </nav>
+
+            <div class="wf-col">
+                <h2 class="wf-h">Nos destinations</h2>
+                <p class="wf-sub">Maroc</p>
+                <ul class="wf-chips">
+                    <li>Casablanca</li><li>Marrakech</li><li>Agadir</li><li>Tanger</li><li>Chefchaouen</li><li>Ifrane</li><li>Dakhla</li>
+                </ul>
+                <p class="wf-sub">International &amp; spirituel</p>
+                <ul class="wf-chips">
+                    <li>Omra</li><li>Istanbul</li><li>Égypte</li>
+                </ul>
             </div>
 
-            <div class="footer-contact-col">
-                <h4>Contact Corporate</h4>
-                <p><i class="fa-solid fa-location-dot"></i> 36 Rue Ouled Mhanna, RDC Mag. 02, Casablanca</p>
-                <p><i class="fa-solid fa-phone"></i> +212 702 093 107 / +212 522 863 490</p>
-                <p><i class="fa-solid fa-envelope"></i> contact@wandertravel-event.com</p>
-            </div>
+            <address class="wf-col wf-contact">
+                <h2 class="wf-h">Contact corporate</h2>
+                <a class="wf-ci" href="https://maps.google.com/?q=36+Rue+Ouled+Mhanna+Casablanca" target="_blank" rel="noopener noreferrer">
+                    <span class="wf-ic"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
+                    <span><small>Siège</small>36 Rue Ouled Mhanna, RDC Mag.&nbsp;02<br>Casablanca</span>
+                </a>
+                <a class="wf-ci" href="tel:+212702093107">
+                    <span class="wf-ic"><i class="fa-solid fa-phone" aria-hidden="true"></i></span>
+                    <span><small>Mobile</small>+212 702 093 107</span>
+                </a>
+                <a class="wf-ci" href="tel:+212522863490">
+                    <span class="wf-ic"><i class="fa-solid fa-building" aria-hidden="true"></i></span>
+                    <span><small>Bureau</small>+212 522 863 490</span>
+                </a>
+                <a class="wf-ci" href="mailto:contact@wandertravel-event.com">
+                    <span class="wf-ic"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span>
+                    <span><small>Email</small>contact@wandertravel-event.com</span>
+                </a>
+            </address>
         </div>
-        
-        <div class="footer-legal-mentions" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 30px; padding-top: 20px; font-size: 0.8rem; color: rgba(250,248,245,0.6); line-height: 1.6;">
-            <p><strong>Dénomination :</strong> WANDER TRAVEL & EVENT SARL AU &nbsp;|&nbsp; <strong>Agrément Tourisme :</strong> ODV-9266 (Loi 11-16)</p>
-            <p><strong>Siège / Exploitation :</strong> 36 Rue Ouled Mhanna, RDC Mag. 02, Casablanca</p>
-            <p><strong>Identifiants :</strong> ICE 003425248000044 · IF 60164838 · RC 607185 Casablanca · Patente 36302091 · Capital : 100 000 MAD</p>
-            <p><strong>Juridiction compétente :</strong> Tribunal de Commerce de Casablanca &nbsp;|&nbsp; <strong>Données personnelles :</strong> loi 09-08 &nbsp;|&nbsp; <strong>Réservations :</strong> Resa@wandertravel-event.com</p>
-        </div>
 
-        <div class="footer-bottom">
+        <!-- Informations société -->
+        <section class="wf-legal" id="mentions-legales" aria-labelledby="wf-legal-h">
+            <h2 class="wf-legal-h" id="wf-legal-h">Informations légales</h2>
+            <dl class="wf-dl">
+                <div><dt>Dénomination</dt><dd>WANDER TRAVEL &amp; EVENT SARL AU</dd></div>
+                <div><dt>Agrément tourisme</dt><dd>ODV-9266 (loi 11-16)</dd></div>
+                <div><dt>Siège / exploitation</dt><dd>36 Rue Ouled Mhanna, RDC Mag. 02, Casablanca</dd></div>
+                <div><dt>Capital</dt><dd>100 000 MAD</dd></div>
+                <div class="wf-dl-wide"><dt>Identifiants</dt><dd>ICE 003425248000044 · IF 60164838 · RC 607185 Casablanca · Patente 36302091</dd></div>
+                <div><dt>Juridiction compétente</dt><dd>Tribunal de Commerce de Casablanca</dd></div>
+                <div><dt>Données personnelles</dt><dd>Loi 09-08</dd></div>
+                <div><dt>Réservations</dt><dd><a href="mailto:Resa@wandertravel-event.com">Resa@wandertravel-event.com</a></dd></div>
+            </dl>
+        </section>
+
+        <div class="wf-bottom">
             <p>&copy; 2026 Wander Travel &amp; Event. Tous droits réservés. Programme Avantages Salariés.</p>
-            <div class="footer-legal-links">
-                <a href="#faq">Mentions légales</a>
-                <span>·</span>
-                <a href="#faq">Politique de confidentialité</a>
-                <span>·</span>
-                <a href="#faq">Conditions de réservation</a>
-                <span>·</span>
-                <a href="#faq">Conditions d'annulation</a>
-            </div>
+            <nav aria-label="Liens légaux">
+                <ul>
+                    <li><a href="#mentions-legales">Mentions légales</a></li>
+                    <li><a href="/confidentialite">Politique de confidentialité</a></li>
+                    <li><a href="index.html#faq">Conditions de réservation</a></li>
+                    <li><a href="index.html#faq">Conditions d'annulation</a></li>
+                </ul>
+            </nav>
+            <a class="wf-top" href="#top" aria-label="Revenir en haut de la page" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>
         </div>
     </footer>
 

@@ -84,3 +84,21 @@ export async function sendResetPasswordEmail(to: string, name: string, url: stri
     `Réinitialisez votre mot de passe : ${url}`,
   );
 }
+
+// Nouvelle demande de réservation sur la plateforme : alerte à l'équipe Wander.
+export async function sendRequestNotification(d: Record<string, string>) {
+  const to = process.env.NOTIFY_EMAIL || "contact@wandertravel-event.com";
+  const lines = [
+    `${d.fn} ${d.ln} — ${d.co || "entreprise non précisée"}`,
+    `${d.em} · ${d.ph}${d.account && d.account !== d.em ? ` (compte : ${d.account})` : ""}`,
+    "",
+    `${d.product} — ${d.variant}`,
+    `Du ${d.date} au ${d.end}${d.nights ? ` · ${d.nights} nuit(s) · ${d.rooms} chambre(s)` : ""}`,
+    `Adultes : ${d.adults} · Enfants -12 ans : ${d.children} · Bébés : ${d.babies}`,
+    `Estimation : ${d.total} (sous réserve de confirmation)`,
+  ];
+  const html = `<div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#241a1c">${lines
+    .map((l) => escapeHtml(l))
+    .join("<br>")}<br><br>À traiter dans le tableau de bord, onglet Demandes.</div>`;
+  await send(to, `Nouvelle demande : ${d.product}`, html, lines.join("\n"));
+}

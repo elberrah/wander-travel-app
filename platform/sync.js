@@ -1,7 +1,7 @@
 // Wander — synchronisation (offres, demandes, visites)
-// Collez ici l'adresse de votre application web Google Apps Script (voir apps-script.gs). Vide = mode local (ce navigateur seulement).
+// Base Wander (serveur de la plateforme sécurisée) : offres publiées, visites et demandes partagées.
 (function () {
-const SYNC_URL = '';
+const SYNC_URL = '/api/plateforme';
 const KO = 'wander_overrides', KV = 'wander_visits', KR = 'wander_requests';
 const SES = () => { try { return JSON.parse(localStorage.getItem('wander_session')); } catch (e) { return null; } };
 const J = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };

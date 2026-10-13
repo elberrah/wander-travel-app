@@ -70,7 +70,7 @@ const J=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d
 const REMOTE=!!Sync.url, BASE=JSON.parse(JSON.stringify(OFFERS_DATA));
 const CATS=[...new Set(BASE.map(o=>o.category))];
 const STAT=['Nouveau','Contacté','Confirmé','Annulé'];
-let ov={deleted:[],added:[],offers:{}}, dirty=false, tab='home', token=sessionStorage.getItem('wander_admin_token')||'', data={visits:[],requests:[]}, users=[], q='', editing=null, rq='all';
+let ov={deleted:[],added:[],offers:{}}, dirty=false, tab='home', token='session', data={visits:[],requests:[]}, users=[], q='', editing=null, rq='all';
 
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2600)};
 const fmtD=t=>new Date(t).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
@@ -86,14 +86,13 @@ function mark(){dirty=true;$('#publish').style.display='';$('#publish').classLis
 function norm(o){o=o||{};return{deleted:o.deleted||[],added:o.added||[],offers:o.offers||{}}}
 
 async function boot(){
-  $('#mode').textContent=REMOTE?'Google Sheets':'Mode local';$('#mode').className='badge'+(REMOTE?' on':'');
-  if(REMOTE&&!token)return gate();
+  $('#mode').textContent=REMOTE?'Base Wander · en ligne':'Mode local';$('#mode').className='badge'+(REMOTE?' on':'');
   try{
     if(REMOTE){const tk='&token='+encodeURIComponent(token);const [o,s,us]=await Promise.all([Sync.get('overrides'),Sync.get('stats',tk),Sync.get('users',tk)]);users=Array.isArray(us)?us:[];
-      if(s.error){sessionStorage.removeItem('wander_admin_token');token='';return gate('Mot de passe refusé.')}
+      if(s.error){$('#app').innerHTML='<main><div class="panel err">Accès réservé aux administrateurs.</div></main>';return}
       ov=norm(o);data=s;
     }else{ov=norm(J(Sync.KO,{}));data={visits:J(Sync.KV,[]),requests:J(Sync.KR,[]).map((r,i)=>Object.assign({row:i},r))}}
-  }catch(e){$('#app').innerHTML='<main><div class="panel err">Connexion impossible à Google Sheets. Vérifiez l\u2019adresse dans sync.js.</div></main>';return}
+  }catch(e){$('#app').innerHTML='<main><div class="panel err">Connexion impossible au serveur. Rechargez la page.</div></main>';return}
   render();
 }
 function gate(m){$('#app').innerHTML='<div class="gate"><h2>Accès réservé</h2><p class="muted">Entrez le mot de passe défini dans le script Google.</p><div class="panel"><div class="f"><input type="password" id="tk" placeholder="Mot de passe"></div><button class="btn" data-act="login" style="width:100%">Entrer</button><p class="err">'+(m||'')+'</p></div></div>'}
@@ -113,7 +112,8 @@ function home(){
   return '<div class="kpis"><div class="kpi"><b>'+V.length+'</b><span>Pages vues</span></div><div class="kpi"><b>'+u+'</b><span>Visiteurs uniques</span></div><div class="kpi"><b>'+l7.length+'</b><span>Pages vues, 7 jours</span></div><div class="kpi"><b>'+R.length+'</b><span>Demandes</span></div><div class="kpi"><b>'+R.filter(r=>r.status==='Nouveau').length+'</b><span>À traiter</span></div></div>'
   +'<div class="cols"><div><h3>Visites, 30 derniers jours</h3><div class="bars">'+days.map(x=>'<i style="height:'+(x.n/mx*100)+'%" title="'+fmtD(x.d)+' : '+x.n+'"></i>').join('')+'</div><div class="axis"><span>'+fmtD(days[0].d)+'</span><span>'+fmtD(days[29].d)+'</span></div></div>'
   +'<div><h3>Offres les plus consultées</h3>'+(T.length?'<table>'+T.map(function(e){return '<tr><td>'+esc((eff(e[0])||{title:e[0]}).title)+'</td><td style="text-align:right"><b>'+e[1]+'</b></td></tr>'}).join('')+'</table>':'<p class="muted">Aucune visite enregistrée pour l\u2019instant.</p>')+'</div></div>'
-  +(REMOTE?'':'<p class="muted" style="margin-top:20px">Mode local : les chiffres viennent de ce navigateur seulement. Connectez Google Sheets (onglet Réglages) pour compter tous les visiteurs.</p>');
+  +((data.people||[]).length?'<h3 style="margin-top:28px">Visiteurs (90 derniers jours)</h3><div style="overflow:auto"><table><tr><th>Nom</th><th>Entreprise</th><th>Email</th><th style="text-align:right">Pages vues</th><th>Dernière visite</th></tr>'+data.people.map(p=>'<tr><td><b>'+esc(p.name)+'</b></td><td>'+esc(p.company)+'</td><td class="muted">'+esc(p.email)+'</td><td style="text-align:right"><b>'+p.n+'</b></td><td>'+new Date(p.last).toLocaleString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})+'</td></tr>').join('')+'</table></div>':'')
+  +(REMOTE?'':'<p class="muted" style="margin-top:20px">Mode local : les chiffres viennent de ce navigateur seulement. Connectez la base (sync.js) pour compter tous les visiteurs.</p>');
 }
 
 function offres(){
@@ -146,21 +146,17 @@ const rows=()=>eff(editing).rows.map(r=>r.slice());
 function dem(){
   const R=data.requests.filter(r=>rq==='all'||r.status===rq);
   return '<div class="tools"><select id="rq" style="max-width:200px"><option value="all">Tous les statuts</option>'+STAT.map(s=>'<option '+(rq===s?'selected':'')+'>'+s+'</option>').join('')+'</select><span class="muted">'+R.length+' demande(s)</span></div>'
-  +(R.length?'<div style="overflow:auto"><table><tr><th>Date</th><th>Salarié</th><th>Entreprise</th><th>Contact</th><th>Produit</th><th>Séjour</th><th>Personnes</th><th>Estimation</th><th>Statut</th></tr>'+R.map(r=>'<tr><td>'+fmtD(r.t)+'</td><td><b>'+esc(r.fn)+' '+esc(r.ln)+'</b></td><td>'+esc(r.co)+'</td><td>'+esc(r.ph)+'<br><span class="muted">'+esc(r.em)+'</span></td><td>'+esc(r.product)+'<br><span class="muted">'+esc(r.variant)+'</span></td><td>'+esc(r.date)+(r.nights?'<br><span class="muted">'+esc(r.nights)+' nuit(s), '+esc(r.rooms)+' ch.</span>':'')+'</td><td>'+esc(r.adults)+' ad.'+(+r.children?', '+esc(r.children)+' enf.':'')+(+r.babies?', '+esc(r.babies)+' bébé(s)':'')+'</td><td>'+esc(r.total)+'</td><td><select data-act="status" data-row="'+r.row+'" style="min-width:120px">'+STAT.map(s=>'<option '+(r.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select></td></tr>').join('')+'</table></div>':'<p class="muted">Aucune demande pour l\u2019instant.</p>');
+  +(R.length?'<div style="overflow:auto"><table><tr><th>Date</th><th>Salarié</th><th>Entreprise</th><th>Contact</th><th>Produit</th><th>Séjour</th><th>Personnes</th><th>Estimation</th><th>Statut</th></tr>'+R.map(r=>'<tr><td>'+fmtD(r.t)+'</td><td><b>'+esc(r.fn)+' '+esc(r.ln)+'</b></td><td>'+esc(r.co)+'</td><td>'+esc(r.ph)+'<br><span class="muted">'+esc(r.em)+'</span></td><td>'+esc(r.product)+'<br><span class="muted">'+esc(r.variant)+'</span></td><td>'+esc(r.date)+(r.end?' → '+esc(r.end):'')+(r.nights?'<br><span class="muted">'+esc(r.nights)+' nuit(s), '+esc(r.rooms)+' ch.</span>':'')+'</td><td>'+esc(r.adults)+' ad.'+(+r.children?', '+esc(r.children)+' enf.':'')+(+r.babies?', '+esc(r.babies)+' bébé(s)':'')+'</td><td>'+esc(r.total)+'</td><td><select data-act="status" data-row="'+r.row+'" style="min-width:120px">'+STAT.map(s=>'<option '+(r.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select></td></tr>').join('')+'</table></div>':'<p class="muted">Aucune demande pour l\u2019instant.</p>');
 }
 
 function sal(){
-  if(!REMOTE)return '<p class="muted">Les accès salariés demandent Google Sheets. Connectez-le dans l\u2019onglet Réglages : sans connexion, le site reste en accès libre.</p>';
-  return '<h3>Créer un accès</h3><p class="muted">Le salarié reçoit par email son identifiant et un mot de passe généré.</p><div class="row2" style="margin:12px 0"><input id="u-fn" placeholder="Prénom"><input id="u-ln" placeholder="Nom"><input id="u-em" type="email" placeholder="Email"><input id="u-co" placeholder="Entreprise"></div><button class="btn" data-act="adduser">Créer l\u2019accès et envoyer l\u2019email</button>'
-  +'<h3 style="margin-top:28px">Salariés ('+users.length+')</h3>'+(users.length?'<div style="overflow:auto"><table><tr><th>Identifiant</th><th>Nom</th><th>Entreprise</th><th>Email</th><th>Actif</th><th></th></tr>'+users.map(u=>'<tr><td><code>'+esc(u.id)+'</code>'+(u.active?'':' <span class="pill">En attente</span>')+'</td><td><b>'+esc(u.fn)+' '+esc(u.ln)+'</b></td><td>'+esc(u.co)+'</td><td>'+esc(u.em)+'</td><td><input type="checkbox" style="width:auto" '+(u.active?'checked':'')+' data-act="active" data-row="'+u.row+'"></td><td><button class="btn alt sm" data-act="resetpw" data-row="'+u.row+'">'+(u.active?'Nouveau mot de passe':'Valider et envoyer l\u2019accès')+'</button></td></tr>').join('')+'</table></div>':'<p class="muted">Aucun accès créé.</p>');
+  return '<h3>Comptes salariés et DRH</h3><p class="muted">Les comptes (création, rôles, suspension, suppression) se gèrent dans l\u2019espace sécurisé.</p><p><a class="btn" href="/admin/utilisateurs" style="display:inline-block;text-decoration:none">Ouvrir la gestion des comptes</a></p>';
 }
 function set(){
-  return '<h3>Connexion à Google Sheets</h3><p class="muted">État : '+(REMOTE?'<b style="color:var(--ok)">connecté</b>':'mode local (ce navigateur seulement)')+'.</p>'
-  +'<ol><li>Créez un Google Sheet vide, puis <b>Extensions &gt; Apps Script</b>.</li><li>Collez le contenu du fichier <code>apps-script.gs</code>. Changez <code>ADMIN_TOKEN</code> (votre mot de passe) et <code>NOTIFY_EMAIL</code>.</li><li><b>Déployer &gt; Nouveau déploiement &gt; Application web</b>. Exécuter en tant que : moi. Accès : tout le monde.</li><li>Copiez l\u2019adresse obtenue dans <code>sync.js</code>, à la ligne <code>SYNC_URL</code>.</li><li>Rechargez cette page : elle demande le mot de passe, puis lit et écrit dans votre Sheet.</li></ol>'
-  +'<p class="muted">Trois onglets se créent seuls : <b>Demandes</b> (une ligne par demande, statut modifiable), <b>Visites</b> (une ligne par visite) et <b>Config</b> (vos modifications d\u2019offres, à ne pas modifier à la main).</p>'
-  +'<p><button class="btn alt" data-act="ping">Tester la connexion</button> <button class="btn alt" data-act="testreq">Envoyer une demande de test</button></p><h3 style="margin-top:26px">Modifications</h3><button class="btn del" data-act="reset">Annuler toutes les modifications publiées</button>';
+  return '<h3>Base de données</h3><p class="muted">État : '+(REMOTE?'<b style="color:var(--ok)">connecté à la base Wander</b> : offres, visites et demandes sont partagées entre tous les comptes.':'mode local (ce navigateur seulement)')+'</p>'
+  +'<p class="muted">Chaque nouvelle demande est aussi envoyée par email à l\u2019équipe Wander.</p>'
+  +'<p><button class="btn alt" data-act="ping">Tester la connexion</button></p><h3 style="margin-top:26px">Modifications</h3><button class="btn del" data-act="reset">Annuler toutes les modifications publiées</button>';
 }
-
 document.addEventListener('click',async e=>{
   const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,id=t.dataset.id;
   if(a==='login'){token=$('#tk').value;sessionStorage.setItem('wander_admin_token',token);return boot()}

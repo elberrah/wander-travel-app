@@ -258,3 +258,6 @@ body.dark-mode .op-book{background:rgba(30,20,23,.7)!important}
 .filter-controls{flex-direction:column;align-items:stretch}
 .filter-controls>*,.category-pills,.select-filters{min-width:0;max-width:100%;width:100%}
 }
+
+/* Galerie Kids : 5e photo -> la 4e ne s'étire plus, les deux se partagent la ligne du bas. */
+.kids-gallery figure:nth-child(4):not(:last-child){grid-column:auto}

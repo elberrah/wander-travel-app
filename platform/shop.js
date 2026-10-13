@@ -8,7 +8,11 @@ const COMPANIES = {
 };
 const K = { user: 'wander_member', cart: 'wander_cart', book: 'wander_bookings' };
 const ls = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
-const sv = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+const sv = (k, v) => {
+  localStorage.setItem(k, JSON.stringify(v));
+  // Panier aussi enregistré sur le serveur : rappel si la demande n'est pas finalisée.
+  if (k === K.cart && window.Sync && Sync.url) Sync.post({ action: 'cart', items: v });
+};
 const fmt = n => n ? Math.round(n).toLocaleString('fr-FR') + ' MAD' : 'Sur devis';
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const $ = id => document.getElementById(id);
@@ -157,6 +161,14 @@ W.submit = function () {
   const books = ls(K.book, []);
   books.push({ ref, date: new Date().toISOString(), email: m.email, company: m.company, name, phone, poste, proof, note, items: cart, total, stage: 0 });
   sv(K.book, books); sv(K.cart, []);
+  // La demande du panier arrive aussi dans le tableau de bord (onglet Demandes).
+  if (window.Sync) {
+    const [fn, ...ln] = name.split(/\s+/);
+    Sync.request({ uid: (Sync.session() || {}).id || '', fn: fn || '', ln: ln.join(' '), em: m.email, co: m.company, ph: phone,
+      product: cart.map(i => i.title).join(' + '), variant: cart.map(i => i.variant).join(' + ') + (poste ? ` · ${poste}` : '') + ` · réf. ${ref}`,
+      date: cart[0].date || '', end: cart[cart.length - 1].end || '', nights: '', rooms: '',
+      adults: cart.reduce((s, i) => s + (+i.adults || 0), 0), children: cart.reduce((s, i) => s + (+i.children || 0), 0), babies: 0, total: fmt(total) });
+  }
   const msg = `Bonjour Wander, demande ${ref} (${m.company}) de ${name}, ${poste}, ${phone}\n` + cart.map(i => `- ${i.title} · ${i.variant} · ${itemLine(i)} · ${fmt(i.total)}`).join('\n') + `\nTotal estimé : ${fmt(total)}` + (note ? `\nNote : ${note}` : '') + (proof ? `\nJustificatif à joindre : ${proof}` : '');
   done = { ref, msg }; draft = {}; refreshAll(); renderDrawer();
 };
@@ -332,4 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (t === 'dark') document.body.classList.replace('light-mode', 'dark-mode');
   updateHeader(); renderOfferPage();
 });
+// Lien « Finaliser ma demande » des rappels : ouvre directement le panier.
+if (/[?&]panier=1/.test(location.search)) window.addEventListener('load', () => { if (ls(K.cart, []).length) W.open('cart'); });
+// Panier déjà présent dans ce navigateur : synchronisé une fois avec le serveur.
+if (window.Sync && Sync.url && ls(K.cart, []).length && !sessionStorage.getItem('wander_cart_synced')) {
+  sessionStorage.setItem('wander_cart_synced', '1'); Sync.post({ action: 'cart', items: ls(K.cart, []) });
+}
 })();

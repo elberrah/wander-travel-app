@@ -5,7 +5,7 @@ import { motion, useSpring } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 // Pages d'application (connexion, espace, administration) : curseur natif.
-const APP_PAGES = /^\/(connexion|inscription|mot-de-passe-oublie|reinitialiser-mot-de-passe|verifier-email|deconnexion|espace|admin|confidentialite)(\/|$)/;
+const APP_PAGES = /^\/(connexion|inscription|mot-de-passe-oublie|reinitialiser-mot-de-passe|verifier-email|deconnexion|espace|admin|confidentialite|desabonnement)(\/|$)/;
 
 export function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });

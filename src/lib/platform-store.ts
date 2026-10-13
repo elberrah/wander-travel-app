@@ -27,6 +27,11 @@ function ensureTables() {
     await run(`CREATE TABLE IF NOT EXISTS wander_visit (id ${id}, t BIGINT NOT NULL, page TEXT, offer TEXT, user_id TEXT)`);
     await run(`CREATE INDEX IF NOT EXISTS wander_visit_t ON wander_visit (t)`);
     await run(`CREATE TABLE IF NOT EXISTS wander_request (id ${id}, t BIGINT NOT NULL, status TEXT NOT NULL, user_id TEXT, data TEXT NOT NULL)`);
+    // Notifications : panier en cours, préférences, appareils (push), envois déjà faits.
+    await run(`CREATE TABLE IF NOT EXISTS wander_cart (user_id TEXT PRIMARY KEY, items TEXT NOT NULL, updated BIGINT NOT NULL, reminded INTEGER NOT NULL DEFAULT 0, last_reminded BIGINT)`);
+    await run(`CREATE TABLE IF NOT EXISTS wander_prefs (user_id TEXT PRIMARY KEY, cart INTEGER NOT NULL DEFAULT 1, promos INTEGER NOT NULL DEFAULT 0, news INTEGER NOT NULL DEFAULT 0, asked INTEGER NOT NULL DEFAULT 0)`);
+    await run(`CREATE TABLE IF NOT EXISTS wander_push (endpoint TEXT PRIMARY KEY, user_id TEXT NOT NULL, p256dh TEXT NOT NULL, auth TEXT NOT NULL, t BIGINT NOT NULL)`);
+    await run(`CREATE TABLE IF NOT EXISTS wander_notif_log (k TEXT PRIMARY KEY, t BIGINT NOT NULL)`);
   })().catch((e) => {
     ready = null;
     throw e;
@@ -86,4 +91,139 @@ export async function getStats() {
     visits: visits.map((v) => ({ t: Number(v.t), p: v.page, o: v.offer, v: v.user_id })),
     requests: requests.map((r) => ({ ...JSON.parse(r.data), row: Number(r.id), t: Number(r.t), status: r.status })),
   };
+}
+
+// ---------- Panier (relances) ----------
+
+export type CartItem = { title?: string; variant?: string; date?: string; end?: string; total?: number; offerId?: string };
+
+export async function saveCart(userId: string, items: CartItem[]) {
+  await ensureTables();
+  if (!items.length) {
+    await run(`DELETE FROM wander_cart WHERE user_id = ?`, [userId]);
+    return;
+  }
+  // Panier inchangé (simple nouvelle visite) : on garde le compte à rebours en cours.
+  const json = JSON.stringify(items);
+  const [cur] = await run<{ items: string }>(`SELECT items FROM wander_cart WHERE user_id = ?`, [userId]);
+  if (cur && cur.items === json) return;
+  // Panier modifié : le compte à rebours des relances repart de zéro.
+  await run(
+    `INSERT INTO wander_cart (user_id, items, updated, reminded, last_reminded) VALUES (?, ?, ?, 0, NULL)
+     ON CONFLICT (user_id) DO UPDATE SET items = excluded.items, updated = excluded.updated, reminded = 0, last_reminded = NULL`,
+    [userId, json, Date.now()],
+  );
+}
+
+export type PendingCart = { userId: string; items: CartItem[]; updated: number; reminded: number; lastReminded: number | null };
+
+export async function getPendingCarts(): Promise<PendingCart[]> {
+  await ensureTables();
+  const rows = await run<{ user_id: string; items: string; updated: string | number; reminded: string | number; last_reminded: string | number | null }>(
+    `SELECT user_id, items, updated, reminded, last_reminded FROM wander_cart ORDER BY updated DESC LIMIT 1000`,
+  );
+  return rows.map((r) => ({
+    userId: r.user_id,
+    items: JSON.parse(r.items),
+    updated: Number(r.updated),
+    reminded: Number(r.reminded),
+    lastReminded: r.last_reminded == null ? null : Number(r.last_reminded),
+  }));
+}
+
+export async function markCartReminded(userId: string, step: number) {
+  await ensureTables();
+  await run(`UPDATE wander_cart SET reminded = ?, last_reminded = ? WHERE user_id = ?`, [step, Date.now(), userId]);
+}
+
+// ---------- Préférences ----------
+
+export type Prefs = { cart: boolean; promos: boolean; news: boolean; asked: boolean };
+
+export async function getPrefs(userId: string): Promise<Prefs> {
+  await ensureTables();
+  const [r] = await run<{ cart: number; promos: number; news: number; asked: number }>(
+    `SELECT cart, promos, news, asked FROM wander_prefs WHERE user_id = ?`,
+    [userId],
+  );
+  return r
+    ? { cart: !!Number(r.cart), promos: !!Number(r.promos), news: !!Number(r.news), asked: !!Number(r.asked) }
+    : { cart: true, promos: false, news: false, asked: false };
+}
+
+export async function setPrefs(userId: string, p: Partial<Prefs>) {
+  const cur = { ...(await getPrefs(userId)), ...p };
+  await run(
+    `INSERT INTO wander_prefs (user_id, cart, promos, news, asked) VALUES (?, ?, ?, ?, ?)
+     ON CONFLICT (user_id) DO UPDATE SET cart = excluded.cart, promos = excluded.promos, news = excluded.news, asked = excluded.asked`,
+    [userId, +cur.cart, +cur.promos, +cur.news, +cur.asked],
+  );
+  return cur;
+}
+
+// ---------- Appareils (notifications push) ----------
+
+export type PushSub = { endpoint: string; p256dh: string; auth: string; userId: string };
+
+export async function addPushSub(userId: string, endpoint: string, p256dh: string, auth: string) {
+  await ensureTables();
+  await run(
+    `INSERT INTO wander_push (endpoint, user_id, p256dh, auth, t) VALUES (?, ?, ?, ?, ?)
+     ON CONFLICT (endpoint) DO UPDATE SET user_id = excluded.user_id, p256dh = excluded.p256dh, auth = excluded.auth, t = excluded.t`,
+    [endpoint, userId, p256dh, auth, Date.now()],
+  );
+}
+
+export async function removePushSub(endpoint: string, userId?: string) {
+  await ensureTables();
+  if (userId) await run(`DELETE FROM wander_push WHERE endpoint = ? AND user_id = ?`, [endpoint, userId]);
+  else await run(`DELETE FROM wander_push WHERE endpoint = ?`, [endpoint]);
+}
+
+export async function getPushSubs(userId?: string): Promise<PushSub[]> {
+  await ensureTables();
+  const rows = await run<{ endpoint: string; user_id: string; p256dh: string; auth: string }>(
+    userId ? `SELECT endpoint, user_id, p256dh, auth FROM wander_push WHERE user_id = ?` : `SELECT endpoint, user_id, p256dh, auth FROM wander_push`,
+    userId ? [userId] : [],
+  );
+  return rows.map((r) => ({ endpoint: r.endpoint, userId: r.user_id, p256dh: r.p256dh, auth: r.auth }));
+}
+
+// ---------- Destinataires et journal des envois ----------
+
+export type Member = { id: string; email: string; name: string; company: string; prefs: Prefs; banned: boolean; verified: boolean };
+
+export async function getMembers(): Promise<Member[]> {
+  await ensureTables();
+  const rows = await run<Record<string, unknown>>(
+    `SELECT u.id AS id, u.email AS email, u.name AS name, u.company AS company, u."emailVerified" AS verified, u.banned AS banned,
+            p.cart AS cart, p.promos AS promos, p.news AS news, p.asked AS asked
+     FROM "user" u LEFT JOIN wander_prefs p ON p.user_id = u.id`,
+  );
+  return rows.map((r) => ({
+    id: String(r.id),
+    email: String(r.email),
+    name: String(r.name || ""),
+    company: String(r.company || ""),
+    verified: r.verified === true || Number(r.verified) === 1,
+    banned: r.banned === true || Number(r.banned) === 1,
+    prefs: {
+      cart: r.cart == null ? true : !!Number(r.cart),
+      promos: !!Number(r.promos || 0),
+      news: !!Number(r.news || 0),
+      asked: !!Number(r.asked || 0),
+    },
+  }));
+}
+
+/** Réserve une clé d'envoi (true si elle n'existait pas : l'envoi peut partir). */
+export async function claimNotif(k: string): Promise<boolean> {
+  await ensureTables();
+  const rows = await run<{ k: string }>(`INSERT INTO wander_notif_log (k, t) VALUES (?, ?) ON CONFLICT (k) DO NOTHING RETURNING k`, [k, Date.now()]);
+  return rows.length > 0;
+}
+
+export async function hasNotif(k: string): Promise<boolean> {
+  await ensureTables();
+  return (await run(`SELECT k FROM wander_notif_log WHERE k = ?`, [k])).length > 0;
 }

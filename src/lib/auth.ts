@@ -14,7 +14,7 @@ const vercelUrl =
   process.env.VERCEL_ENV === "production"
     ? process.env.VERCEL_PROJECT_PRODUCTION_URL
     : process.env.VERCEL_BRANCH_URL || process.env.VERCEL_URL;
-const baseURL = process.env.BETTER_AUTH_URL || (vercelUrl ? `https://${vercelUrl}` : "http://localhost:3000");
+export const baseURL = process.env.BETTER_AUTH_URL || (vercelUrl ? `https://${vercelUrl}` : "http://localhost:3000");
 // Adresses de prévisualisation Vercel (déploiement et branche) acceptées en plus.
 const vercelOrigins = [process.env.VERCEL_URL, process.env.VERCEL_BRANCH_URL, process.env.VERCEL_PROJECT_PRODUCTION_URL]
   .filter(Boolean)

@@ -2,7 +2,27 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { sendRequestNotification } from "@/lib/email";
-import { REQUEST_STATUSES, addRequest, addVisit, getOverrides, getStats, saveOverrides, setRequestStatus } from "@/lib/platform-store";
+import {
+  REQUEST_STATUSES,
+  addPushSub,
+  addRequest,
+  addVisit,
+  getMembers,
+  getOverrides,
+  getPendingCarts,
+  getPrefs,
+  getPushSubs,
+  getStats,
+  removePushSub,
+  saveCart,
+  saveOverrides,
+  setPrefs,
+  setRequestStatus,
+} from "@/lib/platform-store";
+import { catalogue, promoContent, sendCartReminder, sendNews, sendPromo, vapidPublicKey } from "@/lib/notify";
+
+// Services de notification push des navigateurs (Chrome/Android, Safari/iPhone, Firefox, Edge).
+const PUSH_HOSTS = [/^fcm\.googleapis\.com$/, /(^|\.)push\.apple\.com$/, /(^|\.)push\.services\.mozilla\.com$/, /(^|\.)notify\.windows\.com$/];
 
 // Remplace le script Google Apps Script de la plateforme (même protocole que sync.js) :
 // GET ?action=ping|overrides|stats|users, POST {action: visit|request|save|status}.
@@ -24,8 +44,28 @@ export async function GET(req: Request) {
   const action = new URL(req.url).searchParams.get("action");
   if (action === "ping") return json({ ok: true, time: new Date().toISOString() });
   if (action === "overrides") return json(await getOverrides());
+  if (action === "prefs") {
+    const devices = await getPushSubs(session.user.id);
+    return json({ prefs: await getPrefs(session.user.id), vapid: vapidPublicKey, devices: devices.length });
+  }
   if (session.user.role !== "admin") return json({ error: "auth" }, 403);
-  if (action === "stats") return json(await getStats());
+  if (action === "stats") {
+    const [stats, carts, members, subs] = await Promise.all([getStats(), getPendingCarts(), getMembers(), getPushSubs()]);
+    const byId = new Map(members.map((m) => [m.id, m]));
+    return json({
+      ...stats,
+      carts: carts.map((c) => {
+        const m = byId.get(c.userId);
+        return { name: m?.name || "", email: m?.email || "", company: m?.company || "", items: c.items, updated: c.updated, reminded: c.reminded };
+      }),
+      audience: {
+        members: members.filter((m) => m.verified && !m.banned).length,
+        promos: members.filter((m) => m.prefs.promos).length,
+        news: members.filter((m) => m.prefs.news).length,
+        devices: new Set(subs.map((x) => x.userId)).size,
+      },
+    });
+  }
   // Les comptes se gèrent dans /admin/utilisateurs.
   if (action === "users") return json([]);
   return json({ error: "action" }, 400);
@@ -64,7 +104,64 @@ export async function POST(req: Request) {
     return json({ ok: true });
   }
 
+  if (b.action === "cart") {
+    const items = Array.isArray(b.items) ? b.items.slice(0, 20) : [];
+    await saveCart(
+      userId,
+      items.map((i: Record<string, unknown>) => ({
+        offerId: str(i.offerId, 120),
+        title: str(i.title, 200),
+        variant: str(i.variant, 200),
+        date: str(i.date, 40),
+        end: str(i.end, 40),
+        total: Number(i.total) || 0,
+      })),
+    );
+    return json({ ok: true });
+  }
+
+  if (b.action === "prefs") {
+    const p: Record<string, boolean> = {};
+    for (const k of ["cart", "promos", "news", "asked"]) if (typeof b[k] === "boolean") p[k] = b[k] as boolean;
+    return json({ ok: true, prefs: await setPrefs(userId, p) });
+  }
+
+  if (b.action === "push-sub") {
+    const sub = (b.sub || {}) as { endpoint?: string; keys?: { p256dh?: string; auth?: string } };
+    let host = "";
+    try {
+      const u = new URL(String(sub.endpoint));
+      if (u.protocol === "https:") host = u.hostname;
+    } catch {}
+    if (!host || !PUSH_HOSTS.some((r) => r.test(host)) || !sub.keys?.p256dh || !sub.keys?.auth) return json({ error: "sub" }, 400);
+    await addPushSub(userId, String(sub.endpoint).slice(0, 1000), str(sub.keys.p256dh, 200), str(sub.keys.auth, 100));
+    return json({ ok: true });
+  }
+
+  if (b.action === "push-unsub") {
+    await removePushSub(str(b.endpoint, 1000), userId);
+    return json({ ok: true });
+  }
+
   if (session.user.role !== "admin") return json({ error: "auth" }, 403);
+
+  // Aperçu des notifications envoyé uniquement à l'admin connecté.
+  if (b.action === "notify-test") {
+    const me = (await getMembers()).find((m) => m.id === userId);
+    if (!me) return json({ error: "user" }, 400);
+    if (b.kind === "cart") {
+      await sendCartReminder(me, [{ title: "Palm Plaza Marrakech", variant: "Chambre double", date: "2026-11-12", end: "2026-11-15", total: 3600 }], 1);
+    } else if (b.kind === "promo") {
+      const promos = await promoContent();
+      if (!promos.length) return json({ error: "Aucune offre cochée « Promo du jeudi »." }, 400);
+      await sendPromo(me, promos);
+    } else if (b.kind === "news") {
+      const { offers } = await catalogue();
+      if (!offers.length) return json({ error: "Catalogue vide." }, 400);
+      await sendNews(me, offers.slice(-1));
+    } else return json({ error: "kind" }, 400);
+    return json({ ok: true });
+  }
 
   if (b.action === "save") {
     const ov = b.overrides;

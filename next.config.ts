@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
   // Fichiers de la plateforme Avantages Salariés (servis après connexion).
   outputFileTracingIncludes: {
     "/plateforme/[[...path]]": ["./platform/**/*"],
+    // Catalogue lu par les notifications (Jeudi Promo, nouveautés).
+    "/api/cron/notifications": ["./platform/data.js"],
+    "/api/plateforme": ["./platform/data.js"],
   },
   // Jamais dans le paquet livré : base locale, secrets, sources, scripts.
   outputFileTracingExcludes: {

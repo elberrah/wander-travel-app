@@ -136,3 +136,14 @@ suspension (connexion refusée), réactivation, changement de rôle, création d
 illisible en JavaScript ; redirection externe neutralisée ; traversée de répertoire bloquée ; fichiers
 backend jamais servis ; limitation des tentatives (429) ; affichage mobile sans défilement horizontal ;
 redirection Google (OpenID, PKCE S256, URI de retour correcte, URL externe refusée).
+
+## 7. Notifications salariés (panier, Jeudi Promo, nouveautés)
+
+- **Accord** : bandeau « Restez informé » sur la plateforme (une fois), puis préférences dans `/espace` → « Mes notifications ». Lien de désabonnement signé dans chaque email (`/desabonnement`, sans connexion).
+- **Panier abandonné** : le panier est enregistré sur le serveur ; rappel email + push 24 h puis 72 h après la dernière modification. Suivi dans le tableau de bord, onglet « Paniers ».
+- **Jeudi Promo** : offres cochées « 🔥 Promo jeudi » (onglet Offres & photos, puis Publier), envoyées le jeudi matin aux abonnés.
+- **Nouveautés** : toute offre ajoutée et publiée est annoncée au passage suivant du robot.
+- **Robot** : `GET /api/cron/notifications` (Vercel Cron chaque jour à 9 h UTC = 10 h au Maroc ; `vercel.json`), protégé par `Authorization: Bearer CRON_SECRET`. Paramètres : `task=cart|promo|new`, `force=1` (promo hors jeudi). Peut aussi être appelé par n8n.
+- **Push** : Web Push (VAPID) via `platform/sw.js` ; sur iPhone, après « Sur l'écran d'accueil ».
+- **Variables** : `CRON_SECRET`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (option), `NOTIFY_EMAIL` (option, alertes demandes).
+- Le compte démo (`DEMO_EMAIL`), les comptes suspendus et non confirmés ne reçoivent rien.

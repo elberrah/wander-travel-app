@@ -62,6 +62,7 @@ ol li{margin-bottom:8px}
 <script>window.SYNC_NO_APPLY = true;</script>
 <script src="data.js"></script>
 <script src="sync.js"></script>
+<script src="notify.js"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s);
@@ -80,7 +81,7 @@ function eff(id){const b=all().find(o=>o.id===id);if(!b)return null;const p=(ov.
   ['title','location','priceLabel','description'].forEach(k=>{if(p[k])o[k]=p[k]});
   if(p.startingPrice!==undefined&&p.startingPrice!=='')o.startingPrice=Number(p.startingPrice);
   o.photos=p.photos||b.images||(b.image?[b.image]:[]);o.rows=p.rows||(b.details&&b.details.tableRows)||[];o.header=(b.details&&b.details.tableHeader)||[];
-  o.hidden=!!p.hidden;o.gone=(ov.deleted||[]).includes(id);return o}
+  o.hidden=!!p.hidden;o.promo=!!p.promo;o.gone=(ov.deleted||[]).includes(id);return o}
 function patch(id,k,v){ov.offers[id]=ov.offers[id]||{};ov.offers[id][k]=v;mark()}
 function mark(){dirty=true;$('#publish').style.display='';$('#publish').classList.add('dirty')}
 function norm(o){o=o||{};return{deleted:o.deleted||[],added:o.added||[],offers:o.offers||{}}}
@@ -98,9 +99,9 @@ async function boot(){
 function gate(m){$('#app').innerHTML='<div class="gate"><h2>Accès réservé</h2><p class="muted">Entrez le mot de passe défini dans le script Google.</p><div class="panel"><div class="f"><input type="password" id="tk" placeholder="Mot de passe"></div><button class="btn" data-act="login" style="width:100%">Entrer</button><p class="err">'+(m||'')+'</p></div></div>'}
 
 function render(){
-  const tabs=[['home','Vue d\u2019ensemble'],['offres','Offres & photos'],['dem','Demandes'],['sal','Salariés'],['set','Réglages']];
-  const body={home:home,offres:offres,dem:dem,sal:sal,set:set}[tab]();
-  $('#app').innerHTML='<nav>'+tabs.map(t=>'<button data-act="tab" data-v="'+t[0]+'" class="'+(tab===t[0]?'on':'')+'">'+t[1]+(t[0]==='dem'?' <span class="pill">'+data.requests.filter(r=>r.status==='Nouveau').length+'</span>':'')+'</button>').join('')+'</nav><main><div class="panel">'+body+'</div></main>';
+  const tabs=[['home','Vue d\u2019ensemble'],['offres','Offres & photos'],['dem','Demandes'],['pan','Paniers'],['notif','Notifications'],['sal','Salariés'],['set','Réglages']];
+  const body={home:home,offres:offres,dem:dem,pan:pan,notif:notif,sal:sal,set:set}[tab]();
+  $('#app').innerHTML='<nav>'+tabs.map(t=>'<button data-act="tab" data-v="'+t[0]+'" class="'+(tab===t[0]?'on':'')+'">'+t[1]+(t[0]==='dem'?' <span class="pill">'+data.requests.filter(r=>r.status==='Nouveau').length+'</span>':'')+(t[0]==='pan'&&(data.carts||[]).length?' <span class="pill">'+data.carts.length+'</span>':'')+'</button>').join('')+'</nav><main><div class="panel">'+body+'</div></main>';
 }
 
 function home(){
@@ -119,8 +120,8 @@ function home(){
 function offres(){
   const L=all().filter(o=>!q||(o.title+o.location).toLowerCase().includes(q.toLowerCase()));
   return '<div class="tools"><input id="q" placeholder="Rechercher une offre" value="'+esc(q)+'"><button class="btn" data-act="add">+ Ajouter une offre</button><span class="muted">'+(all().length-(ov.deleted||[]).length)+' offres en ligne</span></div>'
-  +'<div style="overflow:auto"><table><tr><th></th><th>Offre</th><th>Ville</th><th>Prix de départ</th><th>Photos</th><th>En ligne</th><th></th></tr>'+L.map(function(b){const o=eff(b.id);
-    return '<tr class="'+(o.gone?'gone':'')+'"><td>'+(o.photos[0]?'<img class="thumb" src="'+esc(o.photos[0])+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="thumb"></div>')+'</td><td><b>'+esc(o.title)+'</b></td><td>'+esc(o.location)+'</td><td><input type="number" min="0" style="width:120px" value="'+(o.startingPrice==null?'':o.startingPrice)+'" data-act="price" data-id="'+o.id+'" placeholder="sur demande"></td><td>'+o.photos.length+'</td><td>'+(o.gone?'<span class="pill">Supprimée</span>':'<input type="checkbox" style="width:auto" '+(o.hidden?'':'checked')+' data-act="vis" data-id="'+o.id+'">')+'</td><td style="white-space:nowrap">'+(o.gone?'<button class="btn alt sm" data-act="restore" data-id="'+o.id+'">Restaurer</button>':'<button class="btn alt sm" data-act="edit" data-id="'+o.id+'">Modifier</button> <button class="btn del sm" data-act="del" data-id="'+o.id+'">Supprimer</button>')+'</td></tr>'}).join('')+'</table></div>';
+  +'<div style="overflow:auto"><table><tr><th></th><th>Offre</th><th>Ville</th><th>Prix de départ</th><th>Photos</th><th title="Envoyée chaque jeudi aux salariés abonnés">🔥 Promo jeudi</th><th>En ligne</th><th></th></tr>'+L.map(function(b){const o=eff(b.id);
+    return '<tr class="'+(o.gone?'gone':'')+'"><td>'+(o.photos[0]?'<img class="thumb" src="'+esc(o.photos[0])+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="thumb"></div>')+'</td><td><b>'+esc(o.title)+'</b></td><td>'+esc(o.location)+'</td><td><input type="number" min="0" style="width:120px" value="'+(o.startingPrice==null?'':o.startingPrice)+'" data-act="price" data-id="'+o.id+'" placeholder="sur demande"></td><td>'+o.photos.length+'</td><td>'+(o.gone?'':'<input type="checkbox" style="width:auto" '+(o.promo?'checked':'')+' data-act="promo" data-id="'+o.id+'">')+'</td><td>'+(o.gone?'<span class="pill">Supprimée</span>':'<input type="checkbox" style="width:auto" '+(o.hidden?'':'checked')+' data-act="vis" data-id="'+o.id+'">')+'</td><td style="white-space:nowrap">'+(o.gone?'<button class="btn alt sm" data-act="restore" data-id="'+o.id+'">Restaurer</button>':'<button class="btn alt sm" data-act="edit" data-id="'+o.id+'">Modifier</button> <button class="btn del sm" data-act="del" data-id="'+o.id+'">Supprimer</button>')+'</td></tr>'}).join('')+'</table></div>';
 }
 
 function ph(u,i,n){return '<div class="ph"><img class="thumb" src="'+esc(u)+'" alt="" onerror="this.style.visibility=\'hidden\'"><input data-p="'+i+'" value="'+esc(u)+'"><button class="btn alt sm" data-act="up" data-i="'+i+'" '+(i?'':'disabled')+'>↑</button><button class="btn alt sm" data-act="dn" data-i="'+i+'" '+(i<n-1?'':'disabled')+'>↓</button><button class="btn del sm" data-act="delph" data-i="'+i+'">×</button></div>'}
@@ -149,6 +150,21 @@ function dem(){
   +(R.length?'<div style="overflow:auto"><table><tr><th>Date</th><th>Salarié</th><th>Entreprise</th><th>Contact</th><th>Produit</th><th>Séjour</th><th>Personnes</th><th>Estimation</th><th>Statut</th></tr>'+R.map(r=>'<tr><td>'+fmtD(r.t)+'</td><td><b>'+esc(r.fn)+' '+esc(r.ln)+'</b></td><td>'+esc(r.co)+'</td><td>'+esc(r.ph)+'<br><span class="muted">'+esc(r.em)+'</span></td><td>'+esc(r.product)+'<br><span class="muted">'+esc(r.variant)+'</span></td><td>'+esc(r.date)+(r.end?' → '+esc(r.end):'')+(r.nights?'<br><span class="muted">'+esc(r.nights)+' nuit(s), '+esc(r.rooms)+' ch.</span>':'')+'</td><td>'+esc(r.adults)+' ad.'+(+r.children?', '+esc(r.children)+' enf.':'')+(+r.babies?', '+esc(r.babies)+' bébé(s)':'')+'</td><td>'+esc(r.total)+'</td><td><select data-act="status" data-row="'+r.row+'" style="min-width:120px">'+STAT.map(s=>'<option '+(r.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select></td></tr>').join('')+'</table></div>':'<p class="muted">Aucune demande pour l\u2019instant.</p>');
 }
 
+function pan(){
+  const C=data.carts||[];
+  if(!C.length)return '<p class="muted">Aucun panier en attente. Dès qu’un salarié ajoute un séjour sans finaliser, il apparaît ici.</p>';
+  const lbl=r=>r===0?'Pas encore relancé':r===1?'1<sup>er</sup> rappel envoyé':'2 rappels envoyés';
+  return '<p class="muted" style="margin-bottom:14px">Paniers non finalisés. Rappel automatique par email et notification après 24 h, puis 72 h. Les plus gros paniers méritent un appel.</p><div style="overflow:auto"><table><tr><th>Salarié</th><th>Entreprise</th><th>Panier</th><th>Montant</th><th>Dernière modif.</th><th>Relance</th></tr>'
+  +C.map(c=>{const tot=c.items.reduce((s,i)=>s+(+i.total||0),0);return '<tr><td><b>'+esc(c.name)+'</b><br><span class="muted">'+esc(c.email)+'</span></td><td>'+esc(c.company)+'</td><td>'+c.items.map(i=>esc(i.title)+(i.date?' <span class="muted">('+esc(i.date)+(i.end?' → '+esc(i.end):'')+')</span>':'')).join('<br>')+'</td><td><b>'+(tot?Math.round(tot).toLocaleString('fr-FR')+' MAD':'Sur devis')+'</b></td><td>'+new Date(c.updated).toLocaleString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})+'</td><td>'+lbl(c.reminded)+'</td></tr>'}).join('')+'</table></div>';
+}
+function notif(){
+  const a=data.audience||{members:0,promos:0,news:0,devices:0};
+  const P=all().map(b=>eff(b.id)).filter(o=>o.promo&&!o.gone&&!o.hidden);
+  return '<div class="kpis"><div class="kpi"><b>'+a.members+'</b><span>Comptes actifs</span></div><div class="kpi"><b>'+a.promos+'</b><span>Abonnés Jeudi Promo</span></div><div class="kpi"><b>'+a.news+'</b><span>Abonnés nouveautés</span></div><div class="kpi"><b>'+a.devices+'</b><span>Appareils (push)</span></div></div>'
+  +'<h3>Envois automatiques</h3><ol style="margin:10px 0 24px;padding-left:20px"><li><b>Panier abandonné</b> : rappel 24 h puis 72 h après le dernier ajout (onglet Paniers).</li><li><b>Jeudi Promo</b> : chaque jeudi vers 10 h, les offres cochées « 🔥 Promo jeudi » dans Offres &amp; photos (pensez à publier).</li><li><b>Nouveautés</b> : chaque nouvelle offre ajoutée et publiée est annoncée le lendemain matin.</li></ol>'
+  +'<h3>Jeudi Promo de cette semaine ('+P.length+')</h3>'+(P.length?'<ul style="margin:8px 0 20px">'+P.map(o=>'<li>'+esc(o.title)+' <span class="muted">'+(o.startingPrice?'dès '+Math.round(o.startingPrice).toLocaleString('fr-FR')+' MAD':'')+'</span></li>').join('')+'</ul>':'<p class="muted" style="margin:8px 0 20px">Aucune offre cochée : pas d’envoi jeudi.</p>')
+  +'<h3>Tester (envoi à vous seul)</h3><p class="muted">Recevez l’email et la notification exactement comme un salarié.</p><p style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn alt" data-act="ntest" data-k="cart">Rappel panier</button><button class="btn alt" data-act="ntest" data-k="promo">Jeudi Promo</button><button class="btn alt" data-act="ntest" data-k="news">Nouveauté</button><button class="btn alt" data-act="npush">Activer les notifications sur cet appareil</button></p>';
+}
 function sal(){
   return '<h3>Comptes salariés et DRH</h3><p class="muted">Les comptes (création, rôles, suspension, suppression) se gèrent dans l\u2019espace sécurisé.</p><p><a class="btn" href="/admin/utilisateurs" style="display:inline-block;text-decoration:none">Ouvrir la gestion des comptes</a></p>';
 }
@@ -176,6 +192,9 @@ document.addEventListener('click',async e=>{
   if(a==='delrow'){const r=rows();r.splice(+t.dataset.i,1);patch(editing,'rows',r);return drawer(editing)}
   if(a==='reset'){if(!confirm('Revenir aux offres d\u2019origine ?'))return;ov=norm({});return publish()}
   if(a==='publish')return publish();
+  if(a==='ntest'){t.disabled=true;const r=await fetch('/api/plateforme',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'notify-test',kind:t.dataset.k})}).then(x=>x.json()).catch(()=>null);t.disabled=false;return toast(r&&r.ok?'Envoyé : vérifiez votre boîte mail (et les spams) et votre téléphone.':((r&&r.error)||'Échec de l’envoi.'))}
+  if(a==='npush'){try{const st=await fetch('/api/plateforme?action=prefs').then(x=>x.json());const ok=window.WanderNotify&&await WanderNotify.subscribe(st.vapid,true);toast(ok?'Notifications activées sur cet appareil.':'Notifications refusées ou non disponibles sur ce navigateur.')}catch(x){toast('Notifications non disponibles.')}return}
+
   if(a==='testreq'){if(!REMOTE)return toast('SYNC_URL est vide dans sync.js.');const em=prompt('Adresse email qui doit recevoir la confirmation ?');if(!em)return;
     const r=await Sync.post({action:'request',uid:'test',fn:'Test',ln:'Wander',em:em,co:'TEST',ph:'0600000000',product:'Demande de test',variant:'-',date:new Date().toISOString().slice(0,10),nights:1,rooms:1,adults:2,children:0,babies:0,total:'0 MAD'});
     return toast(r&&r.ok?'Demande envoyée. Vérifiez la boîte de '+em+' (et les spams).':'Échec de l\u2019envoi.')}
@@ -190,6 +209,7 @@ document.addEventListener('change',async e=>{
   if(t.dataset.act==='price'){patch(t.dataset.id,'startingPrice',t.value);toast('Prix modifié, à publier.')}
   if(t.dataset.act==='active'){const row=+t.dataset.row;await Sync.post({action:'setActive',token:token,row:row,active:t.checked});const u=users.find(x=>x.row===row);if(u)u.active=t.checked;toast(t.checked?'Accès réactivé.':'Accès désactivé.')}
   if(t.dataset.act==='vis'){patch(t.dataset.id,'hidden',!t.checked)}
+  if(t.dataset.act==='promo'){patch(t.dataset.id,'promo',t.checked);toast(t.checked?'Ajoutée au Jeudi Promo, à publier.':'Retirée du Jeudi Promo, à publier.')}
   if(t.dataset.act==='status'){const row=+t.dataset.row,r=data.requests.find(x=>x.row===row);if(r)r.status=t.value;
     if(REMOTE)await Sync.post({action:'status',token:token,row:row,status:t.value});else{const a=J(Sync.KR,[]);if(a[row])a[row].status=t.value;localStorage.setItem(Sync.KR,JSON.stringify(a))}
     toast('Statut mis à jour.');render()}

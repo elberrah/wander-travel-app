@@ -1,0 +1,15 @@
+{
+  "name": "Wander Avantages Salariés",
+  "short_name": "Wander",
+  "description": "Vos avantages voyages et loisirs de collaborateur, par Wander Travel & Event.",
+  "start_url": "/plateforme/index.html",
+  "scope": "/plateforme/",
+  "display": "standalone",
+  "background_color": "#1a0b0f",
+  "theme_color": "#1a0b0f",
+  "lang": "fr",
+  "icons": [
+    { "src": "/icons/wander-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/wander-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

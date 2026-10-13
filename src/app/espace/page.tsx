@@ -4,6 +4,7 @@ import { ArrowRight, Gift, Globe, LogOut, ShieldCheck, Users } from "lucide-reac
 import { requireUser, isAdmin } from "@/lib/session";
 import { auth } from "@/lib/auth";
 import { ChangePasswordForm } from "@/components/auth/change-password-form";
+import { NotificationPrefs } from "@/components/notification-prefs";
 
 export const metadata: Metadata = { title: "Mon espace | Wander Travel & Event", robots: { index: false, follow: false } };
 
@@ -89,6 +90,9 @@ export default async function EspacePage({ searchParams }: { searchParams: Promi
                 <dd className="text-white">{[hasPassword && "Email et mot de passe", providers.includes("google") && "Google"].filter(Boolean).join(" · ")}</dd>
               </div>
             </dl>
+            <div className="mt-12">
+              <NotificationPrefs />
+            </div>
           </div>
           <div>
             <h2 className="font-serif text-2xl font-bold text-white mb-6">Mot de passe</h2>

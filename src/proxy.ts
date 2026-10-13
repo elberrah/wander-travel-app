@@ -8,16 +8,27 @@ import { safeCallbackUrl } from "@/lib/safe-redirect";
 
 const AUTH_PAGES = ["/connexion", "/inscription", "/mot-de-passe-oublie", "/reinitialiser-mot-de-passe", "/verifier-email"];
 // Ressources nécessaires à l'affichage de la page de connexion.
-const PUBLIC_FILES = ["/images/gallery/casa-skyline.png", "/favicon.ico", "/robots.txt"];
+const PUBLIC_FILES = [
+  "/images/gallery/casa-skyline.png",
+  "/favicon.ico",
+  "/robots.txt",
+  // Application installable et notifications (chargés sans cookie par le navigateur).
+  "/manifest-plateforme.webmanifest",
+  "/icons/wander-192.png",
+  "/icons/wander-512.png",
+  "/icons/wander-badge.png",
+];
 // Pages publiques, sans connexion (Google exige une politique de confidentialité accessible).
-const PUBLIC_PAGES = ["/confidentialite"];
+const PUBLIC_PAGES = ["/confidentialite", "/desabonnement"];
+// Robot de notifications : protégé par son propre secret (CRON_SECRET).
+const PUBLIC_API = ["/api/cron/notifications"];
 
 const matches = (pathname: string, base: string) => pathname === base || pathname.startsWith(base + "/");
 
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
-  if (matches(pathname, "/api/auth") || PUBLIC_FILES.includes(pathname) || PUBLIC_PAGES.includes(pathname)) {
+  if (matches(pathname, "/api/auth") || PUBLIC_FILES.includes(pathname) || PUBLIC_PAGES.includes(pathname) || PUBLIC_API.includes(pathname)) {
     return NextResponse.next();
   }
 

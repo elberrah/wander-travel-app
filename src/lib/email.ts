@@ -40,7 +40,7 @@ Wander Travel &amp; Event · Casablanca, Maroc<br>contact@wandertravel-event.com
 </td></tr></table></td></tr></table></body></html>`;
 }
 
-async function send(to: string, subject: string, html: string, text: string) {
+async function send(to: string, subject: string, html: string, text: string, headers?: Record<string, string>) {
   if (!transporter) {
     if (process.env.NODE_ENV === "production") {
       console.error(`[email] SMTP non configuré : email « ${subject} » non envoyé à ${to}.`);
@@ -50,7 +50,7 @@ async function send(to: string, subject: string, html: string, text: string) {
     console.info(`\n[email] À : ${to}\n[email] Objet : ${subject}\n[email] ${text}\n`);
     return;
   }
-  await transporter.sendMail({ from: FROM, to, subject, html, text });
+  await transporter.sendMail({ from: FROM, to, subject, html, text, headers });
 }
 
 export async function sendVerificationEmail(to: string, name: string, url: string) {
@@ -101,4 +101,55 @@ export async function sendRequestNotification(d: Record<string, string>) {
     .map((l) => escapeHtml(l))
     .join("<br>")}<br><br>À traiter dans le tableau de bord, onglet Demandes.</div>`;
   await send(to, `Nouvelle demande : ${d.product}`, html, lines.join("\n"));
+}
+
+// ---------- Notifications salariés (panier, Jeudi Promo, nouveautés) ----------
+
+export type MailLine = { title: string; detail?: string; price?: string };
+
+export async function sendNotificationEmail(opts: {
+  to: string;
+  subject: string;
+  title: string;
+  intro: string;
+  lines?: MailLine[];
+  cta: string;
+  url: string;
+  unsubscribeUrl: string;
+  footnote?: string;
+}) {
+  const { to, subject, title, intro, lines = [], cta, url, unsubscribeUrl, footnote } = opts;
+  const safeUrl = escapeHtml(url);
+  const unsub = escapeHtml(unsubscribeUrl);
+  const list = lines.length
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px">${lines
+        .map(
+          (l) => `<tr><td style="padding:14px 16px;border:1px solid #262626;border-radius:12px;background:#111">
+<div style="font-family:Georgia,serif;font-size:17px;color:#fcfcfc">${escapeHtml(l.title)}</div>
+${l.detail ? `<div style="font-size:12px;color:#a3a3a3;margin-top:4px">${escapeHtml(l.detail)}</div>` : ""}
+${l.price ? `<div style="font-size:14px;color:#c5a059;margin-top:6px;font-weight:bold">${escapeHtml(l.price)}</div>` : ""}
+</td></tr><tr><td style="height:8px"></td></tr>`,
+        )
+        .join("")}</table>`
+    : "";
+  const html = `<!doctype html><html lang="fr"><body style="margin:0;background:#050505;padding:32px 16px;font-family:Helvetica,Arial,sans-serif;color:#fcfcfc">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#0a0a0a;border:1px solid #262626;border-radius:18px">
+<tr><td style="padding:34px 34px 6px;text-align:center">
+<div style="font-family:Georgia,serif;font-size:26px;letter-spacing:6px;font-weight:bold;color:#fcfcfc">WANDER</div>
+<div style="font-size:10px;letter-spacing:5px;color:#c5a059;text-transform:uppercase;margin-top:6px">Travel &amp; Event</div>
+</td></tr>
+<tr><td style="padding:24px 34px 8px">
+<h1 style="font-family:Georgia,serif;font-weight:normal;font-size:23px;color:#c5a059;margin:0 0 14px">${escapeHtml(title)}</h1>
+<p style="font-size:15px;line-height:1.6;color:#d4d4d4;margin:0 0 24px">${escapeHtml(intro)}</p>
+${list}
+<p style="text-align:center;margin:0 0 24px"><a href="${safeUrl}" style="display:inline-block;background:#c5a059;color:#050505;text-decoration:none;font-weight:bold;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:16px 32px;border-radius:999px">${escapeHtml(cta)}</a></p>
+<p style="font-size:11px;line-height:1.6;color:#8a8a8a;margin:0 0 20px">${escapeHtml(footnote || "Tarifs indicatifs, sous réserve de confirmation de disponibilité.")}</p>
+</td></tr>
+<tr><td style="padding:18px 34px 30px;border-top:1px solid #262626;font-size:11px;color:#737373;text-align:center;line-height:1.7">
+Wander Travel &amp; Event · Casablanca, Maroc · contact@wandertravel-event.com · +212 702 093 107<br>
+<a href="${unsub}" style="color:#8a8a8a">Gérer mes notifications ou me désabonner</a>
+</td></tr></table></td></tr></table></body></html>`;
+  const text = [title, "", intro, "", ...lines.map((l) => `- ${l.title}${l.detail ? ` (${l.detail})` : ""}${l.price ? ` : ${l.price}` : ""}`), "", `${cta} : ${url}`, "", `Se désabonner : ${unsubscribeUrl}`].join("\n");
+  await send(to, subject, html, text, { "List-Unsubscribe": `<${unsubscribeUrl}>` });
 }

@@ -8,7 +8,7 @@ import { safeCallbackUrl } from "@/lib/safe-redirect";
 
 const AUTH_PAGES = ["/connexion", "/inscription", "/mot-de-passe-oublie", "/reinitialiser-mot-de-passe", "/verifier-email"];
 // Ressources nécessaires à l'affichage de la page de connexion.
-const PUBLIC_FILES = ["/images/logo.png", "/images/gallery/casa-skyline.png", "/favicon.ico", "/robots.txt"];
+const PUBLIC_FILES = ["/images/gallery/casa-skyline.png", "/favicon.ico", "/robots.txt"];
 
 const matches = (pathname: string, base: string) => pathname === base || pathname.startsWith(base + "/");
 

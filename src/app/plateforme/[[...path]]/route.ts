@@ -94,7 +94,18 @@ export async function GET(_req: Request, ctx: { params: Promise<{ path?: string[
     co: (session.user as { company?: string | null }).company || "",
     exp: new Date(session.session.expiresAt).getTime(),
   };
-  const inject = `<script>try{localStorage.setItem('wander_session',${jsonForScript(JSON.stringify(platformSession))})}catch(e){}</script>`;
+  // Espace salarié / panier (shop.js) : ouvert directement avec le compte connecté,
+  // sans l'ancien « code entreprise ».
+  const member = {
+    code: "COMPTE",
+    company: platformSession.co || "Wander",
+    email: session.user.email,
+    name: session.user.name || session.user.email,
+    verified: Boolean(session.user.emailVerified),
+  };
+  const inject =
+    `<script>try{localStorage.setItem('wander_session',${jsonForScript(JSON.stringify(platformSession))});` +
+    `localStorage.setItem('wander_member',${jsonForScript(JSON.stringify(member))})}catch(e){}</script>`;
   const html = body.toString("utf8").replace(/<head([^>]*)>/i, (m) => m + inject);
   return new NextResponse(html, { headers: resHeaders });
 }

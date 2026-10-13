@@ -2,16 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { motion, useSpring } from "framer-motion";
+import { usePathname } from "next/navigation";
+
+// Pages d'application (connexion, espace, administration) : curseur natif.
+const APP_PAGES = /^\/(connexion|inscription|mot-de-passe-oublie|reinitialiser-mot-de-passe|verifier-email|deconnexion|espace|admin)(\/|$)/;
 
 export function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [hasMoved, setHasMoved] = useState(false);
+  const pathname = usePathname();
 
   const cursorX = useSpring(0, { stiffness: 500, damping: 28 });
   const cursorY = useSpring(0, { stiffness: 500, damping: 28 });
 
   useEffect(() => {
     const moveMouse = (e: MouseEvent) => {
+      setHasMoved(true);
       setMousePosition({ x: e.clientX, y: e.clientY });
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
@@ -40,6 +47,9 @@ export function CustomCursor() {
       window.removeEventListener("mouseover", handleHover);
     };
   }, [cursorX, cursorY]);
+
+  // Invisible tant que la souris n'a pas bougé (sinon figé en haut à gauche).
+  if (!hasMoved || APP_PAGES.test(pathname || "")) return null;
 
   return (
     <>

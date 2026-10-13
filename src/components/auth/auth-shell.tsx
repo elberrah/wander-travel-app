@@ -44,11 +44,10 @@ export function AuthShell({ title, subtitle, children, footer }: { title: string
 
 function Brand({ className = "" }: { className?: string }) {
   return (
-    <Link href="/" className={`flex items-center gap-4 ${className}`}>
-      <img src="/images/logo.png" alt="Wander" className="h-12 w-auto object-contain mix-blend-screen brightness-110 saturate-[0.8] sepia-[.1]" />
+    <Link href="/" aria-label="Wander Travel & Event — accueil" className={`group inline-flex items-center ${className}`}>
       <div className="flex flex-col">
-        <span className="font-serif text-2xl font-bold tracking-[0.2em] text-white leading-none">WANDER</span>
-        <span className="text-primary text-[9px] font-bold tracking-[0.5em] uppercase mt-1.5 opacity-80">Travel &amp; Event</span>
+        <span className="font-serif text-2xl md:text-3xl font-bold tracking-[0.2em] text-white leading-none transition-colors group-hover:text-primary">WANDER</span>
+        <span className="text-primary text-[9px] md:text-[10px] font-bold tracking-[0.5em] uppercase mt-1.5 opacity-80">Travel &amp; Event</span>
       </div>
     </Link>
   );

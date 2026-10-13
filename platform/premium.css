@@ -246,3 +246,15 @@ body.dark-mode .op-book{background:rgba(30,20,23,.7)!important}
 .kids-gallery img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
 .kids-gallery figure:hover img{transform:scale(1.05)}
 @media (max-width:700px){.kids-gallery{grid-template-columns:1fr 1fr;grid-template-rows:auto}.kids-gallery figure,.kids-gallery figure:first-child,.kids-gallery figure:nth-child(4){grid-row:auto;grid-column:auto;aspect-ratio:4/3}.kids-gallery figure:first-child{grid-column:span 2}}
+
+/* Carte de chiffres du hero : centrée sans transform (l'animation d'apparition l'écrasait)
+   et posée dans le hero (overflow:hidden la coupait quand elle débordait en bas). */
+@media (min-width:769px){
+.hero-section{padding-bottom:170px}
+.quick-stats-card{left:0!important;right:0!important;bottom:40px!important;margin:0 auto;width:fit-content;max-width:calc(100% - 48px);transform:none}
+}
+/* Mobile : les catégories défilent dans leur zone au lieu d'élargir la page. */
+@media (max-width:768px){
+.filter-controls{flex-direction:column;align-items:stretch}
+.filter-controls>*,.category-pills,.select-filters{min-width:0;max-width:100%;width:100%}
+}

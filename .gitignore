@@ -49,3 +49,10 @@ wander_key*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+!.env.example
+
+# base de données locale (comptes, sessions)
+/data/
+*.db
+*.db-wal
+*.db-shm

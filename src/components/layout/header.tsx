@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, ArrowRight, Globe, Phone, Camera, ExternalLink, ChevronDown, Building2, CreditCard, Heart } from "lucide-react";
+import { Menu, X, ArrowRight, Globe, Phone, Camera, ExternalLink, ChevronDown, Building2, CreditCard, Heart, UserRound } from "lucide-react";
 
 const navLinks = [
   { label: "Accueil", href: "/" },
@@ -183,6 +183,10 @@ export default function Header() {
                 <Globe size={14} className="group-hover:rotate-12 transition-transform" />
                 <span className="text-[10px] uppercase font-bold tracking-widest">FR</span>
              </div>
+             <Link href="/espace" aria-label="Mon espace" className="flex items-center gap-2 text-white/40 hover:text-primary transition-colors">
+                <UserRound size={14} />
+                <span className="text-[10px] uppercase font-bold tracking-widest">Mon espace</span>
+             </Link>
              <Link 
                 href="/contact" 
                 className="px-8 py-3 bg-white text-black font-bold uppercase tracking-[0.2em] text-[10px] hover:bg-primary transition-all shadow-[0_20px_40px_rgba(255,255,255,0.05)] hover:shadow-primary/20"
@@ -275,6 +279,10 @@ export default function Header() {
                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
                className="mt-16 pt-8 border-t border-white/5 relative z-10 flex flex-col gap-6"
             >
+               <Link href="/espace" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 text-white/60 hover:text-primary transition-colors">
+                  <UserRound size={16} />
+                  <span className="text-sm uppercase tracking-[0.2em] font-bold">Mon espace</span>
+               </Link>
                <div className="flex items-center gap-4 text-white/40">
                   <Phone size={16} />
                   <span className="text-sm">+212 702 093 107</span>

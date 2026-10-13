@@ -1,22 +1,22 @@
-# Wander Travel & Event — Deployment Automation Script (Strict Mode)
-# Usage: .\deploy_to_vps.ps1
+# Wander Travel & Event — Déploiement (Strict Mode)
+# Usage : .\deploy_to_vps.ps1
 # OFFICIAL SOURCE ONLY: app2026wander -> VPS OVH (wandertravel-event.com)
+# Envoie les sources validées (git) : le serveur construit l'application lui-même.
 
-echo "=== Wander Travel & Event: Start Deployment 2026 ==="
+$ErrorActionPreference = "Stop"
+echo "=== Wander Travel & Event : déploiement 2026 ==="
 
-# 1. Check local files
-if (-Not (Test-Path "out")) { echo "Error: 'out' directory missing. Run 'npx next build' first."; exit 1 }
+# 1. Sources : uniquement ce qui est commité (aucun .env, aucune base locale)
+if (git status --porcelain) { echo "Erreur : modifications non commitées. Commitez avant de déployer."; exit 1 }
+git archive --format=zip -o site.zip HEAD
 
-# 2. Transfer to VPS using central SSH profile
-echo "Configuring VPS web root permissions for transfer..."
-ssh wander-vps "sudo chown -R ubuntu:ubuntu /var/www/wandertravel-event.com/out"
+# 2. Transfert vers le VPS (profil SSH central)
+echo "Transfert vers wander-vps..."
+scp site.zip nginx.conf server_setup.sh deploy/wander.service deploy/wander_proxy_params wander-vps:/home/ubuntu/
 
-echo "Transferring build to VPS (wander-vps)..."
-scp -r out/* wander-vps:/var/www/wandertravel-event.com/out/
+# 3. Construction et redémarrage sur le serveur
+ssh wander-vps "bash /home/ubuntu/server_setup.sh"
+Remove-Item site.zip
 
-# 3. Secure file permissions remotely
-echo "Restoring VPS web root permissions for Nginx..."
-ssh wander-vps "sudo chown -R www-data:www-data /var/www/wandertravel-event.com/out && sudo chmod -R 755 /var/www/wandertravel-event.com/out"
-
-echo "=== Deployment Successfully Completed ==="
-echo "Site Live: https://wandertravel-event.com"
+echo "=== Déploiement terminé ==="
+echo "Site : https://wandertravel-event.com"

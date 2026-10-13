@@ -110,6 +110,14 @@ Première fois : `sudo certbot --nginx -d wandertravel-event.com -d www.wandertr
 **Sauvegarde** : `sudo sqlite3 /var/lib/wander/wander.db ".backup /root/wander-$(date +%F).db"`
 (ou copie du fichier service arrêté).
 
+## 4 bis. Vercel (Postgres Neon)
+
+Sur Vercel, le disque n'est pas conservé : la base est **Postgres (Neon)**, reliée au projet
+(Storage → Neon → variable `DATABASE_URL`). Les tables sont créées / mises à jour **pendant le build**
+(`node scripts/migrate-db.mjs`, lancé par `npm run build`). Variables à définir dans le projet :
+`BETTER_AUTH_SECRET`, `ADMIN_EMAILS`, `SMTP_*`, `MAIL_FROM`, et en option `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`.
+`BETTER_AUTH_URL` est facultatif : l'adresse Vercel est déduite automatiquement.
+
 ## 5. Développement local
 
 ```

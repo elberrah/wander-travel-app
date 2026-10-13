@@ -150,9 +150,6 @@ export default function ServicesPage() {
                        </div>
                     </div>
                  </div>
-              </div>
-            </Reveal>
-         </div>
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {[
                     { icon: <Shield size={20} />, t: "Confidentialité Protégée", d: "Gestion sécurisée des données et identités." },
@@ -168,6 +165,7 @@ export default function ServicesPage() {
                   ))}
                </div>
             </div>
+            </Reveal>
          </div>
       </section>
 

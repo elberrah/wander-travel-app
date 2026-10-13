@@ -8,6 +8,8 @@ import Link from "next/link";
 import { CheckCircle2, Shield, Star, Clock, Globe, MapPin } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { HeroGlobe } from "@/components/ui/hero-globe";
+import { Reveal } from "@/components/providers/transitions";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -210,9 +212,6 @@ export default function VipLimousinesPage() {
       </section>
 
             <Footer />
-    </main>
-      );
-      <Footer />
     </main>
   );
 }

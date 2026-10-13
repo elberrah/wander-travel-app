@@ -6,6 +6,8 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import WanderBentoSection from "@/components/sections/WanderBentoSection";
 import { ArrowRight, CheckCircle2, CreditCard, Building2, Users, Shield, Wallet, Phone, Mail, Calendar } from "lucide-react";
+import { HeroGlobe } from "@/components/ui/hero-globe";
+import { Reveal } from "@/components/providers/transitions";
 
 const paymentModes = [
   {

@@ -3,6 +3,8 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/providers/smooth-scroll";
 import Script from "next/script";
+import { CustomCursor } from "@/components/ui/custom-cursor";
+import { PageTransition } from "@/components/providers/transitions";
 
 const fontSans = Inter({
   variable: "--font-sans",
@@ -34,7 +36,7 @@ export default function RootLayout({
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-ZL06HET5SK"
           strategy="afterInteractive"
-          />
+        />
         <Script id="google-analytics" strategy="afterInteractive">
           {`
           window.dataLayer = window.dataLayer || [];
@@ -43,8 +45,8 @@ export default function RootLayout({
           gtag('config', 'G-ZL06HET5SK');
           `}
         </Script>
-                <CustomCursor />
-                <SmoothScrollProvider>
+        <CustomCursor />
+        <SmoothScrollProvider>
           <PageTransition>{children}</PageTransition>
         </SmoothScrollProvider>
       </body>

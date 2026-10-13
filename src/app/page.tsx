@@ -11,6 +11,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, CheckCircle2, Star, Shield, Clock, Globe } from "lucide-react";
 import { ExperienceMarquee } from "@/components/sections/ExperienceMarquee";
+import { HeroGlobe } from "@/components/ui/hero-globe";
+import { Reveal } from "@/components/providers/transitions";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);

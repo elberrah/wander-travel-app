@@ -1,0 +1,11 @@
+{
+  "name": "wander-travel-event",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plateforme Wander Travel & Event : offres pour les salariés des entreprises partenaires.",
+  "scripts": {
+    "photos": "node scripts/download-photos.mjs",
+    "start": "npx serve ."
+  },
+  "engines": { "node": ">=18" }
+}

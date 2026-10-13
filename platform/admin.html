@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Wander — Tableau de bord</title>
+<style>
+:root{--ink:#1a0b0f;--bur:#6b1e2a;--gold:#c9a84c;--bg:#f6f3ee;--card:#fff;--hair:#e4ddd0;--tx:#241a1c;--mut:#7a6d6f;--ok:#1f7a4d;--bad:#b3261e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:500;margin:0}
+a{color:var(--bur)}a:hover{color:var(--gold)}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--hair);border-radius:8px;background:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid rgba(201,168,76,.45);border-color:var(--gold)}
+.btn{border:0;border-radius:8px;padding:9px 16px;cursor:pointer;font-weight:600;background:var(--ink);color:#f3e3b0}
+.btn:hover{background:var(--bur)}.btn.alt{background:#fff;color:var(--tx);border:1px solid var(--hair)}.btn.alt:hover{border-color:var(--gold)}.btn.del{background:#fff;color:var(--bad);border:1px solid #e6c3bf}.btn.sm{padding:5px 10px;font-size:.82rem}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 28px;background:var(--ink);color:#faf8f5}
+header h1{font-size:1.4rem;flex:1;color:#f3e3b0}
+.badge{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12)}
+.badge.on{background:var(--ok)}
+nav{display:flex;gap:6px;padding:14px 28px 0;flex-wrap:wrap}
+nav button{border:0;background:none;padding:10px 16px;border-radius:8px 8px 0 0;cursor:pointer;font-weight:600;color:var(--mut)}
+nav button.on{background:var(--card);color:var(--bur);box-shadow:0 -2px 0 var(--gold) inset}
+main{padding:0 28px 60px;max-width:1280px;margin:0 auto}
+.panel{background:var(--card);border:1px solid var(--hair);border-radius:0 12px 12px 12px;padding:24px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:22px}
+.kpi{border:1px solid var(--hair);border-radius:12px;padding:18px}.kpi b{display:block;font:500 2.2rem/1.1 Georgia,serif;color:var(--bur)}.kpi span{font-size:.8rem;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+.cols{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:22px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.bars{display:flex;align-items:flex-end;gap:3px;height:150px;border-bottom:1px solid var(--hair);padding-top:8px;margin-top:10px}.bars i{flex:1;background:var(--gold);border-radius:3px 3px 0 0;min-height:2px}.bars i:hover{background:var(--bur)}
+.axis{display:flex;justify-content:space-between;font-size:.72rem;color:var(--mut);margin-top:4px}
+table{width:100%;border-collapse:collapse}th{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);text-align:left;padding:8px 10px;border-bottom:1px solid var(--hair)}td{padding:9px 10px;border-bottom:1px solid var(--hair);vertical-align:middle}
+tr.gone td{opacity:.45}.thumb{width:56px;height:40px;border-radius:6px;object-fit:cover;background:var(--bg);display:block}
+.tools{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}.tools input{max-width:300px}
+.drawer{position:fixed;inset:0 0 0 auto;width:min(720px,100%);background:#fff;box-shadow:-20px 0 60px rgba(0,0,0,.25);z-index:40;overflow:auto;padding:26px;transform:translateX(105%);transition:transform .3s}.drawer.on{transform:none}
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:30;display:none}.veil.on{display:block}
+.f{display:grid;gap:5px;margin-bottom:14px}.f label{font-size:.78rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ph{display:grid;grid-template-columns:56px 1fr auto auto auto;gap:8px;align-items:center;margin-bottom:8px}
+.pill{font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--bg)}
+.gate{max-width:420px;margin:90px auto;text-align:center}.gate .panel{border-radius:14px}
+.muted{color:var(--mut);font-size:.88rem}.err{color:var(--bad)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#f3e3b0;padding:12px 22px;border-radius:10px;z-index:60;opacity:0;transition:opacity .3s;pointer-events:none}.toast.on{opacity:1}
+.grid-edit td{padding:4px}.grid-edit input{padding:6px 8px;min-width:90px}
+.dirty{background:var(--gold);color:#000}
+code{background:var(--bg);padding:2px 6px;border-radius:5px;font-size:.85rem}
+ol li{margin-bottom:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Wander · Tableau de bord</h1>
+  <span class="badge" id="mode"></span>
+  <button class="btn alt" id="publish" data-act="publish" style="display:none">Publier les modifications</button>
+  <a href="index.html" style="color:#f3e3b0">Voir le site</a>
+</header>
+<div id="app"></div>
+<div class="veil" id="veil" data-act="close"></div>
+<aside class="drawer" id="drawer"></aside>
+<div class="toast" id="toast"></div>
+
+<script>window.SYNC_NO_APPLY = true;</script>
+<script src="data.js"></script>
+<script src="sync.js"></script>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const J=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
+const REMOTE=!!Sync.url, BASE=JSON.parse(JSON.stringify(OFFERS_DATA));
+const CATS=[...new Set(BASE.map(o=>o.category))];
+const STAT=['Nouveau','Contacté','Confirmé','Annulé'];
+let ov={deleted:[],added:[],offers:{}}, dirty=false, tab='home', token=sessionStorage.getItem('wander_admin_token')||'', data={visits:[],requests:[]}, users=[], q='', editing=null, rq='all';
+
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2600)};
+const fmtD=t=>new Date(t).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+
+function all(){return BASE.concat(ov.added||[])}
+function eff(id){const b=all().find(o=>o.id===id);if(!b)return null;const p=(ov.offers||{})[id]||{};const o=Object.assign({},b);
+  ['title','location','priceLabel','description'].forEach(k=>{if(p[k])o[k]=p[k]});
+  if(p.startingPrice!==undefined&&p.startingPrice!=='')o.startingPrice=Number(p.startingPrice);
+  o.photos=p.photos||b.images||(b.image?[b.image]:[]);o.rows=p.rows||(b.details&&b.details.tableRows)||[];o.header=(b.details&&b.details.tableHeader)||[];
+  o.hidden=!!p.hidden;o.gone=(ov.deleted||[]).includes(id);return o}
+function patch(id,k,v){ov.offers[id]=ov.offers[id]||{};ov.offers[id][k]=v;mark()}
+function mark(){dirty=true;$('#publish').style.display='';$('#publish').classList.add('dirty')}
+function norm(o){o=o||{};return{deleted:o.deleted||[],added:o.added||[],offers:o.offers||{}}}
+
+async function boot(){
+  $('#mode').textContent=REMOTE?'Google Sheets':'Mode local';$('#mode').className='badge'+(REMOTE?' on':'');
+  if(REMOTE&&!token)return gate();
+  try{
+    if(REMOTE){const tk='&token='+encodeURIComponent(token);const [o,s,us]=await Promise.all([Sync.get('overrides'),Sync.get('stats',tk),Sync.get('users',tk)]);users=Array.isArray(us)?us:[];
+      if(s.error){sessionStorage.removeItem('wander_admin_token');token='';return gate('Mot de passe refusé.')}
+      ov=norm(o);data=s;
+    }else{ov=norm(J(Sync.KO,{}));data={visits:J(Sync.KV,[]),requests:J(Sync.KR,[]).map((r,i)=>Object.assign({row:i},r))}}
+  }catch(e){$('#app').innerHTML='<main><div class="panel err">Connexion impossible à Google Sheets. Vérifiez l\u2019adresse dans sync.js.</div></main>';return}
+  render();
+}
+function gate(m){$('#app').innerHTML='<div class="gate"><h2>Accès réservé</h2><p class="muted">Entrez le mot de passe défini dans le script Google.</p><div class="panel"><div class="f"><input type="password" id="tk" placeholder="Mot de passe"></div><button class="btn" data-act="login" style="width:100%">Entrer</button><p class="err">'+(m||'')+'</p></div></div>'}
+
+function render(){
+  const tabs=[['home','Vue d\u2019ensemble'],['offres','Offres & photos'],['dem','Demandes'],['sal','Salariés'],['set','Réglages']];
+  const body={home:home,offres:offres,dem:dem,sal:sal,set:set}[tab]();
+  $('#app').innerHTML='<nav>'+tabs.map(t=>'<button data-act="tab" data-v="'+t[0]+'" class="'+(tab===t[0]?'on':'')+'">'+t[1]+(t[0]==='dem'?' <span class="pill">'+data.requests.filter(r=>r.status==='Nouveau').length+'</span>':'')+'</button>').join('')+'</nav><main><div class="panel">'+body+'</div></main>';
+}
+
+function home(){
+  const V=data.visits,now=Date.now(),D=864e5,u=new Set(V.map(v=>v.v)).size,l7=V.filter(v=>now-v.t<7*D),days=[];
+  for(let i=29;i>=0;i--){const d=new Date(now-i*D);d.setHours(0,0,0,0);days.push({d:d,n:0})}
+  V.forEach(v=>{const i=29-Math.floor((now-v.t)/D);if(i>=0&&i<30)days[i].n++});
+  const mx=Math.max(1,...days.map(x=>x.n)),top={};V.filter(v=>v.o).forEach(v=>top[v.o]=(top[v.o]||0)+1);
+  const T=Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,8),R=data.requests;
+  return '<div class="kpis"><div class="kpi"><b>'+V.length+'</b><span>Pages vues</span></div><div class="kpi"><b>'+u+'</b><span>Visiteurs uniques</span></div><div class="kpi"><b>'+l7.length+'</b><span>Pages vues, 7 jours</span></div><div class="kpi"><b>'+R.length+'</b><span>Demandes</span></div><div class="kpi"><b>'+R.filter(r=>r.status==='Nouveau').length+'</b><span>À traiter</span></div></div>'
+  +'<div class="cols"><div><h3>Visites, 30 derniers jours</h3><div class="bars">'+days.map(x=>'<i style="height:'+(x.n/mx*100)+'%" title="'+fmtD(x.d)+' : '+x.n+'"></i>').join('')+'</div><div class="axis"><span>'+fmtD(days[0].d)+'</span><span>'+fmtD(days[29].d)+'</span></div></div>'
+  +'<div><h3>Offres les plus consultées</h3>'+(T.length?'<table>'+T.map(function(e){return '<tr><td>'+esc((eff(e[0])||{title:e[0]}).title)+'</td><td style="text-align:right"><b>'+e[1]+'</b></td></tr>'}).join('')+'</table>':'<p class="muted">Aucune visite enregistrée pour l\u2019instant.</p>')+'</div></div>'
+  +(REMOTE?'':'<p class="muted" style="margin-top:20px">Mode local : les chiffres viennent de ce navigateur seulement. Connectez Google Sheets (onglet Réglages) pour compter tous les visiteurs.</p>');
+}
+
+function offres(){
+  const L=all().filter(o=>!q||(o.title+o.location).toLowerCase().includes(q.toLowerCase()));
+  return '<div class="tools"><input id="q" placeholder="Rechercher une offre" value="'+esc(q)+'"><button class="btn" data-act="add">+ Ajouter une offre</button><span class="muted">'+(all().length-(ov.deleted||[]).length)+' offres en ligne</span></div>'
+  +'<div style="overflow:auto"><table><tr><th></th><th>Offre</th><th>Ville</th><th>Prix de départ</th><th>Photos</th><th>En ligne</th><th></th></tr>'+L.map(function(b){const o=eff(b.id);
+    return '<tr class="'+(o.gone?'gone':'')+'"><td>'+(o.photos[0]?'<img class="thumb" src="'+esc(o.photos[0])+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="thumb"></div>')+'</td><td><b>'+esc(o.title)+'</b></td><td>'+esc(o.location)+'</td><td><input type="number" min="0" style="width:120px" value="'+(o.startingPrice==null?'':o.startingPrice)+'" data-act="price" data-id="'+o.id+'" placeholder="sur demande"></td><td>'+o.photos.length+'</td><td>'+(o.gone?'<span class="pill">Supprimée</span>':'<input type="checkbox" style="width:auto" '+(o.hidden?'':'checked')+' data-act="vis" data-id="'+o.id+'">')+'</td><td style="white-space:nowrap">'+(o.gone?'<button class="btn alt sm" data-act="restore" data-id="'+o.id+'">Restaurer</button>':'<button class="btn alt sm" data-act="edit" data-id="'+o.id+'">Modifier</button> <button class="btn del sm" data-act="del" data-id="'+o.id+'">Supprimer</button>')+'</td></tr>'}).join('')+'</table></div>';
+}
+
+function ph(u,i,n){return '<div class="ph"><img class="thumb" src="'+esc(u)+'" alt="" onerror="this.style.visibility=\'hidden\'"><input data-p="'+i+'" value="'+esc(u)+'"><button class="btn alt sm" data-act="up" data-i="'+i+'" '+(i?'':'disabled')+'>↑</button><button class="btn alt sm" data-act="dn" data-i="'+i+'" '+(i<n-1?'':'disabled')+'>↓</button><button class="btn del sm" data-act="delph" data-i="'+i+'">×</button></div>'}
+function drawer(id){
+  const o=eff(id);editing=id;
+  let g='<p class="muted">Cette offre n\u2019a pas de grille de tarifs. Elle s\u2019affiche « sur demande ».</p>';
+  if(o.header.length)g='<div style="overflow:auto"><table class="grid-edit"><tr>'+o.header.map(h=>'<th>'+esc(h)+'</th>').join('')+'<th></th></tr>'+o.rows.map((r,i)=>'<tr>'+o.header.map((h,j)=>'<td><input data-r="'+i+'" data-c="'+j+'" value="'+esc(r[j]==null?'':r[j])+'"></td>').join('')+'<td><button class="btn del sm" data-act="delrow" data-i="'+i+'">×</button></td></tr>').join('')+'</table></div><button class="btn alt sm" data-act="addrow" style="margin-top:8px">+ Ligne</button>';
+  $('#drawer').innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><h2>'+esc(o.title)+'</h2><button class="btn alt sm" data-act="close">Fermer</button></div>'
+  +'<div class="f"><label>Nom</label><input data-k="title" value="'+esc(o.title)+'"></div>'
+  +'<div class="row2"><div class="f"><label>Ville</label><input data-k="location" value="'+esc(o.location)+'"></div><div class="f"><label>Unité du prix</label><input data-k="priceLabel" value="'+esc(o.priceLabel)+'"></div></div>'
+  +'<div class="f"><label>Prix de départ (MAD)</label><input type="number" min="0" data-k="startingPrice" value="'+(o.startingPrice==null?'':o.startingPrice)+'" placeholder="vide = sur demande"></div>'
+  +'<div class="f"><label>Description</label><textarea rows="4" data-k="description">'+esc(o.description)+'</textarea></div>'
+  +'<h3 style="margin:22px 0 10px">Photos ('+o.photos.length+')</h3><div id="phs">'+o.photos.map((u,i)=>ph(u,i,o.photos.length)).join('')+'</div>'
+  +'<div style="display:flex;gap:8px"><input id="newph" placeholder="Adresse d\u2019une image (https://...)"><button class="btn" data-act="addph">Ajouter</button></div>'
+  +'<h3 style="margin:26px 0 10px">Tarifs</h3>'+g
+  +'<p class="muted" style="margin-top:20px">Les modifications sont gardées ici, puis mises en ligne avec « Publier les modifications ».</p>';
+  $('#drawer').classList.add('on');$('#veil').classList.add('on');
+}
+const photos=()=>eff(editing).photos.slice();
+function setPhotos(a){patch(editing,'photos',a);drawer(editing)}
+const rows=()=>eff(editing).rows.map(r=>r.slice());
+
+function dem(){
+  const R=data.requests.filter(r=>rq==='all'||r.status===rq);
+  return '<div class="tools"><select id="rq" style="max-width:200px"><option value="all">Tous les statuts</option>'+STAT.map(s=>'<option '+(rq===s?'selected':'')+'>'+s+'</option>').join('')+'</select><span class="muted">'+R.length+' demande(s)</span></div>'
+  +(R.length?'<div style="overflow:auto"><table><tr><th>Date</th><th>Salarié</th><th>Entreprise</th><th>Contact</th><th>Produit</th><th>Séjour</th><th>Personnes</th><th>Estimation</th><th>Statut</th></tr>'+R.map(r=>'<tr><td>'+fmtD(r.t)+'</td><td><b>'+esc(r.fn)+' '+esc(r.ln)+'</b></td><td>'+esc(r.co)+'</td><td>'+esc(r.ph)+'<br><span class="muted">'+esc(r.em)+'</span></td><td>'+esc(r.product)+'<br><span class="muted">'+esc(r.variant)+'</span></td><td>'+esc(r.date)+(r.nights?'<br><span class="muted">'+esc(r.nights)+' nuit(s), '+esc(r.rooms)+' ch.</span>':'')+'</td><td>'+esc(r.adults)+' ad.'+(+r.children?', '+esc(r.children)+' enf.':'')+(+r.babies?', '+esc(r.babies)+' bébé(s)':'')+'</td><td>'+esc(r.total)+'</td><td><select data-act="status" data-row="'+r.row+'" style="min-width:120px">'+STAT.map(s=>'<option '+(r.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select></td></tr>').join('')+'</table></div>':'<p class="muted">Aucune demande pour l\u2019instant.</p>');
+}
+
+function sal(){
+  if(!REMOTE)return '<p class="muted">Les accès salariés demandent Google Sheets. Connectez-le dans l\u2019onglet Réglages : sans connexion, le site reste en accès libre.</p>';
+  return '<h3>Créer un accès</h3><p class="muted">Le salarié reçoit par email son identifiant et un mot de passe généré.</p><div class="row2" style="margin:12px 0"><input id="u-fn" placeholder="Prénom"><input id="u-ln" placeholder="Nom"><input id="u-em" type="email" placeholder="Email"><input id="u-co" placeholder="Entreprise"></div><button class="btn" data-act="adduser">Créer l\u2019accès et envoyer l\u2019email</button>'
+  +'<h3 style="margin-top:28px">Salariés ('+users.length+')</h3>'+(users.length?'<div style="overflow:auto"><table><tr><th>Identifiant</th><th>Nom</th><th>Entreprise</th><th>Email</th><th>Actif</th><th></th></tr>'+users.map(u=>'<tr><td><code>'+esc(u.id)+'</code>'+(u.active?'':' <span class="pill">En attente</span>')+'</td><td><b>'+esc(u.fn)+' '+esc(u.ln)+'</b></td><td>'+esc(u.co)+'</td><td>'+esc(u.em)+'</td><td><input type="checkbox" style="width:auto" '+(u.active?'checked':'')+' data-act="active" data-row="'+u.row+'"></td><td><button class="btn alt sm" data-act="resetpw" data-row="'+u.row+'">'+(u.active?'Nouveau mot de passe':'Valider et envoyer l\u2019accès')+'</button></td></tr>').join('')+'</table></div>':'<p class="muted">Aucun accès créé.</p>');
+}
+function set(){
+  return '<h3>Connexion à Google Sheets</h3><p class="muted">État : '+(REMOTE?'<b style="color:var(--ok)">connecté</b>':'mode local (ce navigateur seulement)')+'.</p>'
+  +'<ol><li>Créez un Google Sheet vide, puis <b>Extensions &gt; Apps Script</b>.</li><li>Collez le contenu du fichier <code>apps-script.gs</code>. Changez <code>ADMIN_TOKEN</code> (votre mot de passe) et <code>NOTIFY_EMAIL</code>.</li><li><b>Déployer &gt; Nouveau déploiement &gt; Application web</b>. Exécuter en tant que : moi. Accès : tout le monde.</li><li>Copiez l\u2019adresse obtenue dans <code>sync.js</code>, à la ligne <code>SYNC_URL</code>.</li><li>Rechargez cette page : elle demande le mot de passe, puis lit et écrit dans votre Sheet.</li></ol>'
+  +'<p class="muted">Trois onglets se créent seuls : <b>Demandes</b> (une ligne par demande, statut modifiable), <b>Visites</b> (une ligne par visite) et <b>Config</b> (vos modifications d\u2019offres, à ne pas modifier à la main).</p>'
+  +'<p><button class="btn alt" data-act="ping">Tester la connexion</button> <button class="btn alt" data-act="testreq">Envoyer une demande de test</button></p><h3 style="margin-top:26px">Modifications</h3><button class="btn del" data-act="reset">Annuler toutes les modifications publiées</button>';
+}
+
+document.addEventListener('click',async e=>{
+  const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,id=t.dataset.id;
+  if(a==='login'){token=$('#tk').value;sessionStorage.setItem('wander_admin_token',token);return boot()}
+  if(a==='tab'){tab=t.dataset.v;return render()}
+  if(a==='close'){$('#drawer').classList.remove('on');$('#veil').classList.remove('on');editing=null;return render()}
+  if(a==='edit')return drawer(id);
+  if(a==='del'){if(!confirm('Supprimer cette offre du site ?'))return;
+    if((ov.added||[]).find(o=>o.id===id)){ov.added=ov.added.filter(o=>o.id!==id);delete ov.offers[id]}else ov.deleted.push(id);mark();return render()}
+  if(a==='restore'){ov.deleted=ov.deleted.filter(x=>x!==id);mark();return render()}
+  if(a==='add'){const n=prompt('Nom de la nouvelle offre');if(!n)return;
+    const nid=n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+Date.now().toString(36).slice(-3);
+    ov.added.push({id:nid,category:CATS[0]||'marrakech',title:n,image:'',stars:'Hôtel',meal:'',location:'',equipments:[],startingPrice:null,priceLabel:'Tarif sur demande',description:'',details:{tableHeader:[],tableRows:[],notes:[]}});mark();render();return drawer(nid)}
+  if(a==='addph'){const u=$('#newph').value.trim();if(!/^https?:\/\/|^assets\//.test(u))return toast('Adresse d\u2019image invalide.');return setPhotos(photos().concat(u))}
+  if(a==='delph'){const p=photos();p.splice(+t.dataset.i,1);return setPhotos(p)}
+  if(a==='up'||a==='dn'){const p=photos(),i=+t.dataset.i,j=a==='up'?i-1:i+1,x=p[i];p[i]=p[j];p[j]=x;return setPhotos(p)}
+  if(a==='addrow'){const o=eff(editing),r=rows();r.push(o.header.map(()=>''));patch(editing,'rows',r);return drawer(editing)}
+  if(a==='delrow'){const r=rows();r.splice(+t.dataset.i,1);patch(editing,'rows',r);return drawer(editing)}
+  if(a==='reset'){if(!confirm('Revenir aux offres d\u2019origine ?'))return;ov=norm({});return publish()}
+  if(a==='publish')return publish();
+  if(a==='testreq'){if(!REMOTE)return toast('SYNC_URL est vide dans sync.js.');const em=prompt('Adresse email qui doit recevoir la confirmation ?');if(!em)return;
+    const r=await Sync.post({action:'request',uid:'test',fn:'Test',ln:'Wander',em:em,co:'TEST',ph:'0600000000',product:'Demande de test',variant:'-',date:new Date().toISOString().slice(0,10),nights:1,rooms:1,adults:2,children:0,babies:0,total:'0 MAD'});
+    return toast(r&&r.ok?'Demande envoyée. Vérifiez la boîte de '+em+' (et les spams).':'Échec de l\u2019envoi.')}
+  if(a==='ping'){if(!REMOTE)return toast('SYNC_URL est vide dans sync.js.');try{const r=await Sync.get('ping');return toast(r&&r.ok?'Connexion réussie.':'Réponse inattendue.')}catch(x){return toast('Connexion impossible.')}}
+  if(a==='adduser'){const v=k=>$('#u-'+k).value.trim();if(!v('fn')||!v('ln')||!/^\S+@\S+\.\S+$/.test(v('em')))return toast('Prénom, nom et email valide requis.');
+    const r=await Sync.post({action:'addUser',token:token,fn:v('fn'),ln:v('ln'),em:v('em'),co:v('co')});if(!r||!r.ok)return toast('Création impossible.');
+    users=await Sync.get('users','&token='+encodeURIComponent(token));toast('Accès créé : '+r.id+'. Email envoyé.');return render()}
+  if(a==='resetpw'){if(!confirm('Envoyer un nouveau mot de passe à ce salarié ?'))return;const r=await Sync.post({action:'resetPw',token:token,row:+t.dataset.row});return toast(r&&r.ok?'Nouveau mot de passe envoyé.':'Échec.')}
+});
+document.addEventListener('change',async e=>{
+  const t=e.target;
+  if(t.dataset.act==='price'){patch(t.dataset.id,'startingPrice',t.value);toast('Prix modifié, à publier.')}
+  if(t.dataset.act==='active'){const row=+t.dataset.row;await Sync.post({action:'setActive',token:token,row:row,active:t.checked});const u=users.find(x=>x.row===row);if(u)u.active=t.checked;toast(t.checked?'Accès réactivé.':'Accès désactivé.')}
+  if(t.dataset.act==='vis'){patch(t.dataset.id,'hidden',!t.checked)}
+  if(t.dataset.act==='status'){const row=+t.dataset.row,r=data.requests.find(x=>x.row===row);if(r)r.status=t.value;
+    if(REMOTE)await Sync.post({action:'status',token:token,row:row,status:t.value});else{const a=J(Sync.KR,[]);if(a[row])a[row].status=t.value;localStorage.setItem(Sync.KR,JSON.stringify(a))}
+    toast('Statut mis à jour.');render()}
+  if(t.id==='rq'){rq=t.value;render()}
+  if(editing){
+    if(t.dataset.k)patch(editing,t.dataset.k,t.value);
+    if(t.dataset.p!==undefined){const p=photos();p[+t.dataset.p]=t.value.trim();patch(editing,'photos',p.filter(Boolean))}
+    if(t.dataset.r!==undefined){const r=rows();r[+t.dataset.r][+t.dataset.c]=t.value;patch(editing,'rows',r)}
+  }
+});
+document.addEventListener('input',e=>{if(e.target.id==='q'){q=e.target.value;const p=e.target.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='tk')document.querySelector('[data-act=login]').click()});
+
+async function publish(){
+  localStorage.setItem(Sync.KO,JSON.stringify(ov));
+  if(REMOTE){const r=await Sync.post({action:'save',token:token,overrides:ov});if(!r||!r.ok)return toast('Échec de la publication. Vérifiez le mot de passe.')}
+  dirty=false;$('#publish').style.display='none';$('#publish').classList.remove('dirty');toast(REMOTE?'Publié. Le site se met à jour à la prochaine visite.':'Enregistré dans ce navigateur.');
+}
+window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+boot();
+})();
+</script>
+</body>
+</html>

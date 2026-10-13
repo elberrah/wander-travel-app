@@ -34,7 +34,8 @@ export function AuthShell({ title, subtitle, children, footer }: { title: string
           {footer && <div className="mt-10 text-sm text-white/50">{footer}</div>}
           <p className="mt-12 text-[11px] text-white/30 leading-relaxed">
             Besoin d&apos;aide ? <a className="text-primary/80 hover:text-primary" href="mailto:contact@wandertravel-event.com">contact@wandertravel-event.com</a> ·{" "}
-            <a className="text-primary/80 hover:text-primary" href="https://wa.me/212702093107" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a className="text-primary/80 hover:text-primary" href="https://wa.me/212702093107" target="_blank" rel="noopener noreferrer">WhatsApp</a> ·{" "}
+            <Link className="text-primary/80 hover:text-primary" href="/confidentialite">Confidentialité</Link>
           </p>
         </div>
       </section>

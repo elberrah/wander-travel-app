@@ -2,6 +2,7 @@ import "server-only";
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { admin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
+import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
 import { db } from "./db";
 import { sendResetPasswordEmail, sendVerificationEmail } from "./email";
 import { isGoogleEnabled as googleEnabled } from "./auth-config";
@@ -25,6 +26,9 @@ const adminEmails = (process.env.ADMIN_EMAILS || "")
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean);
 
+// Compte de démonstration partagé (tests DRH) : son mot de passe ne peut pas
+// être changé depuis la plateforme, pour qu'un testeur ne bloque pas les autres.
+const demoEmail = (process.env.DEMO_EMAIL || "").trim().toLowerCase();
 
 export const authOptions = {
   appName: "Wander Travel & Event",
@@ -123,6 +127,21 @@ export const authOptions = {
     useSecureCookies: isProd,
     defaultCookieAttributes: { httpOnly: true, sameSite: "lax", secure: isProd, path: "/" },
     ipAddress: { ipAddressHeaders: ["x-real-ip", "x-forwarded-for"] },
+  },
+
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      if (!demoEmail) return;
+      if (ctx.path === "/request-password-reset" && String(ctx.body?.email || "").toLowerCase() === demoEmail) {
+        throw new APIError("FORBIDDEN", { message: "Compte de démonstration : mot de passe non modifiable." });
+      }
+      if (ctx.path === "/change-password" || ctx.path === "/change-email" || ctx.path === "/delete-user") {
+        const s = await getSessionFromCtx(ctx);
+        if (s?.user.email.toLowerCase() === demoEmail) {
+          throw new APIError("FORBIDDEN", { message: "Compte de démonstration : modification non autorisée." });
+        }
+      }
+    }),
   },
 
   databaseHooks: {

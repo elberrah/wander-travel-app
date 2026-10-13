@@ -9,13 +9,17 @@ import { safeCallbackUrl } from "@/lib/safe-redirect";
 const AUTH_PAGES = ["/connexion", "/inscription", "/mot-de-passe-oublie", "/reinitialiser-mot-de-passe", "/verifier-email"];
 // Ressources nécessaires à l'affichage de la page de connexion.
 const PUBLIC_FILES = ["/images/gallery/casa-skyline.png", "/favicon.ico", "/robots.txt"];
+// Pages publiques, sans connexion (Google exige une politique de confidentialité accessible).
+const PUBLIC_PAGES = ["/confidentialite"];
 
 const matches = (pathname: string, base: string) => pathname === base || pathname.startsWith(base + "/");
 
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
-  if (matches(pathname, "/api/auth") || PUBLIC_FILES.includes(pathname)) return NextResponse.next();
+  if (matches(pathname, "/api/auth") || PUBLIC_FILES.includes(pathname) || PUBLIC_PAGES.includes(pathname)) {
+    return NextResponse.next();
+  }
 
   const session = await auth.api.getSession({ headers: request.headers }).catch(() => null);
   const isAuthPage = AUTH_PAGES.some((p) => matches(pathname, p));

@@ -1,19 +1,28 @@
 import "server-only";
-import Database from "better-sqlite3";
 import fs from "node:fs";
 import path from "node:path";
+import type BetterSqlite3 from "better-sqlite3";
+import type { Pool } from "pg";
 
-// Base SQLite locale, hors du dossier public. Chemin réglable par DATABASE_PATH
-// (en production : /var/lib/wander/wander.db, voir docs/AUTHENTIFICATION.md).
-const dbPath = path.resolve(
-  /* turbopackIgnore: true */ process.env.DATABASE_PATH || path.join(/* turbopackIgnore: true */ process.cwd(), "data", "wander.db"),
-);
+// Base de données des comptes :
+// - DATABASE_URL (postgres://…) : Postgres (Vercel + Neon, hébergement sans disque persistant)
+// - sinon SQLite locale, hors du dossier public (VPS) : DATABASE_PATH ou ./data/wander.db
+const globalForDb = globalThis as unknown as { wanderDb?: BetterSqlite3.Database | Pool };
 
-const globalForDb = globalThis as unknown as { wanderDb?: Database.Database };
+function openPostgres(url: string): Pool {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { Pool } = require("pg") as typeof import("pg");
+  return new Pool({ connectionString: url, max: 5, ssl: /sslmode=disable|localhost|127\.0\.0\.1/.test(url) ? undefined : { rejectUnauthorized: true } });
+}
 
-function open() {
+function openSqlite(): BetterSqlite3.Database {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const Database = require("better-sqlite3") as typeof BetterSqlite3;
   // Pendant « next build » : base en mémoire, aucun fichier créé ni embarqué.
   if (process.env.NEXT_PHASE === "phase-production-build") return new Database(":memory:");
+  const dbPath = path.resolve(
+    /* turbopackIgnore: true */ process.env.DATABASE_PATH || path.join(/* turbopackIgnore: true */ process.cwd(), "data", "wander.db"),
+  );
   fs.mkdirSync(path.dirname(dbPath), { recursive: true, mode: 0o700 });
   const db = new Database(dbPath);
   try {
@@ -25,5 +34,6 @@ function open() {
   return db;
 }
 
-export const db = globalForDb.wanderDb ?? open();
+const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+export const db = globalForDb.wanderDb ?? (url ? openPostgres(url) : openSqlite());
 if (process.env.NODE_ENV !== "production") globalForDb.wanderDb = db;

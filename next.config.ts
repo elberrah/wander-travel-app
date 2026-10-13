@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
   // se font côté serveur (l'export statique ne peut rien protéger).
   output: "standalone",
   poweredByHeader: false,
-  serverExternalPackages: ["better-sqlite3"],
+  serverExternalPackages: ["better-sqlite3", "pg"],
   // Fichiers de la plateforme Avantages Salariés (servis après connexion).
   outputFileTracingIncludes: {
     "/plateforme/[[...path]]": ["./platform/**/*"],

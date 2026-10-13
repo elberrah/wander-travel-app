@@ -3,7 +3,6 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { ArrowLeft } from "lucide-react";
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/session";
 import { CreateUserForm, UserRow } from "./ui";
 
@@ -18,10 +17,10 @@ export default async function AdminUsersPage({ searchParams }: { searchParams: P
     query: { limit: 200, sortBy: "createdAt", sortDirection: "desc", ...(q ? { searchValue: q, searchField: "email", searchOperator: "contains" } : {}) },
   });
 
-  const providers = new Map<string, string[]>();
-  for (const a of db.prepare("SELECT userId, providerId FROM account").all() as { userId: string; providerId: string }[]) {
-    providers.set(a.userId, [...(providers.get(a.userId) || []), a.providerId]);
-  }
+  const adapter = (await auth.$context).internalAdapter;
+  const providers = new Map<string, string[]>(
+    await Promise.all(users.map(async (u) => [u.id, (await adapter.findAccounts(u.id)).map((a) => a.providerId)] as [string, string[]])),
+  );
 
   return (
     <main className="min-h-screen bg-background px-4 py-12 sm:px-8 md:py-16">

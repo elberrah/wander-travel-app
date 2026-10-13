@@ -7,7 +7,13 @@ import { sendResetPasswordEmail, sendVerificationEmail } from "./email";
 import { isGoogleEnabled as googleEnabled } from "./auth-config";
 
 const isProd = process.env.NODE_ENV === "production";
-const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+// Sur Vercel, l'adresse est déduite automatiquement si BETTER_AUTH_URL est absent.
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+const baseURL = process.env.BETTER_AUTH_URL || (vercelUrl ? `https://${vercelUrl}` : "http://localhost:3000");
+// Adresses de prévisualisation Vercel (déploiement et branche) acceptées en plus.
+const vercelOrigins = [process.env.VERCEL_URL, process.env.VERCEL_BRANCH_URL, process.env.VERCEL_PROJECT_PRODUCTION_URL]
+  .filter(Boolean)
+  .map((h) => `https://${h}`);
 
 // Emails promus administrateur automatiquement, une fois l'adresse vérifiée.
 const adminEmails = (process.env.ADMIN_EMAILS || "")
@@ -22,6 +28,7 @@ export const authOptions = {
   secret: process.env.BETTER_AUTH_SECRET,
   trustedOrigins: [
     baseURL,
+    ...vercelOrigins,
     ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS || "").split(",").map((o) => o.trim()).filter(Boolean),
   ],
   database: db,
@@ -41,7 +48,8 @@ export const authOptions = {
     },
     // Le lien de réinitialisation a été reçu dans la boîte mail : l'adresse est prouvée.
     onPasswordReset: async ({ user }) => {
-      db.prepare("UPDATE user SET emailVerified = 1 WHERE id = ?").run(user.id);
+      const ctx = await auth.$context;
+      await ctx.internalAdapter.updateUser(user.id, { emailVerified: true });
     },
   },
 
@@ -116,13 +124,12 @@ export const authOptions = {
   databaseHooks: {
     session: {
       create: {
-        after: async (session) => {
-          if (!adminEmails.length) return;
-          const u = db.prepare("SELECT email, emailVerified, role FROM user WHERE id = ?").get(session.userId) as
-            | { email: string; emailVerified: number; role: string | null }
-            | undefined;
-          if (u && u.emailVerified && u.role !== "admin" && adminEmails.includes(u.email.toLowerCase())) {
-            db.prepare("UPDATE user SET role = 'admin' WHERE id = ?").run(session.userId);
+        after: async (session, ctx) => {
+          if (!adminEmails.length || !ctx) return;
+          const u = await ctx.context.internalAdapter.findUserById(session.userId);
+          const role = (u as { role?: string | null } | null)?.role;
+          if (u && u.emailVerified && role !== "admin" && adminEmails.includes(u.email.toLowerCase())) {
+            await ctx.context.internalAdapter.updateUser(session.userId, { role: "admin" });
           }
         },
       },

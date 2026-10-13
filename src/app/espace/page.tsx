@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Gift, Globe, LogOut, ShieldCheck, Users } from "lucide-react";
 import { requireUser, isAdmin } from "@/lib/session";
-import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
 import { ChangePasswordForm } from "@/components/auth/change-password-form";
 
 export const metadata: Metadata = { title: "Mon espace | Wander Travel & Event", robots: { index: false, follow: false } };
@@ -11,7 +11,7 @@ export default async function EspacePage({ searchParams }: { searchParams: Promi
   const session = await requireUser("/espace");
   const sp = await searchParams;
   const admin = isAdmin(session);
-  const providers = (db.prepare("SELECT providerId FROM account WHERE userId = ?").all(session.user.id) as { providerId: string }[]).map((a) => a.providerId);
+  const providers = (await (await auth.$context).internalAdapter.findAccounts(session.user.id)).map((a) => a.providerId);
   const hasPassword = providers.includes("credential");
   const firstName = session.user.name?.split(" ")[0] || "";
 

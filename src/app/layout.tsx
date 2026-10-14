@@ -33,18 +33,8 @@ export default function RootLayout({
       className={`${fontSans.variable} ${fontSerif.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-primary/30 selection:text-primary">
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-ZL06HET5SK"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-ZL06HET5SK');
-          `}
-        </Script>
+        {/* Bandeau cookies : Google Analytics n'est chargé qu'après accord du visiteur. */}
+        <Script src="/wander-consent.js" strategy="afterInteractive" />
         <CustomCursor />
         <SmoothScrollProvider>
           <PageTransition>{children}</PageTransition>

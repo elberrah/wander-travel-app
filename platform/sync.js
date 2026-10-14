@@ -62,7 +62,10 @@ document.addEventListener('DOMContentLoaded', () => { ui(); new MutationObserver
 
 if (!window.SYNC_NO_APPLY) {
   apply(J(KO, {}));
-  Sync.track();
+  // Statistiques de consultation : seulement si le visiteur a accepté la mesure d'audience.
+  const consented = () => /(?:^|;\s*)wander_consent=v1\.a1/.test(document.cookie);
+  if (consented()) Sync.track();
+  else window.addEventListener('wander-consent', e => { if (e.detail && e.detail.analytics) Sync.track(); });
   if (SYNC_URL) Sync.get('overrides').then(ov => {
     const s = JSON.stringify(ov || {}), had = localStorage.getItem(KO);
     if (s !== had) { localStorage.setItem(KO, s); if (!sessionStorage.getItem('wander_sync_rl')) { sessionStorage.setItem('wander_sync_rl', '1'); location.reload(); } }

@@ -1,9 +1,11 @@
+import { randomBytes } from "node:crypto";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { sendRequestNotification } from "@/lib/email";
 import {
   REQUEST_STATUSES,
+  addPhoto,
   addPushSub,
   addRequest,
   addVisit,
@@ -33,6 +35,15 @@ export const dynamic = "force-dynamic";
 const json = (data: unknown, status = 200) =>
   NextResponse.json(data, { status, headers: { "Cache-Control": "private, no-store" } });
 const str = (v: unknown, max = 300) => String(v ?? "").slice(0, max);
+
+// Photos importées : formats image courants uniquement, reconnus à leur signature (pas au nom du fichier).
+const PHOTO_MAX = 1_400_000;
+function photoType(buf: Buffer): string | null {
+  if (buf.length > 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return "image/jpeg";
+  if (buf.length > 8 && buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return "image/png";
+  if (buf.length > 12 && buf.subarray(0, 4).toString("ascii") === "RIFF" && buf.subarray(8, 12).toString("ascii") === "WEBP") return "image/webp";
+  return null;
+}
 
 async function currentSession() {
   return auth.api.getSession({ headers: await headers() });
@@ -161,6 +172,16 @@ export async function POST(req: Request) {
       await sendNews(me, offers.slice(-1));
     } else return json({ error: "kind" }, 400);
     return json({ ok: true });
+  }
+
+  if (b.action === "photo") {
+    const buf = Buffer.from(str(b.data, 2_000_000), "base64");
+    const mime = photoType(buf);
+    if (!mime) return json({ error: "Format non pris en charge (JPEG, PNG ou WebP)." }, 400);
+    if (buf.length > PHOTO_MAX) return json({ error: "Photo trop lourde." }, 413);
+    const id = randomBytes(12).toString("hex");
+    await addPhoto(id, mime, buf, userId);
+    return json({ ok: true, url: `/api/plateforme/photo/${id}` });
   }
 
   if (b.action === "save") {

@@ -32,6 +32,8 @@ function ensureTables() {
     await run(`CREATE TABLE IF NOT EXISTS wander_prefs (user_id TEXT PRIMARY KEY, cart INTEGER NOT NULL DEFAULT 1, promos INTEGER NOT NULL DEFAULT 0, news INTEGER NOT NULL DEFAULT 0, asked INTEGER NOT NULL DEFAULT 0)`);
     await run(`CREATE TABLE IF NOT EXISTS wander_push (endpoint TEXT PRIMARY KEY, user_id TEXT NOT NULL, p256dh TEXT NOT NULL, auth TEXT NOT NULL, t BIGINT NOT NULL)`);
     await run(`CREATE TABLE IF NOT EXISTS wander_notif_log (k TEXT PRIMARY KEY, t BIGINT NOT NULL)`);
+    // Photos importées depuis le tableau de bord (ordinateur ou téléphone).
+    await run(`CREATE TABLE IF NOT EXISTS wander_photo (id TEXT PRIMARY KEY, mime TEXT NOT NULL, data TEXT NOT NULL, size INTEGER NOT NULL, t BIGINT NOT NULL, user_id TEXT)`);
   })().catch((e) => {
     ready = null;
     throw e;
@@ -226,4 +228,24 @@ export async function claimNotif(k: string): Promise<boolean> {
 export async function hasNotif(k: string): Promise<boolean> {
   await ensureTables();
   return (await run(`SELECT k FROM wander_notif_log WHERE k = ?`, [k])).length > 0;
+}
+
+// ---------- Photos importées ----------
+
+export async function addPhoto(id: string, mime: string, data: Buffer, userId: string) {
+  await ensureTables();
+  await run(`INSERT INTO wander_photo (id, mime, data, size, t, user_id) VALUES (?, ?, ?, ?, ?, ?)`, [
+    id,
+    mime,
+    data.toString("base64"),
+    data.length,
+    Date.now(),
+    userId,
+  ]);
+}
+
+export async function getPhoto(id: string): Promise<{ mime: string; data: Buffer } | null> {
+  await ensureTables();
+  const [r] = await run<{ mime: string; data: string }>(`SELECT mime, data FROM wander_photo WHERE id = ?`, [id]);
+  return r ? { mime: r.mime, data: Buffer.from(r.data, "base64") } : null;
 }

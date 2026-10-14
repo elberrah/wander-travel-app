@@ -68,7 +68,9 @@ async function init() {
   if (p.asked) return;
   let later = 0; try { later = +localStorage.getItem(LATER) || 0; } catch (x) {}
   if (later > Date.now()) return;
-  setTimeout(() => banner(st.vapid), 6000);
+  // Un bandeau à la fois : on attend que le choix des cookies soit fait.
+  const later6 = () => setTimeout(() => banner(st.vapid), 6000);
+  if (/(?:^|;\s*)wander_consent=/.test(document.cookie)) later6(); else window.addEventListener('wander-consent', later6, { once: true });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

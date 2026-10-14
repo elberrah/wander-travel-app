@@ -92,11 +92,24 @@ export default function ConfidentialitePage() {
             </ul>
           </Section>
 
-          <Section title="7. Cookies">
+          <Section title="7. Cookies" id="cookies">
             <p>
-              Un cookie de session strictement nécessaire (sécurisé, inaccessible au JavaScript) vous maintient connecté.
-              Une mesure d&apos;audience (Google Analytics) peut être utilisée pour améliorer le service. La plateforme
-              conserve aussi dans votre navigateur vos préférences et votre panier de demandes.
+              <strong>Essentiels (toujours actifs).</strong> Un cookie de session sécurisé, inaccessible au JavaScript, vous
+              maintient connecté et protège votre compte. La plateforme conserve aussi dans votre navigateur vos préférences,
+              votre panier de demandes et votre choix en matière de cookies (6 mois).
+            </p>
+            <p>
+              <strong>Mesure d&apos;audience (avec votre accord).</strong> Google Analytics et les statistiques de consultation
+              Wander (pages et offres vues) nous indiquent quelles offres intéressent les collaborateurs, pour négocier de
+              meilleurs tarifs et ajouter des destinations. Aucune publicité, aucune revente. Sans accord, rien n&apos;est
+              mesuré.
+            </p>
+            <p>
+              Vous pouvez modifier votre choix à tout moment :{" "}
+              <a href="#" data-wander-consent className="underline underline-offset-4">
+                gérer les cookies
+              </a>
+              .
             </p>
           </Section>
 
@@ -134,9 +147,9 @@ export default function ConfidentialitePage() {
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({ title, id, children }: { title: string; id?: string; children: ReactNode }) {
   return (
-    <section className="space-y-3">
+    <section id={id} className="scroll-mt-24 space-y-3">
       <h2 className="font-serif text-xl sm:text-2xl font-bold text-white">{title}</h2>
       {children}
     </section>

@@ -32,7 +32,7 @@ main{padding:0 28px 60px;max-width:1280px;margin:0 auto}
 table{width:100%;border-collapse:collapse}th{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);text-align:left;padding:8px 10px;border-bottom:1px solid var(--hair)}td{padding:9px 10px;border-bottom:1px solid var(--hair);vertical-align:middle}
 tr.gone td{opacity:.45}.thumb{width:56px;height:40px;border-radius:6px;object-fit:cover;background:var(--bg);display:block}
 .tools{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}.tools input{max-width:300px}
-.drawer{position:fixed;inset:0 0 0 auto;width:min(720px,100%);background:#fff;box-shadow:-20px 0 60px rgba(0,0,0,.25);z-index:40;overflow:auto;padding:26px;transform:translateX(105%);transition:transform .3s}.drawer.on{transform:none}
+.drawer{position:fixed;inset:0 0 0 auto;width:min(720px,100%);background:#fff;z-index:40;overflow:auto;padding:26px;transform:translateX(105%);visibility:hidden;transition:transform .3s,visibility 0s .3s}.drawer.on{transform:none;visibility:visible;box-shadow:-20px 0 60px rgba(0,0,0,.25);transition:transform .3s}
 .veil{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:30;display:none}.veil.on{display:block}
 .f{display:grid;gap:5px;margin-bottom:14px}.f label{font-size:.78rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -45,6 +45,36 @@ tr.gone td{opacity:.45}.thumb{width:56px;height:40px;border-radius:6px;object-fi
 .dirty{background:var(--gold);color:#000}
 code{background:var(--bg);padding:2px 6px;border-radius:5px;font-size:.85rem}
 ol li{margin-bottom:8px}
+.upl{display:flex;gap:14px;align-items:center;padding:16px 18px;margin:4px 0 10px;border:2px dashed #d9cba6;border-radius:12px;background:#fbf8f1;cursor:pointer;transition:border-color .2s,background .2s}
+.upl:hover,.upl.over,.upl:focus-within{border-color:var(--gold);background:#f7efd9}
+.upl input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.upl-ic{font-size:1.7rem;line-height:1}
+.dhead{position:sticky;top:-26px;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:12px;margin:-26px -26px 18px;padding:16px 26px;background:#fff;border-bottom:1px solid var(--hair)}.dhead h2{font-size:1.25rem}.dbtns{display:flex;gap:8px;flex:none}
+.phurl{display:flex;gap:8px}.phurl .btn{white-space:nowrap}
+/* Téléphone */
+@media(max-width:700px){
+  header{padding:12px 16px;gap:10px}header h1{font-size:1.15rem;flex-basis:100%}
+  nav{padding:10px 12px 0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
+  nav button{white-space:nowrap;padding:10px 12px}
+  main{padding:0 12px 50px}.panel{padding:16px;border-radius:0 0 12px 12px}
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:14px}.kpi b{font-size:1.6rem}
+  .drawer{padding:18px 16px 40px}.dhead{top:-18px;margin:-18px -16px 16px;padding:12px 16px}.dhead h2{font-size:1.05rem}
+  .row2{grid-template-columns:1fr}
+  .ph{grid-template-columns:56px 1fr auto auto auto;gap:6px}.ph input{font-size:.8rem;padding:8px}
+  .phurl{flex-direction:column}
+  .tools input{max-width:none}
+  /* Offres : une fiche par offre au lieu du tableau */
+  .otab,.otab tbody{display:block}.otab tr:first-child{display:none}
+  .otab tr{display:grid;grid-template-columns:64px minmax(0,1fr);column-gap:12px;padding:14px 0;border-bottom:1px solid var(--hair)}
+  .otab td{border:0;padding:3px 0}
+  .otab td:first-child{grid-row:span 2}.otab .thumb{width:64px;height:48px}
+  .otab td[data-l]{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .otab td[data-l]::before{content:attr(data-l);font-size:.78rem;color:var(--mut)}
+  .otab td[data-l] input[type=number]{width:140px!important}
+  .otab td:last-child{grid-column:1/-1;display:flex;gap:8px;padding-top:8px}.otab td:last-child .btn{flex:1;padding:10px}
+  table{font-size:.86rem}th,td{padding:8px 6px}
+  input,select,textarea{font-size:16px}
+}
 </style>
 </head>
 <body>
@@ -83,7 +113,7 @@ function eff(id){const b=all().find(o=>o.id===id);if(!b)return null;const p=(ov.
   o.photos=p.photos||b.images||(b.image?[b.image]:[]);o.rows=p.rows||(b.details&&b.details.tableRows)||[];o.header=(b.details&&b.details.tableHeader)||[];
   o.hidden=!!p.hidden;o.promo=p.promo!==undefined?!!p.promo:!!b.promo;o.gone=(ov.deleted||[]).includes(id);return o}
 function patch(id,k,v){ov.offers[id]=ov.offers[id]||{};ov.offers[id][k]=v;mark()}
-function mark(){dirty=true;$('#publish').style.display='';$('#publish').classList.add('dirty')}
+function mark(){dirty=true;$('#publish').style.display='';document.querySelectorAll('[data-act=publish]').forEach(b=>b.classList.add('dirty'))}
 function norm(o){o=o||{};return{deleted:o.deleted||[],added:o.added||[],offers:o.offers||{}}}
 
 async function boot(){
@@ -120,8 +150,8 @@ function home(){
 function offres(){
   const L=all().filter(o=>!q||(o.title+o.location).toLowerCase().includes(q.toLowerCase()));
   return '<div class="tools"><input id="q" placeholder="Rechercher une offre" value="'+esc(q)+'"><button class="btn" data-act="add">+ Ajouter une offre</button><span class="muted">'+(all().length-(ov.deleted||[]).length)+' offres en ligne</span></div>'
-  +'<div style="overflow:auto"><table><tr><th></th><th>Offre</th><th>Ville</th><th>Prix de départ</th><th>Photos</th><th title="Envoyée chaque jeudi aux salariés abonnés">🔥 Promo jeudi</th><th>En ligne</th><th></th></tr>'+L.map(function(b){const o=eff(b.id);
-    return '<tr class="'+(o.gone?'gone':'')+'"><td>'+(o.photos[0]?'<img class="thumb" src="'+esc(o.photos[0])+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="thumb"></div>')+'</td><td><b>'+esc(o.title)+'</b></td><td>'+esc(o.location)+'</td><td><input type="number" min="0" style="width:120px" value="'+(o.startingPrice==null?'':o.startingPrice)+'" data-act="price" data-id="'+o.id+'" placeholder="sur demande"></td><td>'+o.photos.length+'</td><td>'+(o.gone?'':'<input type="checkbox" style="width:auto" '+(o.promo?'checked':'')+' data-act="promo" data-id="'+o.id+'">')+'</td><td>'+(o.gone?'<span class="pill">Supprimée</span>':'<input type="checkbox" style="width:auto" '+(o.hidden?'':'checked')+' data-act="vis" data-id="'+o.id+'">')+'</td><td style="white-space:nowrap">'+(o.gone?'<button class="btn alt sm" data-act="restore" data-id="'+o.id+'">Restaurer</button>':'<button class="btn alt sm" data-act="edit" data-id="'+o.id+'">Modifier</button> <button class="btn del sm" data-act="del" data-id="'+o.id+'">Supprimer</button>')+'</td></tr>'}).join('')+'</table></div>';
+  +'<div style="overflow:auto"><table class="otab"><tr><th></th><th>Offre</th><th>Ville</th><th>Prix de départ</th><th>Photos</th><th title="Envoyée chaque jeudi aux salariés abonnés">🔥 Promo jeudi</th><th>En ligne</th><th></th></tr>'+L.map(function(b){const o=eff(b.id);
+    return '<tr class="'+(o.gone?'gone':'')+'"><td>'+(o.photos[0]?'<img class="thumb" src="'+esc(o.photos[0])+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">':'<div class="thumb"></div>')+'</td><td><b>'+esc(o.title)+'</b></td><td>'+esc(o.location)+'</td><td data-l="Prix de départ (MAD)"><input type="number" min="0" style="width:120px" value="'+(o.startingPrice==null?'':o.startingPrice)+'" data-act="price" data-id="'+o.id+'" placeholder="sur demande"></td><td data-l="Photos">'+o.photos.length+'</td><td data-l="🔥 Promo jeudi">'+(o.gone?'':'<input type="checkbox" style="width:auto" '+(o.promo?'checked':'')+' data-act="promo" data-id="'+o.id+'">')+'</td><td data-l="En ligne">'+(o.gone?'<span class="pill">Supprimée</span>':'<input type="checkbox" style="width:auto" '+(o.hidden?'':'checked')+' data-act="vis" data-id="'+o.id+'">')+'</td><td style="white-space:nowrap">'+(o.gone?'<button class="btn alt sm" data-act="restore" data-id="'+o.id+'">Restaurer</button>':'<button class="btn alt sm" data-act="edit" data-id="'+o.id+'">Modifier</button> <button class="btn del sm" data-act="del" data-id="'+o.id+'">Supprimer</button>')+'</td></tr>'}).join('')+'</table></div>';
 }
 
 function ph(u,i,n){return '<div class="ph"><img class="thumb" src="'+esc(u)+'" alt="" onerror="this.style.visibility=\'hidden\'"><input data-p="'+i+'" value="'+esc(u)+'"><button class="btn alt sm" data-act="up" data-i="'+i+'" '+(i?'':'disabled')+'>↑</button><button class="btn alt sm" data-act="dn" data-i="'+i+'" '+(i<n-1?'':'disabled')+'>↓</button><button class="btn del sm" data-act="delph" data-i="'+i+'">×</button></div>'}
@@ -129,13 +159,14 @@ function drawer(id){
   const o=eff(id);editing=id;
   let g='<p class="muted">Cette offre n\u2019a pas de grille de tarifs. Elle s\u2019affiche « sur demande ».</p>';
   if(o.header.length)g='<div style="overflow:auto"><table class="grid-edit"><tr>'+o.header.map(h=>'<th>'+esc(h)+'</th>').join('')+'<th></th></tr>'+o.rows.map((r,i)=>'<tr>'+o.header.map((h,j)=>'<td><input data-r="'+i+'" data-c="'+j+'" value="'+esc(r[j]==null?'':r[j])+'"></td>').join('')+'<td><button class="btn del sm" data-act="delrow" data-i="'+i+'">×</button></td></tr>').join('')+'</table></div><button class="btn alt sm" data-act="addrow" style="margin-top:8px">+ Ligne</button>';
-  $('#drawer').innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><h2>'+esc(o.title)+'</h2><button class="btn alt sm" data-act="close">Fermer</button></div>'
+  $('#drawer').innerHTML='<div class="dhead"><h2>'+esc(o.title)+'</h2><div class="dbtns"><button class="btn sm'+(dirty?' dirty':'')+'" data-act="publish">Publier</button><button class="btn alt sm" data-act="close">Fermer</button></div></div>'
   +'<div class="f"><label>Nom</label><input data-k="title" value="'+esc(o.title)+'"></div>'
   +'<div class="row2"><div class="f"><label>Ville</label><input data-k="location" value="'+esc(o.location)+'"></div><div class="f"><label>Unité du prix</label><input data-k="priceLabel" value="'+esc(o.priceLabel)+'"></div></div>'
   +'<div class="f"><label>Prix de départ (MAD)</label><input type="number" min="0" data-k="startingPrice" value="'+(o.startingPrice==null?'':o.startingPrice)+'" placeholder="vide = sur demande"></div>'
   +'<div class="f"><label>Description</label><textarea rows="4" data-k="description">'+esc(o.description)+'</textarea></div>'
   +'<h3 style="margin:22px 0 10px">Photos ('+o.photos.length+')</h3><div id="phs">'+o.photos.map((u,i)=>ph(u,i,o.photos.length)).join('')+'</div>'
-  +'<div style="display:flex;gap:8px"><input id="newph" placeholder="Adresse d\u2019une image (https://...)"><button class="btn" data-act="addph">Ajouter</button></div>'
+  +'<label class="upl" id="phdrop"><input type="file" id="phfile" accept="image/jpeg,image/png,image/webp,image/*" multiple><span class="upl-ic" aria-hidden="true">📷</span><span><b>Ajouter des photos</b><br><span class="muted">Depuis l\u2019ordinateur ou le téléphone (galerie ou appareil photo). Glisser-déposer possible.</span></span></label>'
+  +'<div class="phurl"><input id="newph" placeholder="… ou coller l\u2019adresse d\u2019une image (https://…)"><button class="btn alt" data-act="addph">Ajouter le lien</button></div>'
   +'<h3 style="margin:26px 0 10px">Tarifs</h3>'+g
   +'<p class="muted" style="margin-top:20px">Les modifications sont gardées ici, puis mises en ligne avec « Publier les modifications ».</p>';
   $('#drawer').classList.add('on');$('#veil').classList.add('on');
@@ -185,7 +216,7 @@ document.addEventListener('click',async e=>{
   if(a==='add'){const n=prompt('Nom de la nouvelle offre');if(!n)return;
     const nid=n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+Date.now().toString(36).slice(-3);
     ov.added.push({id:nid,category:CATS[0]||'marrakech',title:n,image:'',stars:'Hôtel',meal:'',location:'',equipments:[],startingPrice:null,priceLabel:'Tarif sur demande',description:'',details:{tableHeader:[],tableRows:[],notes:[]}});mark();render();return drawer(nid)}
-  if(a==='addph'){const u=$('#newph').value.trim();if(!/^https?:\/\/|^assets\//.test(u))return toast('Adresse d\u2019image invalide.');return setPhotos(photos().concat(u))}
+  if(a==='addph'){const u=$('#newph').value.trim();if(!/^https?:\/\/|^assets\/|^\/api\/plateforme\/photo\//.test(u))return toast('Adresse d\u2019image invalide.');return setPhotos(photos().concat(u))}
   if(a==='delph'){const p=photos();p.splice(+t.dataset.i,1);return setPhotos(p)}
   if(a==='up'||a==='dn'){const p=photos(),i=+t.dataset.i,j=a==='up'?i-1:i+1,x=p[i];p[i]=p[j];p[j]=x;return setPhotos(p)}
   if(a==='addrow'){const o=eff(editing),r=rows();r.push(o.header.map(()=>''));patch(editing,'rows',r);return drawer(editing)}
@@ -214,6 +245,7 @@ document.addEventListener('change',async e=>{
     if(REMOTE)await Sync.post({action:'status',token:token,row:row,status:t.value});else{const a=J(Sync.KR,[]);if(a[row])a[row].status=t.value;localStorage.setItem(Sync.KR,JSON.stringify(a))}
     toast('Statut mis à jour.');render()}
   if(t.id==='rq'){rq=t.value;render()}
+  if(t.id==='phfile'&&editing){upload(t.files);t.value=''}
   if(editing){
     if(t.dataset.k)patch(editing,t.dataset.k,t.value);
     if(t.dataset.p!==undefined){const p=photos();p[+t.dataset.p]=t.value.trim();patch(editing,'photos',p.filter(Boolean))}
@@ -223,10 +255,42 @@ document.addEventListener('change',async e=>{
 document.addEventListener('input',e=>{if(e.target.id==='q'){q=e.target.value;const p=e.target.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='tk')document.querySelector('[data-act=login]').click()});
 
+// Photos importées : réduites dans le navigateur (1600 px, JPEG) puis enregistrées sur le serveur Wander.
+async function shrink(f){
+  const src=URL.createObjectURL(f);
+  try{
+    const img=await new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=ko;i.src=src});
+    const k=Math.min(1,1600/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement('canvas');
+    c.width=Math.round(img.naturalWidth*k);c.height=Math.round(img.naturalHeight*k);
+    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);
+    let q=.85,b;do{b=await new Promise(r=>c.toBlob(r,'image/jpeg',q));q-=.1}while(b&&b.size>1.2e6&&q>.4);
+    return b;
+  }finally{URL.revokeObjectURL(src)}
+}
+const b64=b=>new Promise((ok,ko)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=ko;r.readAsDataURL(b)});
+async function upload(files){
+  const id=editing,list=[...(files||[])].filter(f=>/^image\//.test(f.type)||/\.(jpe?g|png|webp|heic|heif)$/i.test(f.name));
+  if(!list.length)return toast('Choisissez une image (JPEG, PNG ou WebP).');
+  const urls=[];let fail=0;
+  for(let i=0;i<list.length;i++){
+    toast('Envoi de la photo '+(i+1)+' / '+list.length+'…');
+    try{
+      const blob=await shrink(list[i]);if(!blob)throw 0;
+      const r=await fetch('/api/plateforme',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'photo',data:await b64(blob)})}).then(x=>x.json());
+      if(r&&r.ok&&r.url)urls.push(r.url);else fail++;
+    }catch(e){fail++}
+  }
+  if(urls.length){editing=id;setPhotos(photos().concat(urls))}
+  toast(urls.length?urls.length+' photo(s) ajoutée(s). Pensez à « Publier les modifications ».'+(fail?' '+fail+' échec(s).':''):'Échec de l\u2019envoi. Format non lu par ce navigateur (essayez en JPEG).');
+}
+document.addEventListener('dragover',e=>{const d=e.target.closest&&e.target.closest('#phdrop');if(d){e.preventDefault();d.classList.add('over')}});
+document.addEventListener('dragleave',e=>{const d=e.target.closest&&e.target.closest('#phdrop');if(d)d.classList.remove('over')});
+document.addEventListener('drop',e=>{const d=e.target.closest&&e.target.closest('#phdrop');if(d){e.preventDefault();d.classList.remove('over');upload(e.dataTransfer.files)}});
+
 async function publish(){
   localStorage.setItem(Sync.KO,JSON.stringify(ov));
   if(REMOTE){const r=await Sync.post({action:'save',token:token,overrides:ov});if(!r||!r.ok)return toast('Échec de la publication. Vérifiez le mot de passe.')}
-  dirty=false;$('#publish').style.display='none';$('#publish').classList.remove('dirty');toast(REMOTE?'Publié. Le site se met à jour à la prochaine visite.':'Enregistré dans ce navigateur.');
+  dirty=false;$('#publish').style.display='none';document.querySelectorAll('[data-act=publish]').forEach(b=>b.classList.remove('dirty'));toast(REMOTE?'Publié. Le site se met à jour à la prochaine visite.':'Enregistré dans ce navigateur.');
 }
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
 boot();

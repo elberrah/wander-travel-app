@@ -88,6 +88,10 @@ export function AuthShell({ title, subtitle, children, footer }: { title: string
             <a className="text-[#D9BE85] underline-offset-4 hover:underline" href="https://wa.me/212702093107" target="_blank" rel="noopener noreferrer">WhatsApp</a>
             <span aria-hidden> · </span>
             <Link className="text-[#D9BE85] underline-offset-4 hover:underline" href="/confidentialite">Confidentialité</Link>
+            <span aria-hidden> · </span>
+            <a className="text-[#D9BE85] underline-offset-4 hover:underline" href="#" data-wander-consent>
+              Cookies
+            </a>
           </p>
         </footer>
       </section>

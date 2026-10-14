@@ -9,6 +9,7 @@ import { safeCallbackUrl } from "@/lib/safe-redirect";
 const AUTH_PAGES = ["/connexion", "/inscription", "/mot-de-passe-oublie", "/reinitialiser-mot-de-passe", "/verifier-email"];
 // Ressources nécessaires à l'affichage de la page de connexion.
 const PUBLIC_FILES = [
+  "/wander-consent.js",
   "/images/gallery/casa-skyline.png",
   "/images/brand/wander-mark-gold.png",
   // Photo de la page de connexion (déposer le fichier pour l'activer).
@@ -65,7 +66,8 @@ export async function proxy(request: NextRequest) {
 
   const res = NextResponse.next();
   // Contenu privé : jamais en cache partagé (CDN, proxy).
-  if (!matches(pathname, "/plateforme")) {
+  // (Les photos importées gardent leur propre cache longue durée, défini par leur route.)
+  if (!matches(pathname, "/plateforme") && !matches(pathname, "/api/plateforme/photo")) {
     res.headers.set("Cache-Control", /\.[a-z0-9]+$/i.test(pathname) ? "private, max-age=86400" : "private, no-store");
   }
   return res;

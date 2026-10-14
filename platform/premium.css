@@ -275,3 +275,11 @@ body.dark-mode .op-book{background:rgba(30,20,23,.7)!important}
 .kids-engage p{font-size:.9rem;line-height:1.55;color:var(--text-secondary)}
 @media (max-width:980px){.kids-engage{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){.kids-engage{grid-template-columns:1fr}.kids-base{padding:28px 22px}.kids-base h3{font-size:1.8rem}}
+
+/* En-tête : symbole doré Wander à gauche du nom */
+.logo:has(.logo-mark){display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:11px;align-items:center}
+.logo-mark{grid-row:1 / 3;width:46px;height:auto;filter:drop-shadow(0 3px 8px rgba(201,168,76,.25));transition:transform .5s ease}
+.logo:hover .logo-mark{transform:rotate(-6deg)}
+.logo:has(.logo-mark) .logo-text{align-self:end}
+.logo:has(.logo-mark) .logo-sub{align-self:start}
+@media (max-width:600px){.logo-mark{width:36px}.logo:has(.logo-mark){column-gap:8px}}

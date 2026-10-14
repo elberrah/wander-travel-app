@@ -1307,6 +1307,54 @@ const OFFERS_DATA = [
         }
     },
     {
+        "id": "istanbul-sapanca-dec",
+        "category": "package",
+        "promo": true,
+        "title": "Turquie — Istanbul & Sapanca · 8 jours / 7 nuits · Offre groupes",
+        "image": "assets/photos/istanbul-sapanca-dec/1.jpg",
+        "stars": "7 nuits / 8 jours · Vol Casablanca (CMN) – Istanbul (SAW)",
+        "meal": "Petit-déjeuner",
+        "location": "Istanbul & Sapanca (Turquie)",
+        "equipments": [
+            "Vol A/R",
+            "Hôtel 4★",
+            "Transferts",
+            "Bateau sur le Bosphore",
+            "Tour panoramique guidé",
+            "Journée lac de Sapanca + déjeuner"
+        ],
+        "startingPrice": 8015,
+        "priceLabel": "Par personne · vol sans bagage soute",
+        "description": "Séjour organisé en groupe du 18 au 26 décembre 2026, entre histoire, nature et émotions : 7 nuits en hôtel 4★ avec petit-déjeuner, excursion en bateau sur le Bosphore, tour panoramique guidé d’Istanbul et journée au lac de Sapanca avec déjeuner. Avantage groupe : 3ᵉ lit supplémentaire offert en chambre selon conditions.",
+        "details": {
+            "tableHeader": [
+                "Formule (hébergement 4★ inclus)",
+                "Prix par personne"
+            ],
+            "tableRows": [
+                [
+                    "Vol base · sans bagage soute",
+                    "8 015 MAD"
+                ],
+                [
+                    "Vol + bagage 20 kg aller-retour",
+                    "8 375 MAD"
+                ],
+                [
+                    "Vol + bagage 20 kg aller / 40 kg retour",
+                    "8 595 MAD"
+                ]
+            ],
+            "notes": [
+                "🔥 Promo du jeudi — places limitées.",
+                "Dates du séjour : du 18/12/2026 au 26/12/2026. Vols Casablanca (CMN) ↔ Istanbul (SAW).",
+                "Les tarifs comprennent : vol international aller-retour Casablanca–Istanbul, 7 nuits en hôtel 4★ en formule petit-déjeuner, transferts aéroport–hôtel–aéroport, excursion en bateau sur le Bosphore, tour panoramique guidé de la ville d’Istanbul, journée au lac de Sapanca avec déjeuner inclus.",
+                "Avantage groupe : 3ᵉ lit supplémentaire offert en chambre, selon conditions.",
+                "Tarifs par personne, toutes taxes et services inclus, sous réserve de disponibilité et de confirmation."
+            ]
+        }
+    },
+    {
         "id": "package-egypt",
         "category": "package",
         "title": "Séjours en Égypte",
@@ -1392,6 +1440,7 @@ const PHOTO_SOURCES = {
     'casa-chahd': ['assets/photos/casa-chahd/1.jpg','assets/photos/casa-chahd/2.webp','assets/photos/casa-chahd/3.jpg','assets/photos/casa-chahd/4.jpg','assets/photos/casa-chahd/5.jpg'],
     'istanbul-oct': ['assets/photos/istanbul-oct/1.jpg','assets/photos/istanbul-oct/2.jpg','assets/photos/istanbul-oct/3.jpg','assets/photos/istanbul-oct/4.jpg','assets/photos/istanbul-oct/5.jpg'],
     'istanbul-nov-dec': ['assets/photos/istanbul-nov-dec/1.jpg','assets/photos/istanbul-nov-dec/2.jpg','assets/photos/istanbul-nov-dec/3.jpg','assets/photos/istanbul-nov-dec/4.jpg','assets/photos/istanbul-nov-dec/5.jpg'],
+    'istanbul-sapanca-dec': ['assets/photos/istanbul-sapanca-dec/1.jpg','assets/photos/istanbul-sapanca-dec/2.jpg','assets/photos/istanbul-sapanca-dec/3.jpg','assets/photos/istanbul-sapanca-dec/4.jpg'],
     'omra-oct': ['assets/photos/omra-oct/1.jpg'],
     'omra-oct-12j': ['assets/photos/omra-oct-12j/1.jpg'],
     'omra-nov': ['assets/photos/omra-nov/1.jpg'],

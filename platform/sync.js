@@ -18,6 +18,7 @@ function apply(ov) {
     if (p.startingPrice !== undefined && p.startingPrice !== '' && p.startingPrice !== null) o.startingPrice = Number(p.startingPrice);
     if (p.photos && p.photos.length) { o.images = p.photos; o.image = p.photos[0]; }
     if (p.rows) { o.details = o.details || {}; o.details.tableRows = p.rows; }
+    if (p.promo !== undefined) o.promo = !!p.promo;
   });
 }
 

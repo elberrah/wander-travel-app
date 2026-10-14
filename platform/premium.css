@@ -283,3 +283,38 @@ body.dark-mode .op-book{background:rgba(30,20,23,.7)!important}
 .logo:has(.logo-mark) .logo-text{align-self:end}
 .logo:has(.logo-mark) .logo-sub{align-self:start}
 @media (max-width:600px){.logo-mark{width:36px}.logo:has(.logo-mark){column-gap:8px}}
+
+/* ===== Promo du jeudi : offres de la semaine ===== */
+.flash-offers{margin-top:22px;padding:34px 40px 28px;border-radius:24px;background:linear-gradient(180deg,#14100c,#0e0b09);color:#faf8f5;border:1px solid rgba(201,168,76,.25);box-shadow:0 40px 80px -50px rgba(0,0,0,.7)}
+.flash-offers[hidden]{display:none}
+.flash-offers-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;margin-bottom:22px}
+.flash-offers-kicker{font:700 .7rem var(--font-sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
+.flash-offers-head h3{font-family:var(--font-serif);font-weight:500;font-size:clamp(1.5rem,2.6vw,2rem);color:#faf8f5;margin:0}
+.flash-offers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.flash-offer{display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);transition:transform .35s,border-color .35s}
+.flash-offer:hover{transform:translateY(-4px);border-color:var(--gold)}
+.flash-offer-media{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;background:#000}
+.flash-offer-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.flash-offer:hover .flash-offer-media img{transform:scale(1.04)}
+.flash-offer-badge{position:absolute;left:14px;top:14px;display:inline-flex;gap:6px;align-items:center;padding:6px 12px;border-radius:999px;background:#8e1b1b;color:#fff;font:700 .66rem var(--font-sans);letter-spacing:.14em;text-transform:uppercase;box-shadow:0 8px 20px -8px rgba(0,0,0,.6)}
+.flash-offer-body{display:flex;flex-direction:column;gap:8px;padding:18px 20px 20px;flex:1}
+.flash-offer-loc{margin:0;font-size:.78rem;letter-spacing:.06em;color:rgba(250,248,245,.7)}
+.flash-offer-loc i{color:var(--gold-light);margin-right:4px}
+.flash-offer h4{margin:0;font-family:var(--font-serif);font-weight:500;font-size:1.25rem;line-height:1.25}
+.flash-offer h4 a{color:#faf8f5}
+.flash-offer h4 a:hover{color:var(--gold-light)}
+.flash-offer-meta{margin:0;font-size:.82rem;color:rgba(250,248,245,.72)}
+.flash-offer-foot{margin-top:auto;padding-top:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;border-top:1px solid rgba(255,255,255,.08)}
+.flash-offer-foot b{display:block;font:500 1.35rem/1.1 var(--font-serif);color:var(--gold-light)}
+.flash-offer-foot small{display:block;margin-top:4px;font-size:.72rem;color:rgba(250,248,245,.65)}
+.flash-offer-cta{flex:none;display:inline-flex;gap:8px;align-items:center;padding:10px 16px;border-radius:999px;background:var(--gold);color:#000;font:700 .72rem var(--font-sans);letter-spacing:.12em;text-transform:uppercase}
+.flash-offer-cta:hover{background:var(--gold-light);color:#000}
+.flash-offers-note{margin:18px 0 0;font-size:.74rem;color:rgba(250,248,245,.6)}
+@media (max-width:700px){.flash-offers{padding:24px 16px 20px}.flash-offers-grid{grid-template-columns:1fr}.flash-offer-foot{flex-direction:column;align-items:stretch}.flash-offer-cta{justify-content:center}}
+@media (min-width:860px){.flash-offers-grid.solo{grid-template-columns:1fr}.flash-offers-grid.solo .flash-offer{flex-direction:row}.flash-offers-grid.solo .flash-offer-media{flex:0 0 52%;aspect-ratio:auto;min-height:320px}.flash-offers-grid.solo .flash-offer-body{padding:30px 34px;gap:12px}.flash-offers-grid.solo .flash-offer h4{font-size:1.7rem}.flash-offers-grid.solo .flash-offer-foot b{font-size:1.7rem}}
+.flash-offer-tags{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.flash-offer-tags li{font-size:.72rem;padding:5px 10px;border-radius:999px;border:1px solid rgba(201,168,76,.3);color:rgba(250,248,245,.85)}
+.flash-offer-rates{list-style:none;margin:6px 0 0;padding:0;display:none}
+.flash-offer-rates li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.1);font-size:.86rem;color:rgba(250,248,245,.82)}
+.flash-offer-rates b{color:var(--gold-light);font-weight:600;white-space:nowrap}
+@media (min-width:860px){.flash-offers-grid.solo .flash-offer-rates{display:block}}

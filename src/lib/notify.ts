@@ -87,7 +87,7 @@ export async function catalogue() {
           priceLabel: p.priceLabel || o.priceLabel,
           startingPrice: p.startingPrice != null && String(p.startingPrice) !== "" ? Number(p.startingPrice) : o.startingPrice,
           hidden: !!p.hidden,
-          promo: !!p.promo,
+          promo: p.promo !== undefined ? !!p.promo : !!o.promo,
         };
       })
       .filter((o) => !o.hidden),

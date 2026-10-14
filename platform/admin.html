@@ -81,7 +81,7 @@ function eff(id){const b=all().find(o=>o.id===id);if(!b)return null;const p=(ov.
   ['title','location','priceLabel','description'].forEach(k=>{if(p[k])o[k]=p[k]});
   if(p.startingPrice!==undefined&&p.startingPrice!=='')o.startingPrice=Number(p.startingPrice);
   o.photos=p.photos||b.images||(b.image?[b.image]:[]);o.rows=p.rows||(b.details&&b.details.tableRows)||[];o.header=(b.details&&b.details.tableHeader)||[];
-  o.hidden=!!p.hidden;o.promo=!!p.promo;o.gone=(ov.deleted||[]).includes(id);return o}
+  o.hidden=!!p.hidden;o.promo=p.promo!==undefined?!!p.promo:!!b.promo;o.gone=(ov.deleted||[]).includes(id);return o}
 function patch(id,k,v){ov.offers[id]=ov.offers[id]||{};ov.offers[id][k]=v;mark()}
 function mark(){dirty=true;$('#publish').style.display='';$('#publish').classList.add('dirty')}
 function norm(o){o=o||{};return{deleted:o.deleted||[],added:o.added||[],offers:o.offers||{}}}

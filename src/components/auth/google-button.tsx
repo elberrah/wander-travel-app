@@ -29,13 +29,14 @@ export function GoogleButton({ enabled, callbackUrl, onError }: { enabled: boole
         type="button"
         onClick={go}
         disabled={!enabled || loading}
-        className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/15 bg-white px-6 py-3.5 text-sm font-semibold text-[#1f1f1f] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+        aria-busy={loading || undefined}
+        className="flex h-[52px] w-full items-center justify-center gap-3 rounded-[10px] border border-[#3A3E42] bg-[#131416] px-6 text-[15px] font-medium text-[#F5F1E8] transition-[border-color,background-color] duration-200 hover:border-[#C7A35C]/70 hover:bg-[#191B1D] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {loading ? <Loader2 size={18} className="animate-spin" /> : <GoogleLogo />}
-        Continuer avec Google
+        {loading ? <Loader2 size={18} className="animate-spin" aria-hidden /> : <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white"><GoogleLogo /></span>}
+        {loading ? "Redirection vers Google…" : "Continuer avec Google"}
       </button>
       {!enabled && (
-        <p className="mt-2 text-[11px] text-white/35">Connexion Google en cours d&apos;activation par l&apos;administrateur.</p>
+        <p className="mt-2 text-[12px] text-[#F5F1E8]/55">Connexion Google en cours d&apos;activation par l&apos;administrateur.</p>
       )}
     </div>
   );

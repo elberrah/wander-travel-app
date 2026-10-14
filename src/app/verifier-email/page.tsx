@@ -12,7 +12,7 @@ export default async function VerifierEmailPage({ searchParams }: { searchParams
     <AuthShell
       title="Vérifiez votre boîte mail"
       subtitle="Dernière étape avant d'accéder à la plateforme."
-      footer={<Link href="/connexion" className="font-semibold text-primary hover:text-white">← Retour à la connexion</Link>}
+      footer={<Link href="/connexion" className="font-semibold text-[#D9BE85] underline-offset-4 hover:text-[#F5F1E8] hover:underline">← Retour à la connexion</Link>}
     >
       <VerifyEmailPanel email={sp.email} callbackUrl={safeCallbackUrl(sp.callbackUrl)} />
     </AuthShell>

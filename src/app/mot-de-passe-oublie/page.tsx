@@ -10,7 +10,7 @@ export default function MotDePasseOubliePage() {
     <AuthShell
       title="Mot de passe oublié"
       subtitle="Indiquez l'email de votre compte : nous vous envoyons un lien sécurisé pour choisir un nouveau mot de passe."
-      footer={<Link href="/connexion" className="font-semibold text-primary hover:text-white">← Retour à la connexion</Link>}
+      footer={<Link href="/connexion" className="font-semibold text-[#D9BE85] underline-offset-4 hover:text-[#F5F1E8] hover:underline">← Retour à la connexion</Link>}
     >
       <ForgotPasswordForm />
     </AuthShell>

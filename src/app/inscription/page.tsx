@@ -16,7 +16,7 @@ export default async function InscriptionPage({ searchParams }: { searchParams: 
       footer={
         <>
           Déjà inscrit ?{" "}
-          <Link href={`/connexion?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="font-semibold text-primary hover:text-white">
+          <Link href={`/connexion?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="font-semibold text-[#D9BE85] underline-offset-4 hover:text-[#F5F1E8] hover:underline">
             Se connecter
           </Link>
         </>

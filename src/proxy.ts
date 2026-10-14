@@ -10,6 +10,9 @@ const AUTH_PAGES = ["/connexion", "/inscription", "/mot-de-passe-oublie", "/rein
 // Ressources nécessaires à l'affichage de la page de connexion.
 const PUBLIC_FILES = [
   "/images/gallery/casa-skyline.png",
+  "/images/brand/wander-mark-gold.png",
+  // Photo de la page de connexion (déposer le fichier pour l'activer).
+  "/images/login/casablanca.jpg",
   "/favicon.ico",
   "/robots.txt",
   // Application installable et notifications (chargés sans cookie par le navigateur).

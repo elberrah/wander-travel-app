@@ -51,7 +51,7 @@ export function SignupForm({ callbackUrl, googleEnabled }: { callbackUrl: string
         <PasswordField label="Mot de passe" id="password" autoComplete="new-password" required minLength={10} maxLength={128} hint="10 caractères minimum. Une phrase de passe est idéale." />
         <PasswordField label="Confirmer le mot de passe" id="confirm" autoComplete="new-password" required minLength={10} maxLength={128} />
         <SubmitButton loading={loading}>Créer mon compte</SubmitButton>
-        <p className="mt-4 text-[11px] leading-relaxed text-white/35">
+        <p className="mt-4 text-[11px] leading-relaxed text-[#F5F1E8]/55">
           Un email de confirmation vous sera envoyé. Vos données restent strictement confidentielles et ne sont utilisées que pour votre accès Wander.
         </p>
       </form>

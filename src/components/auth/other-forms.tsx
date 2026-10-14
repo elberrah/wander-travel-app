@@ -48,7 +48,7 @@ export function ResetPasswordForm({ token, tokenError }: { token?: string; token
     return (
       <>
         <Alert>{error || "Lien de réinitialisation invalide ou expiré."}</Alert>
-        <Link href="/mot-de-passe-oublie" className="text-primary hover:text-white font-semibold">
+        <Link href="/mot-de-passe-oublie" className="font-semibold text-[#D9BE85] underline-offset-4 hover:text-[#F5F1E8] hover:underline">
           Faire une nouvelle demande
         </Link>
       </>
@@ -76,7 +76,7 @@ export function ResetPasswordForm({ token, tokenError }: { token?: string; token
       <PasswordField label="Nouveau mot de passe" id="password" autoComplete="new-password" required minLength={10} maxLength={128} hint="10 caractères minimum." />
       <PasswordField label="Confirmer" id="confirm" autoComplete="new-password" required minLength={10} maxLength={128} />
       <SubmitButton loading={loading}>Enregistrer le mot de passe</SubmitButton>
-      <p className="mt-4 text-[11px] text-white/35">Par sécurité, toutes vos sessions ouvertes seront fermées.</p>
+      <p className="mt-4 text-[11px] text-[#F5F1E8]/55">Par sécurité, toutes vos sessions ouvertes seront fermées.</p>
     </form>
   );
 }
@@ -103,7 +103,7 @@ export function VerifyEmailPanel({ email, callbackUrl }: { email?: string; callb
       </div>
       {msg && <Alert kind={msg.kind}>{msg.text}</Alert>}
       {email && (
-        <button type="button" onClick={resend} disabled={loading} className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-white disabled:opacity-50">
+        <button type="button" onClick={resend} disabled={loading} className="flex items-center gap-2 text-sm font-semibold text-[#D9BE85] underline-offset-4 hover:text-[#F5F1E8] hover:underline disabled:opacity-50">
           {loading && <Loader2 size={14} className="animate-spin" />} Renvoyer le lien
         </button>
       )}

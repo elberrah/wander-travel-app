@@ -9,7 +9,7 @@ const COMPANIES = {
 const K = { user: 'wander_member', cart: 'wander_cart', book: 'wander_bookings' };
 const ls = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
 const sv = (k, v) => {
-  localStorage.setItem(k, JSON.stringify(v));
+  try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}
   // Panier aussi enregistré sur le serveur : rappel si la demande n'est pas finalisée.
   if (k === K.cart && window.Sync && Sync.url) Sync.post({ action: 'cart', items: v });
 };
@@ -17,7 +17,7 @@ const fmt = n => n ? Math.round(n).toLocaleString('fr-FR') + ' MAD' : 'Sur devis
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const $ = id => document.getElementById(id);
 const W = window.Wander = {};
-const member = () => ls(K.user, null);
+const member = () => ls(K.user, null) || window.__WANDER_MEMBER__ || null;
 W.member = member;
 const unlocked = () => !GATE_PRICES || !!member();
 
@@ -93,7 +93,7 @@ W.login = function () {
   W.closeLogin(); refreshAll();
   W.toast(`Bienvenue ${name} · ${c.name}`);
 };
-W.logout = function () { localStorage.removeItem(K.user); W.close(); location.href = '/deconnexion'; };
+W.logout = function () { try { localStorage.removeItem(K.user); } catch (e) {} W.close(); location.href = '/deconnexion'; };
 
 // ---------- Panier ----------
 const STAGES = ['Demande reçue', 'Facture proforma', 'Paiement', 'Confirmée'];

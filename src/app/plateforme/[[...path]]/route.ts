@@ -47,8 +47,14 @@ export async function GET(_req: Request, ctx: { params: Promise<{ path?: string[
   // /plateforme -> /plateforme/index.html (les liens relatifs du site en dépendent).
   if (!rel) return NextResponse.redirect(new URL("/plateforme/index.html", _req.url));
 
-  // Ancienne page de connexion de la plateforme : remplacée par la vraie déconnexion / connexion.
-  if (rel === "login.html") return NextResponse.redirect(new URL("/deconnexion", _req.url));
+  // Ancienne page de connexion de la plateforme. L'utilisateur est déjà connecté ici :
+  // on le renvoie vers la page demandée, sans jamais fermer sa session (l'ancien renvoi
+  // vers /deconnexion déconnectait les collaborateurs dont le navigateur bloque localStorage).
+  if (rel === "login.html") {
+    const next = new URL(_req.url).searchParams.get("next") || "";
+    const safe = /^[\w.-]+\.html(\?[\w=&%.-]*)?$/.test(next) && !next.startsWith("login.html") ? next : "index.html";
+    return NextResponse.redirect(new URL("/plateforme/" + safe, _req.url));
+  }
 
   if (ADMIN_FILES.includes(rel) && session.user.role !== "admin") {
     return NextResponse.redirect(new URL("/espace?refus=admin", _req.url));
@@ -103,9 +109,14 @@ export async function GET(_req: Request, ctx: { params: Promise<{ path?: string[
     name: session.user.name || session.user.email,
     verified: Boolean(session.user.emailVerified),
   };
+  // 1) Variables de page : toujours disponibles, même si localStorage est bloqué.
+  // 2) localStorage : pour les scripts existants ; si le stockage est plein, on vide
+  //    l'historique de visites (non essentiel) puis on réessaie.
   const inject =
-    `<script>try{localStorage.setItem('wander_session',${jsonForScript(JSON.stringify(platformSession))});` +
-    `localStorage.setItem('wander_member',${jsonForScript(JSON.stringify(member))})}catch(e){}</script>`;
+    `<script>window.__WANDER_SESSION__=${jsonForScript(platformSession)};window.__WANDER_MEMBER__=${jsonForScript(member)};` +
+    `(function(){var d={wander_session:${jsonForScript(JSON.stringify(platformSession))},wander_member:${jsonForScript(JSON.stringify(member))}};` +
+    `function w(){for(var k in d)localStorage.setItem(k,d[k])}` +
+    `try{w()}catch(e){try{localStorage.removeItem('wander_visits');w()}catch(e2){}}})();</script>`;
   const html = body.toString("utf8").replace(/<head([^>]*)>/i, (m) => m + inject);
   return new NextResponse(html, { headers: resHeaders });
 }

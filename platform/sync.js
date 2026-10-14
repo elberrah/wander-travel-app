@@ -3,7 +3,12 @@
 (function () {
 const SYNC_URL = '/api/plateforme';
 const KO = 'wander_overrides', KV = 'wander_visits', KR = 'wander_requests';
-const SES = () => { try { return JSON.parse(localStorage.getItem('wander_session')); } catch (e) { return null; } };
+// Session fournie par le serveur (window.__WANDER_SESSION__) : fonctionne même quand
+// le navigateur bloque localStorage (navigateur intégré de Gmail, mode privé, stockage plein).
+const SES = () => {
+  if (window.__WANDER_SESSION__) return window.__WANDER_SESSION__;
+  try { return JSON.parse(localStorage.getItem('wander_session')); } catch (e) { return null; }
+};
 const J = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
 
 function apply(ov) {
@@ -39,12 +44,11 @@ const Sync = window.Sync = {
   }
 };
 
-if (SYNC_URL && !window.SYNC_NO_APPLY && !window.SYNC_PUBLIC) {
-  const se = SES();
-  if (!se || se.exp < Date.now()) { document.documentElement.style.visibility = 'hidden'; location.replace('login.html?next=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search)); }
-}
+// Plus de contrôle de session côté navigateur : le serveur ne sert ces pages qu'à un
+// compte connecté (src/app/plateforme/[[...path]]/route.ts). L'ancien contrôle renvoyait
+// vers login.html -> /deconnexion et fermait la session dès que localStorage était vide.
 Sync.session = SES;
-Sync.logout = () => { localStorage.removeItem('wander_session'); location.href = 'login.html'; };
+Sync.logout = () => { try { localStorage.removeItem('wander_session'); } catch (e) {} location.href = '/deconnexion'; };
 function ui() {
   const se = SES(); if (!se || window.SYNC_NO_APPLY || window.SYNC_PUBLIC) return;
   if (!document.getElementById('wander-out')) {

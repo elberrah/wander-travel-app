@@ -4,6 +4,7 @@ import { ArrowRight, Gift, Globe, LogOut, ShieldCheck, Users } from "lucide-reac
 import { requireUser, isAdmin } from "@/lib/session";
 import { auth } from "@/lib/auth";
 import { ChangePasswordForm } from "@/components/auth/change-password-form";
+import { MAIN_SITE_URL } from "@/lib/site";
 import { NotificationPrefs } from "@/components/notification-prefs";
 
 export const metadata: Metadata = { title: "Mon espace | Wander Travel & Event", robots: { index: false, follow: false } };
@@ -18,7 +19,7 @@ export default async function EspacePage({ searchParams }: { searchParams: Promi
 
   const spaces = [
     { href: "/plateforme/index.html", icon: Gift, title: "Avantages Salariés", desc: "Hôtels, résidences, Omra, Istanbul, colonies : vos offres et demandes de réservation.", external: true },
-    { href: "/", icon: Globe, title: "Univers Wander", desc: "Services MICE, corporate travel, VIP, destinations et réalisations." },
+    { href: MAIN_SITE_URL, icon: Globe, title: "Univers Wander", desc: "Services MICE, corporate travel, VIP, destinations et réalisations.", external: true },
     ...(admin
       ? [
           { href: "/admin/utilisateurs", icon: Users, title: "Gestion des comptes", desc: "Utilisateurs, rôles, suspensions et sessions." },
@@ -32,7 +33,7 @@ export default async function EspacePage({ searchParams }: { searchParams: Promi
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(197,160,89,0.08),transparent_55%)] pointer-events-none" />
       <div className="relative mx-auto max-w-6xl">
         <header className="mb-14 flex flex-wrap items-center justify-between gap-6">
-          <Link href="/" className="flex flex-col">
+          <Link href="/espace" className="flex flex-col">
             <span className="font-serif text-2xl font-bold tracking-[0.2em] text-white leading-none">WANDER</span>
             <span className="text-primary text-[9px] font-bold tracking-[0.5em] uppercase mt-1.5 opacity-80">Travel &amp; Event</span>
           </Link>

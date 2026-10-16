@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { MAIN_SITE_URL } from "@/lib/site";
 import type { ReactNode } from "react";
 
 // Page publique (sans connexion) : exigée par Google pour la connexion « Continuer avec Google ».
@@ -15,7 +16,7 @@ export default function ConfidentialitePage() {
     <main className="relative min-h-screen bg-background text-foreground">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(197,160,89,0.08),transparent_55%)] pointer-events-none" />
       <div className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-10 md:py-20">
-        <Link href="/" aria-label="Wander Travel & Event — accueil" className="group inline-flex flex-col mb-14">
+        <Link href={MAIN_SITE_URL} aria-label="Wander Travel & Event — site officiel" className="group inline-flex flex-col mb-14">
           <span className="font-serif text-2xl md:text-3xl font-bold tracking-[0.2em] text-white leading-none transition-colors group-hover:text-primary">WANDER</span>
           <span className="text-primary text-[9px] md:text-[10px] font-bold tracking-[0.5em] uppercase mt-1.5 opacity-80">Travel &amp; Event</span>
         </Link>

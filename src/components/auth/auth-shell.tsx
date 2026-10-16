@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { MAIN_SITE_URL } from "@/lib/site";
 import { BadgeCheck, Building2, ShieldCheck } from "lucide-react";
 
 // Cadre commun des pages d'authentification (connexion, inscription, mot de passe…).
@@ -101,7 +102,7 @@ export function AuthShell({ title, subtitle, children, footer }: { title: string
 
 function Brand({ className = "" }: { className?: string }) {
   return (
-    <Link href="/" aria-label="Wander Travel & Event — accueil" className={`group inline-flex items-center gap-3.5 ${className}`}>
+    <Link href={MAIN_SITE_URL} aria-label="Wander Travel & Event — site officiel" className={`group inline-flex items-center gap-3.5 ${className}`}>
       <img src="/images/brand/wander-mark-gold.png" alt="" width={44} height={40} className="h-10 w-auto transition-transform duration-500 group-hover:-rotate-6" />
       <span className="flex flex-col">
         <span className="font-serif text-[1.55rem] font-semibold leading-none tracking-[0.18em] text-[#F5F1E8]">WANDER</span>

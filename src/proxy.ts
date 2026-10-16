@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { safeCallbackUrl } from "@/lib/safe-redirect";
+import { MAIN_SITE_URL } from "@/lib/site";
 
 // Verrou global : toute requête sans session valide est refusée.
 // Pages -> redirection vers /connexion (avec retour à la page demandée).
@@ -29,8 +30,21 @@ const PUBLIC_API = ["/api/cron/notifications"];
 
 const matches = (pathname: string, base: string) => pathname === base || pathname.startsWith(base + "/");
 
+// Déploiement « plateforme seule » (PLATFORM_ONLY=1) : les pages du site vitrine
+// ne sont pas servies ici, elles renvoient vers le site officiel (version à jour).
+const PLATFORM_ZONES = ["/api", "/espace", "/admin", "/plateforme", "/deconnexion", ...AUTH_PAGES, ...PUBLIC_PAGES];
+function siteRedirect(request: NextRequest) {
+  if (process.env.PLATFORM_ONLY !== "1") return null;
+  const { pathname, search } = request.nextUrl;
+  if (pathname === "/") return NextResponse.redirect(new URL("/espace", request.url));
+  if (PLATFORM_ZONES.some((z) => matches(pathname, z)) || matches(pathname, "/_next") || /\.[a-z0-9]+$/i.test(pathname)) return null;
+  return NextResponse.redirect(MAIN_SITE_URL + pathname + search, 308);
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+  const toSite = siteRedirect(request);
+  if (toSite) return toSite;
 
   if (matches(pathname, "/api/auth") || PUBLIC_FILES.includes(pathname) || PUBLIC_PAGES.includes(pathname) || PUBLIC_API.includes(pathname)) {
     return NextResponse.next();

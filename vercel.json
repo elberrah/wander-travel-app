@@ -1,0 +1,8 @@
+{
+  "redirects": [
+    {"source":"/corporate","destination":"/mice","permanent":true},
+    {"source":"/services","destination":"/mice","permanent":true},
+    {"source":"/aviation","destination":"/vip","permanent":true},
+    {"source":"/fan-zone","destination":"/realisations","permanent":true}
+  ]
+}

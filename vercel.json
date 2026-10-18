@@ -3,6 +3,7 @@
     {"source":"/corporate","destination":"/mice","permanent":true},
     {"source":"/services","destination":"/mice","permanent":true},
     {"source":"/aviation","destination":"/vip","permanent":true},
-    {"source":"/fan-zone","destination":"/realisations","permanent":true}
+    {"source":"/fan-zone","destination":"/realisations","permanent":true},
+    {"source":"/:path*","has":[{"type":"host","value":"avantages.wandertravel-event.com"}],"destination":"https://www.wandertravel-event.com/avantages-salaries","permanent":true}
   ]
 }

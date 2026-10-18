@@ -2,7 +2,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, ChevronDown, Menu, X, Phone, Instagram, Linkedin, MapPin, Mail, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Menu, X, Phone, MapPin, Mail, ArrowRight } from 'lucide-react';
+const IconInstagram=()=><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>;
+const IconLinkedin=()=><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>;
 import { SITE } from '@/lib/site-data';
 
 const nav = [
@@ -54,7 +56,7 @@ export function Footer(){return <footer className='site-footer'>
     <div className='footer-brand'><Brand footer/><p>Le sens du détail, la rigueur du mouvement et l’art de créer des moments qui comptent. Paris dans le parcours, Casablanca comme ancrage.</p><span className='footer-license'>Voyages · Événementiel · Casablanca</span></div>
     <div><h3>EXPLORER</h3><Link href='/mice'>Wander MICE</Link><Link href='/avantages-salaries'>Avantages Salariés</Link><Link href='/kids-juniors'>Kids & Juniors</Link><Link href='/scolaire'>Scolaire</Link><Link href='/triangle-dor'>Triangle d’Or</Link><Link href='/voyages-corporate'>Voyages Corporate</Link><Link href='/vip'>VIP & Aviation</Link></div>
     <div><h3>DÉCOUVRIR</h3><Link href='/destinations'>Destinations</Link><Link href='/realisations'>Réalisations</Link><Link href='/a-propos'>À propos</Link><Link href='/contact'>Nous contacter</Link><a href={SITE.whatsapp} target='_blank' rel='noreferrer'>WhatsApp <ArrowUpRight size={12}/></a></div>
-    <div className='footer-contact'><h3>CASABLANCA</h3><p><MapPin size={16}/>{SITE.address}</p><a href={`tel:${SITE.telephone}`}><Phone size={16}/>{SITE.phone}</a><a href={`mailto:${SITE.email}`}><Mail size={16}/>{SITE.email}</a><div className='footer-socials'><a href='https://www.instagram.com/wand.erevents/' aria-label='Instagram Wander' rel='noopener noreferrer' target='_blank'><Instagram size={18}/></a><a href='https://www.linkedin.com/company/wander-travel-event/' aria-label='LinkedIn Wander' rel='noopener noreferrer' target='_blank'><Linkedin size={18}/></a></div></div>
+    <div className='footer-contact'><h3>CASABLANCA</h3><p><MapPin size={16}/>{SITE.address}</p><a href={`tel:${SITE.telephone}`}><Phone size={16}/>{SITE.phone}</a><a href={`mailto:${SITE.email}`}><Mail size={16}/>{SITE.email}</a><div className='footer-socials'><a href='https://www.instagram.com/wand.erevents/' aria-label='Instagram Wander' rel='noopener noreferrer' target='_blank'><IconInstagram/></a><a href='https://www.linkedin.com/company/wander-travel-event/' aria-label='LinkedIn Wander' rel='noopener noreferrer' target='_blank'><IconLinkedin/></a></div></div>
   </div>
   <div className='container footer-bottom'><span>© {new Date().getFullYear()} Wander Travel & Event. Tous droits réservés.</span><div><Link href='/mentions-legales'>Mentions légales</Link><Link href='/cgu'>CGU</Link><Link href='/confidentialite'>Confidentialité</Link><button type='button' onClick={()=>window.dispatchEvent(new Event('wander-open-cookies'))}>Gérer les cookies</button></div><span>Made for moments that matter.</span></div>
  </footer>}

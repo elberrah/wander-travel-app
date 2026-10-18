@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Wander Travel & Event — Agent Spécialiste Solutions Voyage d'Affaire</title>
+    <!-- Google Fonts: Outfit & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="refresh.css">
+    <link rel="stylesheet" href="motion.css">
+    <link rel="stylesheet" href="premium.css">
+    <!-- Admin Mode Detection (runs before render to avoid flicker) -->
+    <script>
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        const isAdmin = params.get('admin') === '1' && localStorage.getItem('wander_admin_auth') === 'wander_admin_2026';
+        if (isAdmin) {
+            document.documentElement.classList.add('admin-mode');
+        }
+    })();
+    </script>
+</head>
+<body class="light-mode">
+
+    <!-- Top Announcement Bar with Countdown -->
+    <div class="announcement-bar">
+        <p><i class="fa-solid fa-fire" style="color:#ff6b35"></i> Offres spéciales pilotes — Expire dans&nbsp;<span id="countdown-timer" style="font-weight:700; color:#fbbf24;">...</span>&nbsp;·&nbsp;<i class="fa-solid fa-lock"></i> Tarifs confidentiels réservés aux salariés partenaires</p>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="#" class="logo">
+                <img src="assets/wander-mark.png" alt="" style="height:54px;width:auto;margin-right:12px;display:block">
+                <span class="logo-text">Wander</span>
+                <span class="logo-sub">Travel & Event</span>
+            </a>
+            <nav class="nav-links">
+                <a href="#comment-ca-marche" class="nav-link">Comment ça marche</a>
+                <a href="#promo-flash" class="nav-link">Promo Flash</a>
+                <a href="#offres" class="nav-link">Nos Offres</a>
+                <a href="#kids" class="nav-link">Kids &amp; Juniors</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#devis" class="nav-link">Devis</a>
+            </nav>
+            <div class="header-actions">
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Changer de thème">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <a href="#devis" class="cta-nav">Devis Express</a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu Mobile">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav">
+        <a href="#comment-ca-marche" class="mobile-nav-link">Comment ça marche</a>
+        <a href="#promo-flash" class="mobile-nav-link">Promo Flash</a>
+        <a href="#offres" class="mobile-nav-link">Nos Offres</a>
+        <a href="#kids" class="mobile-nav-link">Kids &amp; Juniors</a>
+        <a href="#faq" class="mobile-nav-link">FAQ</a>
+        <a href="#devis" class="mobile-nav-link">Demande de Devis</a>
+        <a href="#devis" class="mobile-cta">Devis Express</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fa-solid fa-gem"></i> Programme Avantages Salariés</span>
+            <h1 class="hero-title">Évadez-vous avec des <br><span class="highlight">Offres Privilèges</span></h1>
+            <p class="hero-subtitle">Bénéficiez de tarifs exclusifs négociés directement pour les collaborateurs de votre entreprise auprès des plus beaux hôtels, résidences et circuits internationaux.</p>
+            <div class="hero-actions-container">
+                <a href="#offres" class="hero-btn primary-btn"><i class="fa-solid fa-compass"></i> Découvrir le Catalogue</a>
+                <a href="#devis" class="hero-btn secondary-btn"><i class="fa-solid fa-paper-plane"></i> Nous Contacter</a>
+            </div>
+        </div>
+        
+        <!-- Quick stats summary card at bottom of hero -->
+        <div class="quick-stats-card">
+            <div class="stat-item">
+                <span class="stat-num">50+</span>
+                <span class="stat-lbl">Hôtels & Resorts</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num">100%</span>
+                <span class="stat-lbl">Tarifs négociés</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num">0 MAD</span>
+                <span class="stat-lbl">Frais d'agence</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========= PROMO FLASH JEUDI ========= -->
+    <section id="promo-flash" class="flash-section">
+        <div class="flash-inner" data-stg>
+            <div class="flash-head">
+                <span class="flash-tag"><i class="fa-solid fa-bolt"></i> Chaque jeudi</span>
+                <h2>Promo Flash Wander</h2>
+                <p>Chaque jeudi, Wander lance des offres flash sur des hôtels, des appartements et des week-ends all inclusive. Réservées aux salariés partenaires, valables quelques jours seulement.</p>
+                <a href="#devis" class="hero-btn primary-btn"><i class="fa-solid fa-bell"></i> Être prévenu des offres</a>
+            </div>
+            <div class="flash-side">
+                <div class="flash-count" aria-live="off">
+                    <span class="flash-count-lbl">Prochaine vague dans</span>
+                    <div class="flash-digits">
+                        <div><b id="fl-d">00</b><small>jours</small></div><div><b id="fl-h">00</b><small>heures</small></div><div><b id="fl-m">00</b><small>min</small></div><div><b id="fl-s">00</b><small>sec</small></div>
+                    </div>
+                </div>
+                <div class="flash-cats">
+                    <a href="#offres" class="flash-cat" data-cat="all"><i class="fa-solid fa-hotel"></i><span>Hôtels</span></a>
+                    <a href="#offres" class="flash-cat" data-cat="residence"><i class="fa-solid fa-building"></i><span>Appartements</span></a>
+                    <a href="#offres" class="flash-cat" data-cat="all"><i class="fa-solid fa-champagne-glasses"></i><span>Week-ends All Inclusive</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Filter Hub -->
+    <section id="offres" class="filter-section">
+        <div class="section-title-wrapper">
+            <span class="section-tag">Catalogue Exclusif</span>
+            <h2 class="section-title">Explorez nos destinations conventionnées</h2>
+            <div class="accent-line"></div>
+        </div>
+
+        <div class="filter-hub">
+            <!-- Search input -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" placeholder="Rechercher une destination, un hôtel, un équipement (ex: Spa, Golf)...">
+            </div>
+
+            <!-- Filters bar -->
+            <div class="filter-controls">
+                <!-- Category Pills -->
+                <div class="category-pills">
+                    <button class="pill active" data-category="all">Tout voir</button>
+                    <button class="pill" data-category="casa">Casablanca</button>
+                    <button class="pill" data-category="marrakech">Marrakech</button>
+                    <button class="pill" data-category="sud">Agadir &amp; Grand Sud</button>
+                    <button class="pill" data-category="nord">Nord &amp; Atlas</button>
+                    <button class="pill" data-category="dakhla">Dakhla</button>
+                    <button class="pill" data-category="package">Istanbul · Égypte</button>
+                    <button class="pill" data-category="omra">Omra</button>
+                    <a class="pill" href="#kids" style="text-decoration:none">Colonies de vacances</a>
+                </div>
+
+                <!-- Select Filters -->
+                <div class="select-filters">
+                    <div class="select-wrapper">
+                        <i class="fa-solid fa-location-dot select-icon"></i>
+                        <select id="location-filter">
+                            <option value="all">Toutes les destinations</option>
+                            <!-- Will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-count-bar">
+                <span id="results-count">Chargement des offres...</span>
+            </div>
+        </div>
+
+        <!-- Offers Grid -->
+        <div class="offers-grid" id="offers-grid">
+            <!-- Dynamic cards will be injected here -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="empty-state hidden">
+            <i class="fa-regular fa-face-frown empty-icon"></i>
+            <h3>Aucune offre ne correspond à vos critères</h3>
+            <p>Essayez de modifier votre recherche ou vos filtres pour découvrir d'autres opportunités de voyage.</p>
+            <button id="reset-filters-btn" class="reset-btn">Réinitialiser les filtres</button>
+        </div>
+    </section>
+
+    <!-- ========= COMMENT CA MARCHE ========= -->
+    <section id="comment-ca-marche" class="how-section">
+        <div class="section-title-wrapper">
+            <span class="section-tag">Simple & Rapide</span>
+            <h2 class="section-title">Comment ça marche ?</h2>
+            <p class="section-intro">En 3 étapes seulement, vos salariés profitent de tarifs exclusifs partout au Maroc et à l'international.</p>
+            <div class="accent-line"></div>
+        </div>
+        <div class="how-steps">
+            <div class="how-step">
+                <div class="step-icon-wrap"><i class="fa-solid fa-handshake"></i><span class="step-num">1</span></div>
+                <h3>Partenariat Entreprise</h3>
+                <p>Votre entreprise signe une convention de partenariat avec Wander Travel & Event, via son DRH ou son CSE. C'est gratuit et sans engagement. Tous les salariés en profitent.</p>
+            </div>
+            <div class="how-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="how-step">
+                <div class="step-icon-wrap"><i class="fa-solid fa-id-card"></i><span class="step-num">2</span></div>
+                <h3>Accès Salarié</h3>
+                <p>Chaque salarié reçoit un code d'accès entreprise et peut consulter les offres préférentielles confidentielles.</p>
+            </div>
+            <div class="how-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            <div class="how-step">
+                <div class="step-icon-wrap"><i class="fa-solid fa-plane-departure"></i><span class="step-num">3</span></div>
+                <h3>Wander Gère Tout</h3>
+                <p>Notre équipe prend en charge la réservation, les confirmations, et le suivi jusqu'au retour de voyage.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========= AVANTAGES ENTREPRISE ========= -->
+    <section id="avantages-entreprise" class="benefits-section">
+        <div class="section-title-wrapper">
+            <span class="section-tag">Programme Corporate</span>
+            <h2 class="section-title">Un avantage pour tous les salariés</h2>
+            <p class="section-intro">Le DRH ouvre la porte de l'entreprise. Ce sont tous les salariés qui en bénéficient. Zéro coût, zéro gestion pour l'entreprise.</p>
+            <div class="accent-line"></div>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <h4>Avantage Social Sans Coût</h4>
+                <p>Le programme est entièrement gratuit pour l'entreprise. Aucun budget RH n'est nécessaire.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-tag"></i></div>
+                <h4>Offres Exclusives Négociées</h4>
+                <p>Des tarifs confidentiels inaccessibles au grand public, négociés directement avec les hôtels.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-laptop"></i></div>
+                <h4>Plateforme Dédiée</h4>
+                <p>Une page web sécurisée aux couleurs de votre programme, accessible 24h/24 par les salariés.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-headset"></i></div>
+                <h4>Accompagnement Wander</h4>
+                <p>Un conseiller dédié gère chaque réservation individuellement avec un suivi personnalisé.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-heart"></i></div>
+                <h4>Bien-être des Salariés</h4>
+                <p>Renforcement de la QVT, fidélisation des talents et amélioration de l'attractivité de l'entreprise.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h4>Reporting & Suivi</h4>
+                <p>Un bilan annuel des réservations et économies réalisées par vos collaborateurs, fourni gratuitement.</p>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:2rem;">
+            <a href="#devis" class="hero-btn primary-btn"><i class="fa-solid fa-file-contract"></i> Demander un Partenariat</a>
+        </div>
+    </section>
+
+    <!-- ========= WANDER KIDS & JUNIORS ========= -->
+    <section id="kids" class="kids-section">
+        <div class="section-title-wrapper">
+            <span class="section-tag">Colonies de vacances</span>
+            <h2 class="section-title">Wander Kids &amp; Juniors</h2>
+            <p class="section-intro">Colonies de vacances et camps d'été pour les enfants des collaborateurs, intégrés à l'offre Wander Partner Benefits (Avantages Salariés &amp; CSE). Accessible à tous les salariés de l'entreprise partenaire, que l'accord soit signé par le DRH, le CSE ou la direction.</p>
+            <div class="accent-line"></div>
+        </div>
+
+        <div class="kids-trust">
+            <div class="kids-trust-item" data-stg><i class="fa-solid fa-shield-heart"></i><div><h4>Sécurité et encadrement certifié</h4><p>Moniteurs diplômés, taux d'encadrement strict, suivi médical et assurance groupe 24/7.</p></div></div>
+            <div class="kids-trust-item" data-stg><i class="fa-solid fa-bus"></i><div><h4>Zéro charge mentale</h4><p>Wander prend en charge toute la logistique : transport sécurisé, hébergement, restauration et activités.</p></div></div>
+            <div class="kids-trust-item" data-stg><i class="fa-brands fa-whatsapp"></i><div><h4>Suivi pour les parents</h4><p>Un groupe WhatsApp privé par séjour : photos, vidéos et résumé de la journée.</p></div></div>
+            <div class="kids-trust-item" data-stg><i class="fa-solid fa-handshake-angle"></i><div><h4>Marque employeur</h4><p>Une réponse concrète au casse-tête estival de la garde d'enfants, pour fidéliser les collaborateurs.</p></div></div>
+        </div>
+
+        <div class="kids-gallery">
+            <figure data-stg><img src="assets/photos/kids/1.webp" alt="Aire de jeux gonflable en bord de plage" loading="lazy"></figure>
+            <figure data-stg><img src="assets/photos/kids/2.jpg" alt="Enfants à la piscine avec animateurs" loading="lazy"></figure>
+            <figure data-stg><img src="assets/photos/kids/3.jpg" alt="Restaurant et repas" loading="lazy"></figure>
+            <figure data-stg><img src="assets/photos/kids/4.webp" alt="Parc aquatique et toboggans" loading="lazy"></figure>
+        </div>
+
+        <h3 class="kids-sub">4 pôles régionaux au Maroc</h3>
+        <div class="kids-poles">
+            <article class="kids-pole" data-stg><span class="kids-n">01</span><h4>Pôle Agadir</h4><span class="kids-where">Taghazout / Imsouane</span><p>Surf, océan et aventure.</p></article>
+            <article class="kids-pole" data-stg><span class="kids-n">02</span><h4>Pôle Fès</h4><span class="kids-where">Moyen Atlas / Ifrane / Imouzzer</span><p>Nature, culture, équitation et histoire.</p></article>
+            <article class="kids-pole" data-stg><span class="kids-n">03</span><h4>Pôle Essaouira</h4><span class="kids-where">Côte atlantique</span><p>Sports nautiques, écologie et ateliers artistiques.</p></article>
+            <article class="kids-pole" data-stg><span class="kids-n">04</span><h4>Pôle Asilah</h4><span class="kids-where">Côte nord</span><p>Créativité, peinture, océan et découverte.</p></article>
+        </div>
+
+        <h3 class="kids-sub">Par tranche d'âge</h3>
+        <div class="kids-ages">
+            <div class="kids-age" data-stg><b>7–10 ans</b><span>Programme adapté aux plus jeunes</span></div>
+            <div class="kids-age" data-stg><b>11–14 ans</b><span>Programme adapté aux pré-ados</span></div>
+            <div class="kids-age" data-stg><b>15–17 ans</b><span>Programme adapté aux adolescents</span></div>
+        </div>
+
+        <div class="kids-cta" data-stg>
+            <div><h4>Offre Corporate CE</h4><p>Tarification sur mesure selon convention CE et volume. Notre équipe prépare une proposition pour votre entreprise, au bénéfice de tous les salariés.</p></div>
+            <a href="#devis" class="hero-btn primary-btn"><i class="fa-solid fa-child-reaching"></i> Demander une proposition CE</a>
+        </div>
+    </section>
+
+    <!-- ========= ENGAGEMENTS ========= -->
+    <section id="engagements" class="eng-section">
+        <div class="section-title-wrapper">
+            <span class="section-tag">Nos engagements</span>
+            <h2 class="section-title">Une plateforme fiable pour tous les salariés</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="eng-grid">
+            <div class="eng-card" data-stg><i class="fa-solid fa-rotate-left"></i><h4>Annulation claire</h4><p>Conditions affichées avant paiement, et remboursement suivi.</p></div>
+            <div class="eng-card" data-stg><i class="fa-solid fa-headset"></i><h4>Assistance</h4><p>WhatsApp, chat et numéro d’urgence pendant le séjour.</p></div>
+            <div class="eng-card" data-stg><i class="fa-solid fa-bell"></i><h4>Notifications</h4><p>Alertes pour les promos flash du jeudi.</p></div>
+            <div class="eng-card" data-stg><i class="fa-solid fa-tags"></i><h4>Prix négociés réservés aux salariés</h4><p>Avec comparateur Booking daté, pour voir l’économie réelle.</p></div>
+            <div class="eng-card" data-stg><i class="fa-solid fa-layer-group"></i><h4>Offres complètes</h4><p>Hôtels, résidences, Omra, Istanbul, Égypte et colonies de vacances au même endroit.</p></div>
+            <div class="eng-card" data-stg><i class="fa-solid fa-user-tie"></i><h4>Accompagnement humain</h4><p>Un conseiller dédié par entreprise, ce que Booking ne propose pas.</p></div>
+            <div class="eng-card" data-stg><i class="fa-solid fa-bolt"></i><h4>Promos flash du jeudi</h4><p>Avec liste d’attente et alerte.</p></div>
+        </div>
+        <div class="eng-pdf" data-stg><a href="#" onclick="window.print();return false" class="hero-btn primary-btn"><i class="fa-solid fa-file-pdf"></i> Télécharger nos offres en PDF</a></div>
+    </section>
+
+    <!-- ========= POURQUOI WANDER ========= -->
+    <section class="why-section">
+        <div class="why-inner">
+            <div class="section-title-wrapper" style="text-align:center; margin-bottom:2.5rem;">
+                <span class="section-tag">Notre Expertise</span>
+                <h2 class="section-title" style="color:#fff;">Pourquoi choisir Wander ?</h2>
+            </div>
+            <div class="why-stats">
+                <div class="why-stat">
+                    <span class="why-num">10+</span>
+                    <span class="why-lbl">Années d'expérience</span>
+                </div>
+                <div class="why-divider"></div>
+                <div class="why-stat">
+                    <span class="why-num">30+</span>
+                    <span class="why-lbl">Entreprises accompagnées</span>
+                </div>
+                <div class="why-divider"></div>
+                <div class="why-stat">
+                    <span class="why-num">50+</span>
+                    <span class="why-lbl">Hôtels partenaires</span>
+                </div>
+                <div class="why-divider"></div>
+                <div class="why-stat">
+                    <span class="why-num">5 000+</span>
+                    <span class="why-lbl">Salariés servis</span>
+                </div>
+                <div class="why-divider"></div>
+                <div class="why-stat">
+                    <span class="why-num">0 MAD</span>
+                    <span class="why-lbl">Frais d'agence</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========= TÉMOIGNAGES ========= -->
+    <section class="testimonials-section">
+        <div class="section-title-wrapper">
+            <span class="section-tag">Ils nous font confiance</span>
+            <h2 class="section-title">Ce que disent nos clients</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Grâce au programme Wander, nos collaborateurs bénéficient de séjours haut de gamme à des tarifs exceptionnels. Un vrai plus pour notre politique RH !"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SB</div>
+                    <div>
+                        <strong>Samir B.</strong>
+                        <span>Directeur RH — Groupe Industriel</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"J'ai réservé un séjour à Marrakech pour toute ma famille. Le tarif était imbattable et le service de Wander était impeccable du début à la fin."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">FK</div>
+                    <div>
+                        <strong>Fatima K.</strong>
+                        <span>Ingénieure — Collaboratrice Pilote</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Le programme Omra organisé par Wander était parfaitement encadré. Visa, hôtels, transferts — tout était géré avec professionnalisme."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">MA</div>
+                    <div>
+                        <strong>Mohammed A.</strong>
+                        <span>Responsable Achats — Entreprise Partenaire</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========= FAQ ========= -->
+    <section id="faq" class="faq-section">
+        <div class="section-title-wrapper">
+            <span class="section-tag">Questions Fréquentes</span>
+            <h2 class="section-title">FAQ — Tout savoir en 2 minutes</h2>
+            <div class="accent-line"></div>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)"><span>Qui peut bénéficier des offres ?</span><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Tous les salariés des entreprises ayant signé une convention de partenariat avec Wander Travel & Event. L'accès est strictement réservé aux collaborateurs de l'entreprise partenaire, sur présentation d'un code entreprise et d'un email professionnel.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)"><span>Comment accéder aux tarifs préférentiels ?</span><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Consultez librement nos offres sur cette page. Les tarifs sont négociés pour les salariés des entreprises partenaires.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)"><span>Y a-t-il des frais d'agence ?</span><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Non, aucun frais d'agence n'est facturé aux salariés ni à l'entreprise. Les tarifs affichés sont les prix finaux négociés. Seules les taxes de séjour locales peuvent s'appliquer en sus, selon les établissements.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)"><span>Comment réserver ?</span><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Ouvrez l'offre qui vous intéresse et remplissez le formulaire de demande, ou contactez-nous par WhatsApp, par téléphone (+212 702 093 107) ou par email. Un conseiller vous répond pour confirmer la disponibilité et le tarif.</p></div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)"><span>Peut-on voyager avec sa famille ?</span><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Absolument ! La grande majorité de nos offres s'adressent aux familles. Les tarifs affichés précisent les configurations disponibles (simple, double, triple, famille). Des gratuités enfants sont souvent incluses selon les établissements.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)"><span>Quels documents sont nécessaires pour réserver ?</span><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="faq-answer"><p>Pour une réservation nationale : CIN ou passeport des participants. Pour une réservation internationale : passeport valide 6 mois après la date de retour. Pour l'Omra : passeport + photos d'identité. Notre équipe vous guidera selon la destination choisie.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Request Quote Form -->
+    <section id="devis" class="quote-section">
+        <div class="quote-container">
+            <div class="quote-info-side">
+                <span class="quote-tag"><i class="fa-solid fa-bell-concierge"></i> Service Réservation</span>
+                <h2>Préparez votre prochain voyage</h2>
+                <p>Sélectionnez l'offre de votre choix ou décrivez-nous votre projet de vacances sur-mesure. Notre équipe de conseillers dédiés traitera votre demande sous 24h ouvrées.</p>
+                
+                <div class="contact-details">
+                    <div class="contact-card">
+                        <i class="fa-solid fa-phone contact-icon"></i>
+                        <div>
+                            <h4>Conseillers Salariés</h4>
+                            <p>+212 702 093 107</p>
+                            <p>+212 522 863 490</p>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fa-solid fa-envelope contact-icon"></i>
+                        <div>
+                            <h4>Email Corporate</h4>
+                            <p>contact@wandertravel-event.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quote-form-side">
+                <form id="booking-request-form" class="quote-form">
+                    <h3 class="form-title">Demande de Devis Personnalisé</h3>
+                    
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="form-name">Nom complet *</label>
+                            <input type="text" id="form-name" placeholder="Ex: Jean Dupont" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="form-email">Email professionnel *</label>
+                            <input type="email" id="form-email" placeholder="Ex: jean.dupont@entreprise.ma" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="form-drh">Entreprise *</label>
+                            <input type="text" id="form-drh" placeholder="Ex: AXA" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="form-phone">Téléphone *</label>
+                            <input type="tel" id="form-phone" placeholder="Ex: +212 600 000 000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="form-destination">Sélectionner une offre ou destination *</label>
+                        <div class="select-wrapper">
+                            <i class="fa-solid fa-hotel select-icon-form"></i>
+                            <select id="form-destination" required>
+                                <option value="" disabled selected>Choisir une offre...</option>
+                                <option value="sur-mesure">Voyage Sur-Mesure / Autre destination</option>
+                                <!-- Offers options will be injected dynamically -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="form-checkin">Date de départ souhaitée</label>
+                            <input type="date" id="form-checkin">
+                        </div>
+                        <div class="form-group">
+                            <label for="form-duration">Durée (nuits)</label>
+                            <input type="number" id="form-duration" min="1" max="90" placeholder="Ex: 7">
+                        </div>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="form-adults">Adultes</label>
+                            <input type="number" id="form-adults" min="1" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="form-children">Enfants</label>
+                            <input type="number" id="form-children" min="0" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="form-notes">Précisions ou demandes spécifiques</label>
+                        <textarea id="form-notes" rows="3" placeholder="Options souhaitées, configuration des chambres, âges des enfants, formule repas particulière..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>Envoyer ma demande</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Details Modal Dialog -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal-btn">&times;</span>
+            <div id="modal-body-content">
+                <!-- Will be populated dynamically by script -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <i class="fa-solid fa-circle-check toast-icon"></i>
+            <div class="toast-message">
+                <span class="toast-title">Succès</span>
+                <span class="toast-desc">Votre demande a été envoyée avec succès.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="assets/wander-logo.png" alt="Wander Travel & Event" style="height:150px;width:auto;display:block;margin-bottom:10px">
+                <h3 class="logo-text" style="position:absolute;left:-9999px">Wander</h3>
+                <p class="brand-desc">Agent Spécialiste — Solutions Voyage d'Affaire.<br>Le partenaire privilégié de vos voyages d'affaires et de loisirs négociés au meilleur tarif.</p>
+            </div>
+            
+            <div class="footer-links-col">
+                <h4>Rubriques</h4>
+                <a href="#offres">Nos Offres</a>
+                <a href="#devis">Faire un Devis</a>
+            </div>
+
+            <div class="footer-links-col">
+                <h4>Nos Destinations</h4>
+                <span>Casablanca · Marrakech · Agadir</span>
+                <span>Tanger · Chefchaouen · Ifrane · Dakhla</span>
+                <span>Omra · Istanbul · Égypte</span>
+            </div>
+
+            <div class="footer-contact-col">
+                <h4>Contact Corporate</h4>
+                <p><i class="fa-solid fa-location-dot"></i> 36 Rue Ouled Mhanna, RDC Mag. 02, Casablanca</p>
+                <p><i class="fa-solid fa-phone"></i> +212 702 093 107 / +212 522 863 490</p>
+                <p><i class="fa-solid fa-envelope"></i> contact@wandertravel-event.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-legal-mentions" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 30px; padding-top: 20px; font-size: 0.8rem; color: rgba(250,248,245,0.6); line-height: 1.6;">
+            <p><strong>Dénomination :</strong> WANDER TRAVEL & EVENT SARL AU &nbsp;|&nbsp; <strong>Agrément Tourisme :</strong> ODV-9266 (Loi 11-16)</p>
+            <p><strong>Siège / Exploitation :</strong> 36 Rue Ouled Mhanna, RDC Mag. 02, Casablanca</p>
+            <p><strong>Identifiants :</strong> ICE 003425248000044 · IF 60164838 · RC 607185 Casablanca · Patente 36302091 · Capital : 100 000 MAD</p>
+            <p><strong>Juridiction compétente :</strong> Tribunal de Commerce de Casablanca &nbsp;|&nbsp; <strong>Données personnelles :</strong> loi 09-08 &nbsp;|&nbsp; <strong>Réservations :</strong> Resa@wandertravel-event.com</p>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Wander Travel &amp; Event. Tous droits réservés. Programme Avantages Salariés.</p>
+            <div class="footer-legal-links">
+                <a href="#faq">Mentions légales</a>
+                <span>·</span>
+                <a href="#faq">Politique de confidentialité</a>
+                <span>·</span>
+                <a href="#faq">Conditions de réservation</a>
+                <span>·</span>
+                <a href="#faq">Conditions d'annulation</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/212702093107" target="_blank" class="whatsapp-float-btn" aria-label="Contactez-nous sur WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Admin Login Modal (hidden by default) -->
+    <div id="admin-login-modal" style="
+        display:none; position:fixed; inset:0; z-index:99999;
+        background:rgba(0,0,0,0.7); backdrop-filter:blur(6px);
+        align-items:center; justify-content:center;
+    ">
+        <div style="
+            background:#fff; border-radius:16px; padding:32px 28px;
+            width:90%; max-width:380px; text-align:center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        ">
+            <div style="font-size:2rem; margin-bottom:8px;">🔐</div>
+            <h2 style="font-family:'Playfair Display',serif; color:#6B1E2A; margin-bottom:4px;">Accès Administrateur</h2>
+            <p style="color:#888; font-size:0.85rem; margin-bottom:20px;">Wander Travel & Event</p>
+            <input id="admin-pw-input" type="password" placeholder="Mot de passe admin" style="
+                width:100%; padding:12px 16px; border:1px solid #ddd;
+                border-radius:8px; font-size:1rem; margin-bottom:12px;
+                font-family:'Outfit',sans-serif; outline:none;
+            ">
+            <div id="admin-login-error" style="color:#ef4444; font-size:0.82rem; margin-bottom:10px; display:none;">
+                ❌ Mot de passe incorrect
+            </div>
+            <button onclick="checkAdminLogin()" style="
+                width:100%; background:#6B1E2A; color:#fff; border:none;
+                border-radius:8px; padding:13px; font-size:1rem;
+                font-weight:700; cursor:pointer; font-family:'Outfit',sans-serif;
+            ">Connexion Admin</button>
+            <button onclick="closeAdminLoginModal()" style="
+                width:100%; background:none; color:#888; border:none;
+                padding:10px; font-size:0.9rem; cursor:pointer; margin-top:6px;
+            ">Annuler</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel (only visible in admin mode) -->
+    <div id="admin-export-panel" class="admin-only" style="
+        position: fixed; bottom: 16px; right: 16px; z-index: 9999;
+        background: #6B1E2A; color: #fff;
+        border-radius: 14px; padding: 14px 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+        font-family: 'Outfit', sans-serif; font-size: 0.85rem;
+        display: flex; flex-direction: column; gap: 8px;
+        width: 220px; max-width: calc(100vw - 32px);
+    ">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:700; font-size:0.88rem; color:#C9A84C;">📸 Mode Admin</span>
+            <button onclick="logoutAdmin()" title="Déconnexion" style="
+                background:none; border:none; color:rgba(255,255,255,0.5);
+                cursor:pointer; font-size:0.75rem; padding:0;
+            ">✕ Quitter</button>
+        </div>
+        <button onclick="exportGalleryForDeploy()" style="
+            background:#C9A84C; color:#000; border:none; border-radius:8px;
+            padding:10px 12px; font-weight:700; cursor:pointer; font-size:0.8rem;
+            text-align:left;
+        ">💾 Exporter photos</button>
+        <button onclick="document.getElementById('import-photos-input').click()" style="
+            background:rgba(255,255,255,0.12); color:#fff;
+            border:1px solid rgba(255,255,255,0.25);
+            border-radius:8px; padding:10px 12px; font-weight:600;
+            cursor:pointer; font-size:0.8rem; text-align:left;
+        ">📂 Importer photos</button>
+        <input type="file" id="import-photos-input" accept=".json" style="display:none" onchange="importGalleryFromFile(event)">
+        <span id="admin-status" style="font-size:0.72rem; color:#C9A84C; text-align:center; min-height:16px;"></span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="sync.js"></script>
+    <script src="app.js"></script>
+    <script src="shop.js"></script>
+    <script src="motion.js"></script>
+    <script src="premium.js"></script>
+    <script>
+    // =================== ADMIN MODE SYSTEM ===================
+    const ADMIN_PASSWORD = 'wander2026';
+    const ADMIN_AUTH_KEY = 'wander_admin_auth';
+    const ADMIN_AUTH_VAL = 'wander_admin_2026';
+
+    function initAdminMode() {
+        const params = new URLSearchParams(window.location.search);
+        const isAdminUrl = params.get('admin') === '1';
+        const isAuthenticated = localStorage.getItem(ADMIN_AUTH_KEY) === ADMIN_AUTH_VAL;
+
+        if (isAdminUrl && !isAuthenticated) {
+            // Show login modal
+            const modal = document.getElementById('admin-login-modal');
+            modal.style.display = 'flex';
+            document.getElementById('admin-pw-input').focus();
+            document.getElementById('admin-pw-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') checkAdminLogin();
+            });
+        } else if (isAdminUrl && isAuthenticated) {
+            activateAdminMode();
+        }
+        // If not ?admin=1, nothing shown — pure client view
+    }
+
+    function checkAdminLogin() {
+        const pw = document.getElementById('admin-pw-input').value;
+        if (pw === ADMIN_PASSWORD) {
+            localStorage.setItem(ADMIN_AUTH_KEY, ADMIN_AUTH_VAL);
+            document.getElementById('admin-login-modal').style.display = 'none';
+            activateAdminMode();
+        } else {
+            const errEl = document.getElementById('admin-login-error');
+            errEl.style.display = 'block';
+            document.getElementById('admin-pw-input').value = '';
+            setTimeout(() => errEl.style.display = 'none', 3000);
+        }
+    }
+
+    function closeAdminLoginModal() {
+        document.getElementById('admin-login-modal').style.display = 'none';
+        // Remove admin param from URL
+        const url = new URL(window.location);
+        url.searchParams.delete('admin');
+        window.history.replaceState({}, '', url);
+    }
+
+    function activateAdminMode() {
+        document.documentElement.classList.add('admin-mode');
+        document.getElementById('admin-export-panel').style.display = 'flex';
+    }
+
+    function logoutAdmin() {
+        localStorage.removeItem(ADMIN_AUTH_KEY);
+        document.documentElement.classList.remove('admin-mode');
+        const url = new URL(window.location);
+        url.searchParams.delete('admin');
+        window.history.replaceState({}, '', url);
+        document.getElementById('admin-export-panel').style.display = 'none';
+    }
+
+    // Export gallery to JSON file for redeployment
+    function exportGalleryForDeploy() {
+        const savedGalleries = JSON.parse(localStorage.getItem('wander_custom_galleries') || '{}');
+        const count = Object.keys(savedGalleries).length;
+        if (count === 0) {
+            document.getElementById('admin-status').textContent = '⚠️ Aucune photo à exporter';
+            return;
+        }
+        const blob = new Blob([JSON.stringify(savedGalleries, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'wander_galleries_export.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById('admin-status').textContent = '✅ Fichier exporté !';
+    }
+
+    // Import gallery from previously exported JSON
+    function importGalleryFromFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                localStorage.setItem('wander_custom_galleries', JSON.stringify(data));
+                document.getElementById('admin-status').textContent = '✅ Importé ! Rechargement...';
+                setTimeout(() => location.reload(), 1200);
+            } catch(err) {
+                document.getElementById('admin-status').textContent = '❌ Fichier invalide';
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // Init on load
+    document.addEventListener('DOMContentLoaded', initAdminMode);
+    </script>
+</body>
+</html>

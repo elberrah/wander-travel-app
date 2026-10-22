@@ -20,6 +20,18 @@ const OFFERS_DATA = [
         "startingPrice": 1200,
         "priceLabel": "Appartement / Nuit",
         "description": "Résidence balnéaire familiale à Dar Bouazza, en bord de mer, à environ 30 minutes de Casablanca.",
+        "pricing": {
+            "seasons": [
+                { "name": "Haute saison (été)", "from": "06-15", "to": "09-15", "price": 1600, "weekendPrice": 1900 },
+                { "name": "Moyenne saison (printemps/automne)", "from": "03-01", "to": "06-14", "price": 1300, "weekendPrice": 1500 },
+                { "name": "Moyenne saison (printemps/automne)", "from": "09-16", "to": "10-31", "price": 1300, "weekendPrice": 1500 }
+            ],
+            "weekly": { "weekdayPrice": 1200, "weekendPrice": 1400 },
+            "specials": [
+                { "date": "2026-12-31", "price": 2500 },
+                { "date": "2027-01-01", "price": 2000 }
+            ]
+        },
         "details": {
             "tableHeader": [
                 "Catégorie",

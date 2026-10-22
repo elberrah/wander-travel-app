@@ -46,6 +46,58 @@ function variants(o) {
 }
 const unitOf = o => (o.category === 'package' || o.category === 'omra') ? 'person' : 'night';
 
+// ---------- Moteur de tarification par nuit ----------
+function inSeason(mmdd, from, to) {
+  // Supports year-wrap (e.g. from=11-01, to=03-31)
+  if (from <= to) return mmdd >= from && mmdd <= to;
+  return mmdd >= from || mmdd <= to;
+}
+function nightRate(pricing, dateStr) {
+  if (!pricing) return null;
+  const d = new Date(dateStr + 'T12:00:00');
+  const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+  const mmdd = dateStr.slice(5);
+  // 1. Tarif spécial pour une date précise
+  if (pricing.specials) { const s = pricing.specials.find(x => x.date === dateStr); if (s) return s.price; }
+  // 2. Tarif saisonnier (semaine / week-end si défini)
+  if (pricing.seasons && pricing.seasons.length) {
+    for (const season of pricing.seasons) {
+      if (inSeason(mmdd, season.from, season.to))
+        return (isWeekend && season.weekendPrice) ? season.weekendPrice : season.price;
+    }
+  }
+  // 3. Tarif semaine / week-end sans saison
+  if (pricing.weekly) return (isWeekend && pricing.weekly.weekendPrice) ? pricing.weekly.weekendPrice : pricing.weekly.weekdayPrice;
+  // 4. Tarif fixe par défaut
+  if (pricing.fixed !== undefined) return pricing.fixed;
+  return null;
+}
+function calcNights(pricing, checkin, checkout, rooms, basePrice) {
+  const msDay = 864e5;
+  const start = new Date(checkin + 'T12:00:00'), end = new Date(checkout + 'T12:00:00');
+  const nights = Math.round((end - start) / msDay);
+  if (nights <= 0) return null;
+  if (!pricing) {
+    const p = basePrice || 0;
+    const detail = p ? `${fmt(p)} × ${nights} nuit${nights > 1 ? 's' : ''}` + (rooms > 1 ? ` × ${rooms} chambres` : '') : 'Tarif confirmé par un conseiller';
+    return { nights, total: p * nights * rooms, detail };
+  }
+  const groups = [];
+  const d = new Date(start);
+  for (let i = 0; i < nights; i++) {
+    const ds = d.toISOString().slice(0, 10);
+    const rate = nightRate(pricing, ds) ?? (basePrice || 0);
+    if (groups.length && groups[groups.length - 1].rate === rate) groups[groups.length - 1].count++;
+    else groups.push({ rate, count: 1 });
+    d.setDate(d.getDate() + 1);
+  }
+  const perRoom = groups.reduce((s, g) => s + g.rate * g.count, 0);
+  const total = perRoom * rooms;
+  const parts = groups.map(g => `${g.count} nuit${g.count > 1 ? 's' : ''} × ${fmt(g.rate)}`);
+  const detail = parts.join(' + ') + (rooms > 1 ? ` × ${rooms} chambres` : '');
+  return { nights, total, detail };
+}
+
 // ---------- Connexion salarié ----------
 function ensureLogin() {
   let m = $('wm-login');
@@ -206,8 +258,7 @@ function renderOfferPage() {
         <label>Téléphone<input id="rq-ph" type="tel" required autocomplete="tel" placeholder="+212 6 00 00 00 00"></label>
         <label>Produit<input id="rq-pr" value="${esc(o.title)}" readonly></label>
         <label>Formule<select id="bk-var" onchange="Wander.calc()">${VARS.map((v, i) => `<option value="${i}">${esc(v.label)}${v.price ? ' — ' + fmt(v.price) : ''}</option>`).join('')}</select></label>
-        <label>Date de départ souhaitée<input type="date" id="bk-date" min="${today}" onchange="Wander.calc()" required></label>
-        ${unit === 'night' ? `<div class="op-row"><label>Nuits<input type="number" id="bk-nights" min="1" max="60" value="3" oninput="Wander.calc()"></label><label>Chambres<input type="number" id="bk-rooms" min="1" max="10" value="1" oninput="Wander.calc()"></label></div>` : ''}
+        ${unit === 'night' ? `<div class="op-row"><label>Date d'arrivée<input type="date" id="bk-checkin" min="${today}" onchange="Wander.calc()" required></label><label>Date de départ<input type="date" id="bk-checkout" min="${today}" onchange="Wander.calc()" required></label></div><div id="bk-nights-info" style="font-size:.83rem;color:var(--gold,#c9a84c);margin:-6px 0 10px;min-height:1.2em"></div><label>Chambres<input type="number" id="bk-rooms" min="1" max="10" value="1" oninput="Wander.calc()"></label>` : `<label>Date souhaitée<input type="date" id="bk-date" min="${today}" onchange="Wander.calc()" required></label>`}
         <div class="op-row3"><label>Adultes<input type="number" id="bk-ad" min="1" max="20" value="2" oninput="Wander.calc()"></label><label>Enfants -12 ans<input type="number" id="bk-ch" min="0" max="20" value="0" oninput="Wander.calc()"></label><label>Bébés<input type="number" id="bk-bb" min="0" max="10" value="0" oninput="Wander.calc()"></label></div>
         <div class="op-sum"><span id="bk-detail"></span><div><small>Total estimé</small><b id="bk-total"></b></div></div>
         <div id="bk-cmp" class="bk-cmp"></div>
@@ -241,18 +292,45 @@ W.pic = (b, u) => { $('op-img').src = u; b.parentNode.querySelectorAll('button')
 function current() {
   const o = OFFERS_DATA.find(x => x.id === new URLSearchParams(location.search).get('id')), v = VARS[+$('bk-var').value]; if (!o || !v) return null;
   const unit = unitOf(o), g = id => $(id) ? Math.max(0, parseInt($(id).value, 10) || 0) : 0;
-  const adults = Math.max(1, g('bk-ad')), children = g('bk-ch'), babies = g('bk-bb'), nights = unit === 'night' ? Math.max(1, g('bk-nights')) : 0, rooms = unit === 'night' ? Math.max(1, g('bk-rooms')) : 0;
-  const total = unit === 'night' ? v.price * nights * rooms : v.price * (adults + children);
-  const detail = !v.price ? 'Tarif confirmé par un conseiller' : unit === 'night' ? `${fmt(v.price)} × ${nights} nuit${nights > 1 ? 's' : ''} × ${rooms} chambre${rooms > 1 ? 's' : ''}` : `${fmt(v.price)} × ${adults + children} personne${adults + children > 1 ? 's' : ''}`;
-  return { o, v, unit, adults, children, babies, nights, rooms, total, detail, date: $('bk-date').value };
+  const adults = Math.max(1, g('bk-ad')), children = g('bk-ch'), babies = g('bk-bb'), rooms = unit === 'night' ? Math.max(1, g('bk-rooms')) : 0;
+  const checkin = $('bk-checkin') ? $('bk-checkin').value : ($('bk-date') ? $('bk-date').value : '');
+  const checkout = $('bk-checkout') ? $('bk-checkout').value : '';
+  let nights = 0, total = 0, detail = '';
+  if (unit === 'night') {
+    if (checkin && checkout && checkin < checkout) {
+      const nc = calcNights(o.pricing || null, checkin, checkout, rooms, v.price);
+      if (nc) { nights = nc.nights; total = nc.total; detail = nc.detail; }
+    } else {
+      detail = 'Choisissez l\'arrivée et le départ';
+    }
+  } else {
+    total = v.price ? v.price * (adults + children) : 0;
+    detail = v.price ? `${fmt(v.price)} × ${adults + children} personne${adults + children > 1 ? 's' : ''}` : 'Tarif confirmé par un conseiller';
+  }
+  return { o, v, unit, adults, children, babies, nights, rooms, total, detail, date: checkin, checkout };
 }
-W.calc = () => { const c = current(); if (!c) return; $('bk-total').textContent = fmt(c.total); $('bk-detail').textContent = c.detail; cmp(c); };
+W.calc = () => {
+  // Ensure checkout min = checkin + 1
+  const ci = $('bk-checkin'), co = $('bk-checkout');
+  if (ci && ci.value && co) {
+    const next = new Date(ci.value + 'T12:00:00'); next.setDate(next.getDate() + 1);
+    const mn = next.toISOString().slice(0, 10);
+    co.min = mn;
+    if (co.value && co.value <= ci.value) co.value = mn;
+  }
+  const c = current(); if (!c) return;
+  const ni = $('bk-nights-info');
+  if (ni) ni.textContent = c.nights > 0 ? `↳ ${c.nights} nuit${c.nights > 1 ? 's' : ''} calculée${c.nights > 1 ? 's' : ''} automatiquement` : '';
+  if ($('bk-total')) $('bk-total').textContent = fmt(c.total);
+  if ($('bk-detail')) $('bk-detail').textContent = c.detail;
+  cmp(c);
+};
 
 // ---------- Comparateur Booking ----------
 const BK = 'wander_booking_ref';
 const bkRef = id => (ls(BK, {})[id]) || (OFFERS_DATA.find(x => x.id === id) || {}).bookingRef || null;
 const isAdmin = () => document.documentElement.classList.contains('admin-mode');
-const bkUrl = c => 'https://www.booking.com/searchresults.html?ss=' + encodeURIComponent(c.o.title) + (c.date ? '&checkin=' + c.date + '&checkout=' + new Date(new Date(c.date).getTime() + Math.max(1, c.nights || 1) * 864e5).toISOString().slice(0, 10) : '') + '&group_adults=' + c.adults + '&group_children=' + c.children + '&no_rooms=' + Math.max(1, c.rooms || 1);
+const bkUrl = c => 'https://www.booking.com/searchresults.html?ss=' + encodeURIComponent(c.o.title) + (c.date ? '&checkin=' + c.date + '&checkout=' + (c.checkout || new Date(new Date(c.date + 'T12:00:00').getTime() + Math.max(1, c.nights || 1) * 864e5).toISOString().slice(0, 10)) : '') + '&group_adults=' + c.adults + '&group_children=' + c.children + '&no_rooms=' + Math.max(1, c.rooms || 1);
 let live = {};
 function cmp(c) {
   const box = $('bk-cmp'); if (!box || !c.v.price) { if (box) box.innerHTML = ''; return; }
@@ -290,10 +368,13 @@ W.send = function (kind) {
   const f = $('rq'); if (!f.reportValidity()) return;
   const c = current(); if (!c) return;
   const g = id => $(id).value.trim();
-  const msg = `Bonjour Wander, demande de réservation\nProduit : ${c.o.title}\nFormule : ${c.v.label}\nDépart : ${new Date(c.date).toLocaleDateString('fr-FR')}` + (c.unit === 'night' ? `\n${c.nights} nuit(s) · ${c.rooms} chambre(s)` : '') + `\nAdultes : ${c.adults} · Enfants -12 ans : ${c.children} · Bébés : ${c.babies}\nEstimation : ${fmt(c.total)}\n\n${g('rq-fn')} ${g('rq-ln')}\nEntreprise : ${g('rq-co')}\nEmail : ${g('rq-em')}\nTéléphone : ${g('rq-ph')}`;
+  const dateInfo = c.unit === 'night' && c.date && c.checkout
+    ? `\nArrivée : ${new Date(c.date + 'T12:00:00').toLocaleDateString('fr-FR')} · Départ : ${new Date(c.checkout + 'T12:00:00').toLocaleDateString('fr-FR')} (${c.nights} nuit${c.nights > 1 ? 's' : ''})\n${c.rooms} chambre${c.rooms > 1 ? 's' : ''}`
+    : (c.date ? `\nDate souhaitée : ${new Date(c.date + 'T12:00:00').toLocaleDateString('fr-FR')}` : '');
+  const msg = `Bonjour Wander, demande de réservation\nProduit : ${c.o.title}\nFormule : ${c.v.label}${dateInfo}\nAdultes : ${c.adults} · Enfants -12 ans : ${c.children} · Bébés : ${c.babies}\nEstimation : ${fmt(c.total)}\n\n${g('rq-fn')} ${g('rq-ln')}\nEntreprise : ${g('rq-co')}\nEmail : ${g('rq-em')}\nTéléphone : ${g('rq-ph')}`;
   if (kind === 'wa') window.open('https://wa.me/212702093107?text=' + encodeURIComponent(msg), '_blank', 'noopener');
   else location.href = 'mailto:Resa@wandertravel-event.com?subject=' + encodeURIComponent('Demande ' + c.o.title) + '&body=' + encodeURIComponent(msg);
-  if (window.Sync) Sync.request({ uid: (Sync.session() || {}).id || '', fn: g('rq-fn'), ln: g('rq-ln'), em: g('rq-em'), co: g('rq-co'), ph: g('rq-ph'), product: c.o.title, variant: c.v.label, date: c.date, nights: c.unit === 'night' ? c.nights : '', rooms: c.unit === 'night' ? c.rooms : '', adults: c.adults, children: c.children, babies: c.babies, total: fmt(c.total) });
+  if (window.Sync) Sync.request({ uid: (Sync.session() || {}).id || '', fn: g('rq-fn'), ln: g('rq-ln'), em: g('rq-em'), co: g('rq-co'), ph: g('rq-ph'), product: c.o.title, variant: c.v.label, date: c.date, checkout: c.checkout || '', nights: c.unit === 'night' ? c.nights : '', rooms: c.unit === 'night' ? c.rooms : '', adults: c.adults, children: c.children, babies: c.babies, total: fmt(c.total) });
   W.toast('Demande prête à envoyer.');
 };
 W.add = function (go) {

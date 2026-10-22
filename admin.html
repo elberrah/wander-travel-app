@@ -189,9 +189,15 @@ document.addEventListener('click',async e=>{
     users=await Sync.get('users','&token='+encodeURIComponent(token));toast('Accès créé : '+r.id+'. Email envoyé.');return render()}
   if(a==='resetpw'){if(!confirm('Envoyer un nouveau mot de passe à ce salarié ?'))return;const r=await Sync.post({action:'resetPw',token:token,row:+t.dataset.row});return toast(r&&r.ok?'Nouveau mot de passe envoyé.':'Échec.')}
 });
+document.addEventListener('input',e=>{
+  const t=e.target;
+  // Sauvegarde immédiate du prix dès la frappe (évite la perte au re-render)
+  if(t.dataset.act==='price'){patch(t.dataset.id,'startingPrice',t.value===''?null:Number(t.value));mark()}
+  if(t.id==='q'){q=t.value;const p=t.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)}
+});
 document.addEventListener('change',async e=>{
   const t=e.target;
-  if(t.dataset.act==='price'){patch(t.dataset.id,'startingPrice',t.value);toast('Prix modifié, à publier.')}
+  if(t.dataset.act==='price'){toast('Prix mis à jour — cliquez « Publier les modifications » pour enregistrer.')}
   if(t.dataset.act==='active'){const row=+t.dataset.row;await Sync.post({action:'setActive',token:token,row:row,active:t.checked});const u=users.find(x=>x.row===row);if(u)u.active=t.checked;toast(t.checked?'Accès réactivé.':'Accès désactivé.')}
   if(t.dataset.act==='vis'){patch(t.dataset.id,'hidden',!t.checked)}
   if(t.dataset.act==='status'){const row=+t.dataset.row,r=data.requests.find(x=>x.row===row);if(r)r.status=t.value;
@@ -204,7 +210,6 @@ document.addEventListener('change',async e=>{
     if(t.dataset.r!==undefined){const r=rows();r[+t.dataset.r][+t.dataset.c]=t.value;patch(editing,'rows',r)}
   }
 });
-document.addEventListener('input',e=>{if(e.target.id==='q'){q=e.target.value;const p=e.target.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='tk')document.querySelector('[data-act=login]').click()});
 
 async function publish(){

@@ -30,7 +30,7 @@ export default function Corporate() {
  return <>
    <PageHero eyebrow="WANDER / VOYAGES CORPORATE" title="Voyager pour réussir." italic="Nous pensons au reste."
      description="Billetterie, accueil aéroportuaire, chauffeurs, hébergements et aviation privée. Une coordination précise au service de vos déplacements professionnels."
-     image={`${media}avion-decollage.webp`} imageAlt="Avion de ligne au décollage au coucher du soleil" cta="Demander un devis voyage" height="large" />
+     image={`${media}avion-decollage.webp`} imageAlt="Avion de ligne au décollage au coucher du soleil" cta="Recevoir mon devis voyage sous 24h" height="large" />
 
    <section className="corporate-intro" id="decouvrir"><div className="container corporate-intro-inner">
      <div><span className="eyebrow">NOTRE APPROCHE</span><h2>Le bon déplacement.<br/><em>Au bon rythme.</em></h2></div>
@@ -75,6 +75,6 @@ export default function Corporate() {
 
    <Wow title="Chaque arrivée, un accueil remarquable" text="Vos invités passent de l’avion au véhicule qui les attend, puis à leur rendez-vous, avec un accompagnement discret. Un enchaînement fluide : voilà le luxe qui compte." />
    <FAQs items={[{question:'Pouvez-vous coordonner les déplacements de plusieurs collaborateurs ?',answer:'Oui. L’organisation est étudiée selon les effectifs, les villes, les horaires et les besoins des voyageurs.'},{question:'Proposez-vous des transferts avec chauffeur au Maroc ?',answer:'Oui. Les demandes concernent notamment Casablanca, Rabat, Marrakech, Agadir, Tanger et Fès, selon disponibilité et confirmation.'},{question:'Fast Track et salons VIP sont-ils disponibles partout ?',answer:'Le service dépend de l’aéroport, des conditions d’accès et de la disponibilité au moment de la demande.'},{question:'Peut-on inclure un jet privé dans un déplacement corporate ?',answer:'Wander peut étudier une demande d’aviation privée et proposer une solution adaptée, sous réserve de faisabilité et de confirmation.'},{question:'Les hébergements présentés sont-ils des partenaires identifiés ?',answer:'Les photographies illustrent des types de lieux. Toute proposition d’hébergement fait l’objet d’une sélection et d’une confirmation spécifiques.'}]} />
-   <CTASection eyebrow="WANDER TRAVEL & EVENT · CASABLANCA" title="Votre prochain déplacement commence ici." text="Décrivez-nous votre mission. Notre équipe construit une proposition sur mesure." label="Demander un devis voyage" href="/contact" />
+   <CTASection eyebrow="WANDER TRAVEL & EVENT · CASABLANCA" title="Votre prochain déplacement commence ici." text="Décrivez-nous votre mission. Notre équipe construit une proposition sur mesure." label="Recevoir mon devis voyage sous 24h" href="/contact" />
  </>;
 }

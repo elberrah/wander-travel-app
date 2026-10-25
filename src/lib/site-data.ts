@@ -4,7 +4,7 @@ export const SITE = {
   email: 'contact@wandertravel-event.com',
   phone: '+212 702 093 107',
   telephone: '+212702093107',
-  address: '36 Rue Ouled Mhanna, RDC Mag. 02, Casablanca, Maroc',
+  address: '36 Rue De Vevey, RDC Magasin 02, Casablanca 23330, Maroc',
   phoneSecondary: '+212 522 863 490',
   whatsapp: 'https://wa.me/212702093107?text=Bonjour%20Wander%2C%20je%20souhaite%20%C3%A9changer%20sur%20un%20projet.',
   license: 'ODV-9266',

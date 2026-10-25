@@ -44,14 +44,14 @@ export function Header() {
       </div>
       <Link href='/realisations' className='nav-link'>Réalisations</Link><Link href='/a-propos' className='nav-link'>À propos</Link><Link href='/contact' className='nav-link'>Contact</Link>
     </nav>
-    <div className='header-actions'><Link className='btn btn-gold btn-small header-cta' href='/contact'>Demander une proposition <ArrowUpRight size={16}/></Link>
+    <div className='header-actions'><Link className='btn btn-gold btn-small header-cta' href='/contact'>Devis sous 24h <ArrowUpRight size={16}/></Link>
     <button className='mobile-toggle' onClick={()=>setOpen(!open)} aria-label={open?'Fermer le menu':'Ouvrir le menu'} aria-expanded={open} aria-controls='mobile-nav'>{open?<X size={25}/>:<Menu size={25}/>}</button></div>
    </div>
-   {open&&<nav className='mobile-nav' id='mobile-nav' aria-label='Navigation mobile'><div className='mobile-nav-links'>{nav.concat(secondary).map((item,i)=><Link key={item.href} href={item.href} onClick={()=>setOpen(false)}><span>{String(i+1).padStart(2,'0')}</span>{item.label}<ArrowUpRight size={18}/></Link>)}</div><Link href='/contact' className='btn btn-gold mobile-nav-cta' onClick={()=>setOpen(false)}>Demander une proposition <ArrowUpRight size={18}/></Link></nav>}
+   {open&&<nav className='mobile-nav' id='mobile-nav' aria-label='Navigation mobile'><div className='mobile-nav-links'>{nav.concat(secondary).map((item,i)=><Link key={item.href} href={item.href} onClick={()=>setOpen(false)}><span>{String(i+1).padStart(2,'0')}</span>{item.label}<ArrowUpRight size={18}/></Link>)}</div><Link href='/contact' className='btn btn-gold mobile-nav-cta' onClick={()=>setOpen(false)}>{SITE.ctaDevis} <ArrowUpRight size={18}/></Link></nav>}
  </header>
 }
 export function Footer(){return <footer className='site-footer'>
-  <div className='container footer-top'><div><span className='eyebrow'>DONNONS FORME À VOTRE PROCHAIN PROJET</span><h2 className='footer-title'>Le prochain moment<br/><em>commence ici.</em></h2></div><Link href='/contact' className='circle-link' aria-label='Demander une proposition'><ArrowUpRight size={28}/></Link></div>
+  <div className='container footer-top'><div><span className='eyebrow'>DONNONS FORME À VOTRE PROCHAIN PROJET</span><h2 className='footer-title'>Le prochain moment<br/><em>commence ici.</em></h2></div><Link href='/contact' className='circle-link' aria-label={SITE.ctaDevis}><ArrowUpRight size={28}/></Link></div>
   <div className='container footer-grid'>
     <div className='footer-brand'><Brand footer/><p>Le sens du détail, la rigueur du mouvement et l’art de créer des moments qui comptent. Paris dans le parcours, Casablanca comme ancrage.</p><span className='footer-license'>Voyages · Événementiel · Casablanca</span></div>
     <div><h3>EXPLORER</h3><Link href='/mice'>Wander MICE</Link><Link href='/avantages-salaries'>Avantages Salariés</Link><Link href='/kids-juniors'>Kids & Juniors</Link><Link href='/scolaire'>Scolaire</Link><Link href='/triangle-dor'>Triangle d’Or</Link><Link href='/voyages-corporate'>Voyages Corporate</Link><Link href='/vip'>VIP & Aviation</Link></div>

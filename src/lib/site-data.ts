@@ -8,6 +8,8 @@ export const SITE = {
   phoneSecondary: '+212 522 863 490',
   whatsapp: 'https://wa.me/212702093107?text=Bonjour%20Wander%2C%20je%20souhaite%20%C3%A9changer%20sur%20un%20projet.',
   license: 'ODV-9266',
+  calendly: 'https://calendly.com/wandertravelevent/30min',
+  ctaDevis: 'Recevoir mon devis sous 24h',
 };
 
 export type Package = {

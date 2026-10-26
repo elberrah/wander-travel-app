@@ -14,7 +14,11 @@
   }
 
   var gaLoaded = false;
+  // La plateforme collaborateurs ne doit pas alimenter le GA4 du site vitrine :
+  // GA ne se charge que sur le domaine officiel wandertravel-event.com.
+  var OFFICIAL = /(^|\.)wandertravel-event\.com$/.test(location.hostname);
   function loadGA() {
+    if (!OFFICIAL) return;
     window['ga-disable-' + GA] = false;
     if (gaLoaded) return;
     gaLoaded = true;

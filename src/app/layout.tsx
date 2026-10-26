@@ -8,6 +8,7 @@ export const metadata:Metadata = {
  description:'Wander imagine vos séminaires, voyages corporate et expériences d’exception au Maroc. Un savoir-faire international porté par 17 ans de parcours entrepreneurial.',
  openGraph:{type:'website',locale:'fr_MA',siteName:SITE.name,images:[{url:'/og-wander.jpg',width:1200,height:630,alt:'Wander Travel & Event — Casablanca'}]},
  robots:process.env.VERCEL_ENV === 'preview'?{index:false,follow:false}:{index:true,follow:true},
+ verification:{google:'AdlX8sY5zL1nTWluVSSKNZj8F0ofFwqqIP-5tYEsN38'},
 };
 export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#0A0A0A'};
 export default function RootLayout({children}:{children:React.ReactNode}) {

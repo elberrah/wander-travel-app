@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Clés SSH privées : ne jamais envoyer sur GitHub
+wander_key
+wander_key.pub
